@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Cursos";
+    IEnumerable<SelectListItem> periodos = ViewBag.periodos;
+    IEnumerable<SelectListItem> materias = materias = ViewBag.materias;
+ 
+    
+}
+
+
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Home</li>
+        <li class="breadcrumb-item active">Curso</li>
+
+    </ol>
+</div>
+
+<div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- /.box -->
+            <div class="box box-success">
+
+                <div class="box-body">
+                    @*se carga el contenido del formulario de nuevo registro*@
+                    <div class="panelBorder">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong> Nevo curso</strong> </h3>
+                        </div>
+
+                        <div id="nuevo_registro">
+
+                        </div>
+
+                    </div>
+
+                    <br />
+                    @*espacio para mostrar los registros*@
+                    <div class="panelBorder">
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong>Registros</strong> </h3>
+                        </div><br />
+                       
+
+                            <div class="row">
+                                <div class="col-sm-12 col-12   col-lg-3">
+                                    <label>Periodo</label>
+                                    <select class="form-control buscarGrupo" name="periodoBuscar" id="periodoBuscar">
+                                        <option value="--">Seleccione período</option>
+                                        @if (periodos != null)
+                                        {
+                                            foreach (var e in periodos)
+                                            {
+                                                <option value="@e.Value">
+                                                    @e.Text
+                                                </option>
+                                            }
+                                        }
+                                        
+                                           
+                                        
+                                    </select>
+
+                                </div>
+                                <div class="col-sm-12 col-12  col-lg-5 ">
+                                    <label>Asignatura</label>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control    select2  " style="width: 100%; " id="materiaBuscar" name="materiaBuscar">
+                                                <option selected value="">Ingrese ó seleccione una asignatura</option>
+                                                 @if (materias != null)
+                                                {
+                                                    foreach (var item in materias)
+                                                    {
+                                                        <option value="@item.Value">@item.Value</option>
+                                                    }
+                                                }                                              
+                                                
+                                                  
+                                                
+
+                                            </select>
+                                            @*<input class=" form-control buscarGrupo" placeholder="Ingrese ó seleccione una asignatura" autocomplete="off" id="materiaBuscar" name="materiaBuscar" list="materias_" />*@
+                                            <span class="input-group-btn"><input type="button" class="btn btn-success " value="Buscar" id="buscar_grupos" /></span>
+                                        </div>
+                                    </div>
+                                    @*<datalist id="materias_">
+                                        @if (materias != null)
+                                                {
+                                                    foreach (var item in materias)
+                                                    {
+                                                        <option value="@item.Value">@item.Value</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                            <option value="--">slecciones Asignatura</option>
+                                        }
+                                    </datalist>*@
+                                </div>                               
+                            </div>
+                        @*se carga el contenido de la tabla de registros*@
+                        <div id="registro">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#home_cursos").addClass("active");
+        $("#cursos").addClass("active");
+        // se carga el formulario de nuevo registro
+        $("#nuevo_registro").load("/Curso/Create");
+        // se garga la tabla de registros
+        $("#registro").load("/Curso/Listar");
+
+        $("#buscar_grupos").click(function (e) {
+
+            /// se cambia el espacio por un +
+            var materia = $("#materiaBuscar").val().replace(" ","+");
+            var url = "/Curso/Listar?periodoBuscar=" + $("#periodoBuscar").val() + "&materiaBuscar=" + materia;
+            console.log(url);
+            $("#registro").load(url);
+
+        });
+
+
+
+    });
+</script>

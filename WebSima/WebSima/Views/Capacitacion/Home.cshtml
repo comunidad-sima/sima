@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Capacitiaciones ";
+    List<String> periodos = ViewBag.periodos; 
+ }
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Home</li>
+        <li class="breadcrumb-item active">Capacitaciones</li>
+
+    </ol>
+</div>
+
+<div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- /.box -->
+            <div class="box box-success">
+               
+                <div class="box-body">
+                    @*se carga el contenido del formulario de nuevo registro*@
+                    <div class="panelBorder">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong> Neva capacitación</strong> </h3>
+                        </div>
+
+                        <div id="nuevo_registro">
+
+                        </div>
+
+                    </div>
+
+                  <br />
+                    @*espacio para mostrar los registros*@
+                    <div class="panelBorder">
+                      
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><strong>Registros</strong> </h3>
+                            </div><br />
+                        <div class="row form-group  ">
+
+                            <div class="col-sm-4 @*col-sm-offset-8*@">
+                                <div class="input-group">
+                                    <select class="form-control " name="periodo" id="periodo">
+                                        @foreach (var periodo in periodos)
+                                        {
+                                            <option>@periodo </option>
+                                        }
+
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <input type="button" id="buscar_capcitaciones" class="btn btn-success " value="Buscar" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                            @*se carga el contenido de la tabla de registros*@
+                            <div id="registro">
+
+                            </div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#home_capacitaciones").addClass("active");
+        $("#capacitaciones").addClass("active");
+      // se carga el formulario de nuevo registro
+        $("#nuevo_registro").load("/Capacitacion/Create");
+       // se garga la tabla de registros
+       $("#registro").load("/Capacitacion/Listar");
+        $("#buscar_capcitaciones").click(function () {
+            // div registre esta en Home
+            $("#registro").load("/Capacitacion/listar?periodo=" + $("#periodo").val());// cuando se cuosulta las capacitaciones de un periodo
+        });
+
+    });
+    </script>
+
+
+

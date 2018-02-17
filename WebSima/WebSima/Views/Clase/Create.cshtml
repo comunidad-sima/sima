@@ -1,0 +1,266 @@
+﻿@model WebSima.Models.Mclase
+
+@{
+    Layout = "~/Views/Shared/_Layout_monitor.cshtml";
+    ViewBag.Title = "Registro de asistencias";
+    String mensajeExito = ViewBag.mensajeExito;
+    String mensajeError = ViewBag.mensajeError;
+    List<WebSima.Models.WebApi.EstudianteMateria> estudiantes  =ViewBag.estudiantes;
+    List<String> programas;
+    List<String> grupos;
+    List<WebSima.Models.WebApi.EstudianteMateria> estudiantesProgramaGrupo;
+    int idPanel = 1;
+    int nomClase = 1;// ayuda a controlar los nombre de las clases de los check para seleccionar dodos los de un grupo
+    String materiaSeleccionada = ViewBag.materiaSeleccionada;
+    List<String> materiasMonitor = ViewBag.materiasMonitor;
+    String programa= ViewBag.materia;
+    String selected_ ="selected";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item ">Home</li>
+    <li class="breadcrumb-item active">Clase</li>
+    <li class="breadcrumb-item active">Nueva</li>
+</ol>
+
+
+<div class="panelBorder">
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong> Nueva clase</strong>
+        </div>
+        <div class="panel-body">
+            @if (mensajeExito != null)
+            {
+
+
+                <div class=" alert alert-success alert-dismissible " role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div>@mensajeExito</div>
+                </div>
+            }
+            else if (mensajeError != null)
+            {
+
+                <div class=" alert alert-danger alert-dismissible " role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div>@mensajeError</div>
+                </div>
+            }
+
+
+            @using (Html.BeginForm("Create", "Clase", FormMethod.Get, new { id = "fmaterias", name = "fmaterias", }))
+            {
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <label>Asignatura</label>
+
+                        <select class="form-control" required name="materia" id="materia">
+                            <option value="">Seleccione asignatura</option>
+                            @if (materiasMonitor != null)
+                            {
+                                foreach (var materia in materiasMonitor)
+                                {
+                                    <option value="@materia"
+                                            @if (materia.Equals(materiaSeleccionada)) {  @selected_       }>
+                                        @materia
+                                    </option>
+                                }
+                            }
+
+                        </select>
+                    </div>
+
+                </div>
+            }
+            <hr>
+
+            @using (Html.BeginForm("Create", "Clase", FormMethod.Post, new { enctype = "multipart/form-data", onSubmit = "return dialogo()" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+
+                <div>
+                    @if (estudiantes != null)
+                    {
+                        //filtramos los progrogramas(contaduria,admnistracion,etc)
+                        programas = estudiantes.Select(o => o.nom_unidad).Distinct().ToList();
+
+
+
+                        foreach (String programa_ in programas)
+                        {
+                            // filtramos los grupos de cada programa
+                            grupos = (from s in estudiantes
+                                      where (s.nom_unidad == programa_)
+
+                                      select s).ToList().Select(oo => oo.num_grupo).Distinct().ToList().OrderBy(x => x).ToList();
+                            //idPanel++;
+
+
+
+                            <div class="box box-success collapsed-box box-solid" style="margin-bottom:8px">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">@programa_</h3>
+                                    @*<span class="text-right"><a class="btn btn-sm" data-toggle="collapse" href="#@idPanel" aria-expanded="false" aria-controls="@idPanel"> mostrar</a></span>*@
+
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    @foreach (var pgrupo_ in grupos)
+                                    {
+
+                                        nomClase++;
+                                        //filtramos los estudinates de un programa y grupo
+                                        estudiantesProgramaGrupo = (from s in estudiantes
+                                                                    where (s.nom_unidad == programa_ && s.num_grupo == pgrupo_)
+                                                                    orderby s.nom_largo ascending
+                                                                    select s).ToList();
+                                        idPanel++;
+
+                                        <div class="box box-success  box-solid " style="margin-bottom:5px">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Grupo - @pgrupo_</h3>
+                                                <div class="box-tools pull-right">
+                                                    <a class="btn btn-box-tool" data-toggle="collapse" href="#@idPanel" aria-expanded="false" aria-controls="@idPanel">
+                                                        Mostrar
+                                                        @*<i class="fa fa-plus"></i>*@
+                                                    </a>
+                                                </div>
+
+                                                <span class="text-right"><a class="btn btn-sm" data-toggle="collapse" href="#@idPanel" aria-expanded="false" aria-controls="@idPanel"> mostrar</a></span>
+                                            </div>
+                                            <div class="collapse panel-body" id="@idPanel">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-sm  table-striped table-responsive">
+                                                        <thead>
+                                                            <tr class="success">
+                                                                <th>
+                                                                    Identificación
+                                                                </th>
+                                                                <th>
+                                                                    nombre
+                                                                </th>
+                                                                <th >
+    @*Asistió*@
+                                                                    <center>
+                                                                        <input class="seleccionarTodo" onchange="seleccionar(@nomClase,this)" style=" width:16px; height:16px;" type="checkbox" />
+                                                                    </center></th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        @foreach (var e in estudiantesProgramaGrupo)
+                                                        {
+
+                                                            <tr>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => e.num_identificacion)
+
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => e.nom_largo)
+
+                                                                </td>
+                                                                <td>
+                                                                    <center>
+                                                                        <input class="checkbox @nomClase " value="@e.num_identificacion" name="asistentes" id="asistentes" style=" width:16px; height:16px;" type="checkbox" />
+
+                                                                    </center>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+                <hr />
+                <div class="row  ">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.tema)
+                            @Html.ValidationMessageFor(model => model.tema, null, new { @class = "label label-danger" })
+                            @Html.TextAreaFor(model => model.tema, new { @class = "form-control ", TextMode = "multiline" })
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.comentario)
+                            @Html.ValidationMessageFor(model => model.comentario, null, new { @class = "label label-danger" })
+                            @Html.TextAreaFor(model => model.comentario, new { @class = "form-control " })
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fecha_realizada)
+                            @Html.ValidationMessageFor(model => model.fecha_realizada, null, new { @class = "label label-danger" })
+                            @Html.TextBoxFor(model => model.fecha_realizada, new { @class = "form-control ", type = "date" })
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.evidencia)
+                            @Html.ValidationMessageFor(model => model.evidencia, null, new { @class = "label label-danger" })
+                            @Html.TextBoxFor(model => model.evidencia, new { @class = "form-control ", type = "file" })
+                        </div>
+                    </div>
+                    <div class="text-right col-sm-12 form-group ">
+
+                        @if (!materiaSeleccionada.Equals(""))
+                        {
+                            <input class="btn btn-success" type="submit" value="Guardar" />
+                        }
+                        @Html.ActionLink("Listar", "Index", new { }, new { @class = "btn btn-info" })
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/valida.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#materia").change(function () {
+            $("#fmaterias").submit();// se envia el formulario materia, para consultar los estuaiantes 
+        });
+    });
+
+    function seleccionar(idClase, elementoCheck) {
+        var esta = $(elementoCheck).is(":checked");        
+        if (esta) {
+            $("." + idClase).prop("checked", true);
+        } else {
+            $("." + idClase).prop("checked", false);
+        }
+      
+    }
+    function dialogo() {
+        var op = confirm("¿Desea registrar la clase?");
+        if (op) {
+            //viene de validaTamano valida.js, si retian true se envia el formulario, de lo contrario no no se envia
+            return validaTamano("evidencia");
+        }
+        // se retorna flase para q no se envie el formulario
+        return false;
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

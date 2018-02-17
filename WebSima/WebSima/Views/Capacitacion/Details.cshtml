@@ -1,0 +1,49 @@
+﻿@model WebSima.Models.MCapacitacion
+
+@{
+    ViewBag.Title = "Details";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item ">Home</li>
+    <li class="breadcrumb-item active">Capacitaciones</li>
+    <li class="breadcrumb-item active">Detalles</li>
+</ol>
+
+
+<div class="box box-success">
+    <div class="box-body">
+        @*se carga el contenido del formulario de registro*@
+        <div class="panelBorder">
+            <div class="box-header with-border">
+                <h3 class="box-title"><strong>Detalles de capacitación</strong></h3>
+            </div><br />
+            <dl class="row">
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Número:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.id</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Periodo:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.periodo</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Encargado:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.encargado</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Tema:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9"><p>@Model.comentarios</p></dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Cometarios:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9"><p>@Model.comentarios</p></dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Fecha:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.fecha</dd>
+
+            </dl>
+
+            <div class="text-right">
+                @Html.ActionLink("Volver", "Home", new { }, new { @class = "btn  btn-info  " })
+            </div>
+
+        </div>
+        </div>
+    </div>
+
+        

@@ -1,0 +1,244 @@
+﻿@model WebSima.Models.MCurso
+
+@{
+    ViewBag.Title = "Editar";
+
+    String checke = "checked";
+    String selected_ = "selected";
+    SelectList materias = ViewBag.materias;
+    Layout = null;
+}
+
+
+
+
+
+<div class="modal-body  ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Editar grupo</h4>
+    </div>
+    <br />
+    <div class="panelBorder">
+        <div id="alert_2">
+
+        </div>
+
+
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "fDatos_cursos_edit" }))
+{
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="row">
+
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.idUsuario, "Indentificación")
+
+                        @Html.TextBoxFor(model => model.idUsuario, new
+           {
+               type = "text",
+               @class = "form-control ",
+               placeholder = "Identificación o nombre del monitor",
+               list = "nombres_2",
+               id = "idUsuarioEdit",
+               onkeyup = "buscarMonitores()",
+               onBlur = "buscarMonitor()",
+               autocomplete = "on"
+           })
+                        <datalist id="nombres_2"></datalist>
+                        @Html.ValidationMessageFor(model => model.idUsuario, null, new { @class = "label label-danger" })
+
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                        <label>Mombre monitor</label>
+                        <input type="text" name="name" value=" " id="nombre_largo_2" class="form-control  " disabled />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.nombre_materia)
+                        <select class="form-control select2  " style="width: 100%; " name="nombre_materia" id="nombre_materia">
+                                <option value=""> Seleccione asignatura</option>
+                                @foreach (SelectListItem s in materias)
+                                {
+                                    if (s.Value.Equals(Model.nombre_materia))
+                                    {
+                                        <option value="@s.Value" @selected_> @s.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@s.Value"> @s.Value</option>
+                                    }
+                                }
+
+
+                            </select>
+
+                            @Html.ValidationMessageFor(model => model.nombre_materia, null, new { @class = "label label-danger" })
+
+</div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fecha_finalizacion)
+                        @Html.TextBoxFor(model => (model.fecha_finalizacion), "{0:yyyy-MM-dd}", new { maxlength = 10, @class = "form-control datepicker" })
+                        @Html.ValidationMessageFor(model => model.fecha_finalizacion, null, new { @class = "label label-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+
+                        <div class="form-group">
+                            <label>Abierto: </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="estado" id="radioSi" value="1" class="flat-red" required="" checked=""> SI
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="estado" @if (Model.estado == 0) { @checke          } value="0" class="flat-red"> NO
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="text-right col-sm-12 form-group ">
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success" id="edit_usuario">Guardar</button>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+        <script>
+            function buscarMonitor() {
+              
+                var buscar = $("#idUsuarioEdit").val();
+                
+                if (buscar != '' && !isNaN(buscar)) {
+                    var parametros = {
+                        "id": buscar
+                    };
+                    $.ajax({
+                        dataType: 'JSON',
+                        type: 'POST',
+                        data: parametros,
+                        url: "/Curso/GetUsuario",
+                        beforeSend: function () { },
+                        success: function (response) {
+                            if (!$.isEmptyObject(response)) {
+                         
+                                var datos = $.parseJSON(JSON.stringify(response));
+                                $("#nombre_largo_2").val(datos["nombre"] + " " + datos["apellidos"])
+                            } else {
+
+                            }
+                        }
+                    });
+                }
+            }
+            function buscarMonitores() {
+                var buscar = $("#idUsuarioEdit").val();
+                $("#nombre_largo_2").val("--")
+                if (buscar != '') {
+                    var parametros = {
+                        "Buscar": buscar
+                    };
+                    $.ajax({
+                        dataType: 'JSON',
+                        type: 'POST',
+                        data: parametros,
+                        url: "/Curso/Monitores",
+                        beforeSend: function () { },
+                        success: function (response) {
+
+                            var arrayDatos = $.parseJSON(JSON.stringify(response));
+                            $('#nombres_2').empty();
+                            arrayDatos.forEach(function (subArrayDatos, indice, arrayDatos) {
+                                var v = "<option class='datos' value='" + subArrayDatos["id"] + "'> " + subArrayDatos["nombre"] + " " + subArrayDatos["apellidos"] + "</option>";
+
+
+                                $('#nombres_2').append(v);
+
+                            });
+
+                        }
+                    });
+                }
+            }
+            $(document).ready(function () {
+                configurar_daterangepicker("datepicker");
+                $('.select2').select2();
+                $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+
+                $.validator.unobtrusive.parse("#fDatos_cursos_edit");// se activan las validaciones del formulario
+                $("#fDatos_cursos_edit").submit(function (e) {
+                    e.preventDefault();
+
+                    if ($("#fDatos_cursos_edit").valid()) {
+                        var datos = $("#fDatos_cursos_edit").serializeArray();
+                        console.log(datos);
+                        var btn = $("#edit_usuario");
+                        btn.val("Guardando...");
+                        btn.prop("disabled", true);
+                        $.ajax({
+                            data: datos,
+                            url: $("#fDatos_cursos_edit").attr('action'),
+                            dataType: "json",
+                            type: 'post',
+                            beforeSend: function () { },
+                            success: function (response) {
+                                // se activa el boton enviar
+                                btn.val("Guardar");
+                                btn.prop("disabled", false);
+                                var mensaje = "";
+                                var clase = "";
+                                if (response["RESPUESTA"] == "OK") {
+                                    mensaje = "<strong>¡Exito!</strong> Ususrio Actualizado.";
+                                    clase = "alert-success";
+
+                                } else if (response["RESPUESTA"] == "ERROR") {
+                                    mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                                    clase = "alert-danger";
+                                }
+                                else if (response["RESPUESTA"] == "LOGIN") {
+                                    mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
+                                    clase = " alert-danger";
+
+                                    location.href = "/";
+                                }
+                                //alert_mensajes() esta en helper.js
+                                $("#alert_2").html(alert_mensajes(mensaje, clase));
+
+                            }, error: function (error) {
+                                alert("Error");
+                                btn.val("Guardar");
+                                btn.prop("disabled", false);
+                            }
+                        });
+                    }
+                });
+
+              
+                buscarMonitor();
+            });
+        </script>
+
+

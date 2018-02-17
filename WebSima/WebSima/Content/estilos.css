@@ -1,0 +1,48 @@
+﻿
+.fijar {    
+   position: fixed;
+  z-index: 100;
+   width: 100%;
+  
+}
+.contenido {
+  padding-top: 55px;
+}
+
+body{
+    padding:0px;
+    margin:0px;
+    background-image: url(imagenes/fondo.jpg);
+}
+.panelBorder {
+    background-color: white;   
+   padding:15px;
+    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 4px 4px 4px 4px;
+    -webkit-border-radius: 4px 4px 4px 4px;
+    border: 1px solid #d4ced4;
+       
+}
+.breadcrumb{
+    background-color:#ffffff;
+    margin-top:0px;
+
+    margin-bottom:12px;
+}
+.colorPrimario{
+	background-color:#1C8A36;
+}
+.texto_grande {
+    font-size: 1.5rem;
+    color: white;
+} 
+#icone_grande {
+    font-size: 5rem;
+    color:#fff;
+}
+
+
+.center {
+    margin: 0 auto;
+    width: 100%;
+}

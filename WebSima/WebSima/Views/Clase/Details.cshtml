@@ -1,0 +1,102 @@
+﻿@model WebSima.Models.clases_sima
+
+@{
+    String perfil = ViewBag.perfil;
+    ViewBag.Title = "Detalles";
+    List<WebSima.Models.WebApi.EstudianteMateria> estudiantes = ViewBag.estudiantes;
+    
+    if (perfil.Equals("Monitor"))
+    {
+        Layout = "~/Views/Shared/_Layout_monitor.cshtml";
+    }
+   
+    
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item ">Home</li>
+    <li class="breadcrumb-item active">Calse</li>
+    <li class="breadcrumb-item active">Detalles</li>
+</ol>
+
+
+<div class=" panelBorder">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong> Detalles de la clase</strong>
+        </div>
+        <div class="panel-body">
+
+            <dl class="row">
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Número:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.id</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Identicación:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.usuarios.celular</dd>
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Nombre:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.usuarios.nombre @Model.usuarios.apellidos</dd>
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Periodo:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.periodo</dd>              
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Fecha realizada:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.fecha_realizada.ToString().Substring(0, 10)</dd>
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Fecha de registro:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.fecha_registro.ToString().Substring(0, 10)</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Evidencia:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">
+                    @if (!Model.evidencia.Equals("-"))
+                    {
+                        <div>Si</div>
+                    }
+                    else
+                    {
+                        <div>No</div>
+                    }
+                </dd>
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Estudiantes:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.estudiantes_asistentes.Count()</dd>
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Tema:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9"><p>@Model.tema</p></dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Comentarios:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9"> <p> @Model.comentario </p></dd>
+
+            </dl>
+            @if (estudiantes != null)
+{
+    estudiantes.Sort((x, y) => string.Compare(x.nom_largo, y.nom_largo));
+    <table class=" tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    Identificación
+                </th>
+                <th>
+                    nombre
+                </th>
+            </tr>
+        </thead>
+        @foreach (var e in estudiantes)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => e.num_identificacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => e.nom_largo)
+                </td>
+            </tr>
+        }
+    </table>
+}
+            <div class="text-right">
+                @Html.ActionLink("Listar", "Listar", new { }, new { @class = "btn  btn-info  " })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Scripts/paginacion.js"></script>

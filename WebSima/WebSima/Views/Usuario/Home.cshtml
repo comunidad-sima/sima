@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Usuarios ";
+   
+ }
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Home</li>
+        <li class="breadcrumb-item active">Usuario</li>
+
+    </ol>
+</div>
+
+<div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- /.box -->
+            <div class="box box-success">
+               
+                <div class="box-body">
+                    @*se carga el contenido del formulario de nuevo registro*@
+                    <div class="panelBorder">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong> Nevo usuario</strong> </h3>
+                        </div>
+                        
+                        <div id="nuevo_registro">
+
+                        </div>
+
+                    </div>
+
+                  <br />
+                    @*espacio para mostrar los registros*@
+                    <div class="panelBorder">
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong>Registros</strong> </h3>
+                        </div><br />
+                        <div class="row form-group">
+                            <div class="col-6 col-sm-6">
+                                <div class="input-group">
+                                    <input class="form-control " name="buscar" id="buscar" placeholder="Nombre o Indentificación">
+                                    <span class="input-group-btn">
+                                        <input type="submit" class="btn btn-success  " id="buscar_usuarios" value="Buscar" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        @*se carga el contenido de la tabla de registros*@
+                        <div id="registro">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#usuarios").addClass("active");
+        $("#home_usuarios").addClass("active");
+      // se carga el formulario de nuevo registro
+        $("#nuevo_registro").load("/Usuario/Create");
+       // se garga la tabla de registros
+       $("#registro").load("/Usuario/Listar");
+       $("#buscar_usuarios").click(function () {
+           // div registre esta en Home
+           var dato_buscar = $("#buscar").val().replace(" ", "+");
+          
+           $("#registro").load("/Usuario/listar?buscar=" + dato_buscar);// cuando se cuosulta las capacitaciones de un periodo
+        });
+
+    });
+    </script>
+

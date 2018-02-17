@@ -1,0 +1,54 @@
+﻿@model WebSima.Models.grupos_acargo
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>grupos_acargo</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.usuarios.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.usuarios.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.materias.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.materias.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.periodo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.periodo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.id_grupo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.id_grupo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cursos.periodo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cursos.periodo)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

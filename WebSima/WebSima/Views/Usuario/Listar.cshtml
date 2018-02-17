@@ -1,0 +1,129 @@
+﻿@model IEnumerable<WebSima.Models.MUsuario>
+
+@{
+    ViewBag.Title = "Index";
+   
+    Layout = null;
+}
+  
+    <div class="table-responsive">
+    <table id="tabla_usurios" class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.apellidos)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.tipo)
+                </th>
+                <th class="text-right" style="width:180px"></th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tipo)
+                </td>
+                <td class="text-right">
+                    
+                    @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle"})
+                    <button class="btn btn-default fa  fa-pencil-square-o editar" data-toggle="modal" data-target="#modal-editar-usuario"></button>                
+                    @*@Html.ActionLink(" ", "Edit", new { id = item.id }, new { @class = "btn btn-default fa  fa-pencil-square-o ", title = "Editar" })*@
+                    @Html.ActionLink(" ", "Delete", new { id = item.id }, new { @class = "eliminar btn btn-default fa fa-times ", title = "Eliminar", style = "color:red;" })
+                </td>
+            </tr>
+            }
+
+    </table>
+</div>
+@*modal donde se carga el formalario para editar el usuario*@
+<div class="modal fade" id="modal-editar-usuario">
+    <div class="modal-dialog">
+        <div class="modal-content" id="cuerpo_modal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Editar Usuario</h4>
+            </div>
+            <div class="modal-body">
+                <p>Cargando formulario&hellip;</p>
+            </div>
+           
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+    <script>
+        $(document).ready(function () {
+            // se cargaga en el modal el formulario edit
+            $(".editar").click(function () {
+                // se obtiene el id de la dela tabla
+                var id = $(this).parents("tr").find("td")[0].innerHTML;
+                $("#cuerpo_modal").load("/Usuario/edit/" + id.trim())
+            });
+            // se configura la tabla, esta funcion está en helper.js
+            configurar_dataTable("tablaPaginacion");
+
+            $(".eliminar").click(function (e) {
+                e.preventDefault();
+                // se obtiene el href  de <a> que apunta a la ruta elininar del registro
+                var url = $(this).attr('href');
+              
+                // para eliminar la fila cuando se haya eliminado el registro de la BD
+                var tr = $(this).parents("tr");
+
+                $.confirm({
+                    title: 'Eliminar!',
+                    content: "¿Desea eliminar el usuario?",
+                    buttons: {
+                        ACEPTAR: function () {
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                beforeSend: function () { },
+                                success: function (response) {
+                                    if (response["RESPUESTA"] == "OK") {
+                                         tr.hide();
+                                        //$("#tabla_usurios").row(tr).remove().draw();
+                                    } else if (response["RESPUESTA"] == "ERROR") {                                        
+                                        $.alert(response["MENSAJE"], "Error");
+                                    }
+                                    else if (response["RESPUESTA"] == "LOGIN") {
+                                        location.href = "/";
+                                    }
+                                },
+                                error: function (xhr, ajaxOptions, thrownError) {
+
+                                    $.alert("Error  al realizar la cosnulta", "Error");
+                                }
+                            });
+                        },
+                        CANCELAR: function () {
+
+                        },
+                    }
+                });
+
+            });
+        });
+    </script>
+

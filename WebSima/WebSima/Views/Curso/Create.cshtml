@@ -1,0 +1,211 @@
+﻿@model WebSima.Models.MCurso
+
+@{
+    Layout = null;
+    ViewBag.Title = "Nuevo";
+   
+   
+   
+    SelectList materias = ViewBag.materias;
+   
+}    
+<div id="alert_1">
+    @*espacio para los mensajer de de respuesta de las consultas*@
+</div>
+     
+@using (Html.BeginForm(null,null,FormMethod.Post, new { id = "fDatos_curso" }))
+ {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+    <div class="row">
+
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.idUsuario, "Indentificación")
+                @Html.ValidationMessageFor(model => model.idUsuario, null, new { @class = "label label-danger" })
+                @Html.TextBoxFor(model => model.idUsuario, new
+                               {
+                                   type = "text",
+                                   @class = "form-control ",
+                                   placeholder = "Identificación o nombre del monitor",
+                                   list = "nombres_",
+                                   onkeyup = "buscarMonitores()",
+                                   onBlur = "buscarMonitor()",
+                                   autocomplete = "on"
+                               })
+                <datalist id="nombres_"></datalist>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                <label>Mombre monitor</label>
+                <input type="text" name="name" value=" " id="nombre_largo" class="form-control  " disabled />
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group ">                
+                @Html.LabelFor(model => model.nombre_materia)
+                @Html.ValidationMessageFor(model => model.nombre_materia, null, new { @class = "label label-danger" })
+                <select class="form-control    select2  " style="width: 100%; " name="nombre_materia" id="nombre_materia">
+                    <option value="">Seleccione asignatura</option>
+                    @foreach (SelectListItem s in materias)
+                    {
+                        <option value="@s.Value"> @s.Value</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fecha_finalizacion)
+                @Html.ValidationMessageFor(model => model.fecha_finalizacion, null, new { @class = "label label-danger"})
+                @Html.TextBoxFor(model => model.fecha_finalizacion, new { type = "text", @class = "form-control datepicker", placeholder = "yyyy-mm-dd" })
+
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">           
+                    <!-- radio -->
+            <div class="form-group">
+                <label>Abierto: </label>
+                <label class="radio-inline">
+                    <input type="radio" name="estado" id="radioSi" value="1" class="flat-red" required="" checked=""> SI
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="estado" value="0" class="flat-red"> NO
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-12 text-right">
+            <input type="submit" value="Guardar" id="enviar_curso" class="btn  btn-success " /> |
+            <input type="reset" value="Nuevo" class="btn  btn-group " />
+
+        </div>
+
+    </div>
+}
+
+
+      
+  
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2();
+
+  
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        })
+        configurar_daterangepicker("datepicker");
+        $("#fecha_finalizacion").val("");
+       
+        $.validator.unobtrusive.parse("#fDatos_curso");// se activan las validaciones del formulario
+        $("#fDatos_curso").submit(function (e) {
+            e.preventDefault();
+         
+            if ($("#fDatos_curso").valid()) {
+                var datos = $("#fDatos_curso").serializeArray();
+                var btn = $("#enviar_curso");
+                btn.val("Guardando...");
+                btn.prop("disabled", true);
+                $.ajax({
+                    data: datos,
+                    url: $("#fDatos_curso").attr('action'),
+                    dataType: "json",
+                    type: 'post',                  
+                    beforeSend: function () { },
+                    success: function (response) {
+                        // se activa el boton enviar
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                        var mensaje = "";
+                        var clase = "";
+                        if (response["RESPUESTA"] == "OK") {
+                            $("#registro").load("/Usuario/Listar");
+                            mensaje = "<strong>¡Exito!</strong> Grupo registrada.";
+                            clase = "alert-success";
+
+                        } else if (response["RESPUESTA"] == "ERROR") {
+                            mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                            clase = "alert-danger";
+                        }
+                        else if (response["RESPUESTA"] == "LOGIN") {
+                            mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
+                            clase = " alert-danger";
+                            location.href = "/";
+                        }
+                        //alert_mensajes() esta en helper.js
+                        $("#alert_1").html(alert_mensajes(mensaje, clase));
+
+                    }, error: function (error) {
+                        alert("Error ");
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                    }
+                });
+            }
+        });
+    });
+    function buscarMonitor() {
+        var buscar = $("#idUsuario").val();
+        if (buscar != '' && !isNaN(buscar)) {
+            var parametros = {
+                "id": buscar
+            };
+            $.ajax({
+                dataType: 'JSON',
+                type: 'POST',
+                data: parametros,
+                url: "/Curso/GetUsuario",
+                beforeSend: function () { },
+                success: function (response) {                  
+
+                    if (!$.isEmptyObject(response)) {
+                        console.log(response);
+                        var datos = $.parseJSON(JSON.stringify(response));
+                        $("#nombre_largo").val(datos["nombre"]+" "+datos["apellidos"])
+                    } else {
+
+                    }
+                }
+            });
+        }
+    }
+    
+    function buscarMonitores() {
+        
+            var buscar = $("#idUsuario").val();
+            $("#nombre_largo").val("--")
+            if (buscar != '') {
+                var parametros = {
+                    "Buscar": buscar
+                };
+                $.ajax({
+                    dataType:'JSON',
+                    type: 'POST',
+                    data: parametros,
+                    url:"/Curso/Monitores" ,
+                    beforeSend: function () { },
+                    success: function (response) {
+                   
+                        var arrayDatos = $.parseJSON(JSON.stringify(response));
+                        $('#nombres_').empty();
+                        arrayDatos.forEach(function (subArrayDatos, indice, arrayDatos) {
+                            var v = "<option class='datos' value='" + subArrayDatos["id"] + "'> " + subArrayDatos["nombre"] + " " + subArrayDatos["apellidos"] + "</option>";
+
+
+                            $('#nombres_').append(v);
+
+                        });
+
+                    }
+                });
+            }
+        }
+        
+</script>
+            
+

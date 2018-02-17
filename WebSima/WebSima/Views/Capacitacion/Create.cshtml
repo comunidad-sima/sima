@@ -1,0 +1,136 @@
+﻿@model WebSima.Models.MCapacitacion
+
+@{
+    Layout = null;
+    
+} 
+ <div id ="alert_1">
+    @*espacio para los mensajer de de respuesta de las consultas*@
+</div>
+            @using (Html.BeginForm("Create", "Capacitacion", FormMethod.Post, new { enctype = "multipart/form-data", 
+               id="fDatos", @class = "" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+    <div class="row  ">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.encargado)
+                @Html.TextBoxFor(model => model.encargado, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.encargado, null, new { @class = "label label-danger" })
+
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fecha)
+              
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.fecha, new { @class = "form-control datepicker  ", type = "text", placeholder = "YYYY-MM-DD" })
+                </div>
+                    @Html.ValidationMessageFor(model => model.fecha, null, new { @class = "label label-danger" })
+                </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.tema)
+                @Html.TextAreaFor(model => model.tema, new { @class = "form-control ", TextMode = "multiline" })
+                @Html.ValidationMessageFor(model => model.tema, null, new { @class = "label label-danger" })
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.comentarios)
+
+
+
+                @Html.TextAreaFor(model => model.comentarios, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.comentarios, null, new { @class = "label label-danger" })
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.File)
+                @Html.TextBoxFor(model => model.File, new { @class = "form-control ", type = "file" })
+                @Html.ValidationMessageFor(model => model.File, null, new { @class = "label label-danger" })
+            </div>
+
+        </div>
+        <div class="text-right col-sm-12 form-group ">
+
+            <input class="btn btn-success" type="submit" id="enviar" value="Guardar" />
+
+        </div>
+    </div>
+            }
+
+
+
+
+<script>
+    $(document).ready(function () {
+      
+        // se configura el  daterangepicker, esta funcion está en helper.js
+        configurar_daterangepicker("datepicker");
+        $("#fecha").val("");// se limpia para que no muestre la fecha al iniciar
+
+        $.validator.unobtrusive.parse("#fDatos");// se activan las validaciones del formulario
+
+        $("#fDatos").submit(function (e) {       
+            e.preventDefault();
+            if ($("#fDatos").valid()) {
+                var formData = new FormData($("#fDatos")[0]);
+                var btn = $("#enviar");
+                btn.val("Guardando...");
+                btn.prop("disabled", true);
+                $.ajax({
+                    data: formData,
+                    url: $("#fDatos").attr('action'),
+                    dataType: "json",
+                    type: 'post',
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () { },
+                    success: function (response) {
+                        // se activa el boton enviar
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);                        
+                        var mensaje="";
+                        var clase = "";
+                        if (response["RESPUESTA"] == "OK") {
+                            $("#registro").load("/Capacitacion/Listar");
+                            mensaje = "<strong>¡Exito!</strong> Capacitacón registrada.";
+                            clase = "alert-success";                    
+                           
+                        } else if (response["RESPUESTA"] == "ERROR") {                            
+                            mensaje = "<strong>¡Error!</strong> "+response["MENSAJE"];
+                            clase = "alert-danger";
+                        }
+                        else if (response["RESPUESTA"] == "LOGIN") {
+                            mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
+                            clase = " alert-danger";
+                            
+                            location.href = "/";
+                        }
+                        //alert_mensajes() esta en helper.js
+                        $("#alert_1").html(alert_mensajes(mensaje, clase));
+
+                    }, error: function (error) {
+                        alert("Error");
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                    }
+                });
+            }
+        });            
+    });
+    </script>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

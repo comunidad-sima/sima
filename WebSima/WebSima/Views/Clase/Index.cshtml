@@ -1,0 +1,134 @@
+﻿@model IEnumerable<WebSima.Models.Mclase>
+
+@{
+    ViewBag.Title = "Clases registradas";
+    Layout = "~/Views/Shared/_Layout_monitor.cshtml";
+    List<String> materiasMonitor = ViewBag.materiasMonitor;
+    String materiaSeleccionada = ViewBag.materiaSeleccionada;
+    String selected_ = "selected";
+}
+
+<ol class="breadcrumb ">
+    <li class="breadcrumb-item ">Home</li>
+    <li class="breadcrumb-item active">Clases</li>
+
+</ol>
+
+<div class="panelBorder">
+    <h4>Clases registradas</h4>
+    <hr />
+
+    @using (Html.BeginForm("Index", "Clase", FormMethod.Get, new { id = "fmaterias" }))
+    {
+        <div class="row">
+            <div class="col-sm-12 col-12   col-lg-5">
+                <label>Asignaturas</label>
+                <select class="form-control buscarGrupo" id="materia" name="materia" required>
+                    <option value="">Todos los registros</option>
+                    @if (materiasMonitor != null)
+                    {
+                        foreach (var e in materiasMonitor)
+                        {
+                            <option value="@e"
+                                    @if (e.Equals(materiaSeleccionada)) { @selected_    }>
+                                @e
+                            </option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="--">No periodos</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-12 col-12  col-lg-7 text-right form-group ">
+                <br />
+                @Html.ActionLink("Nueva", "Create", new { }, new { @class = "btn btn-success " })
+            </div>
+        </div>
+    }
+    <div>
+        @if (Model != null)
+        {
+            <label><strong>Clases Realizadas:</strong>   @Model.Count()</label>
+        }
+
+    </div>
+    <div class="table-responsive">
+        <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tema)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.comentario)
+                    </th>
+                    <th>
+                        Estudisntes
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.fecha_realizada)
+                    </th>
+                    <th class="text-center">
+                        Opciones
+                    </th>
+
+                </tr>
+            </thead>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tema)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.comentario)
+                        </td>
+                        <td class="text-center">
+                            @item.estudisntes_asistentes.Count()
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fecha_realizada).ToString().Substring(0, 10)
+                        </td>
+                        <td class="text-right">
+                            @if (!item.evidencia.Equals("-"))
+                            {
+                                @Html.ActionLink(" ", "Descargar", new { archivoNombre = item.evidencia }, new { @class = "btn btn-default fa  fa-cloud-download", title = "Descargar", })
+
+                            }
+                            @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle", })
+                        </td>
+
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        configurar_dataTable("tablaPaginacion");
+        $("#materia").change(function () {
+            $("#fmaterias").submit();// se envia el formulario materia, para consultar los estuaiantes
+        });
+    });
+    </script>
+<script src="~/Scripts/paginacion.js"></script>
+
+
+
+
+

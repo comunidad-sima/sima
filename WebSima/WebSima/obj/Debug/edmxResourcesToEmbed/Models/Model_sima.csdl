@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="bd_simaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="capacitaciones">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="periodo" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="encargado" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="tema" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="comentarios" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="nom_File" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="clases_sima">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="periodo" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="tema" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="comentario" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+    <Property Name="cursos_id" Type="Int32" Nullable="false" />
+    <Property Name="usuarios_id" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="evidencia" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fecha_realizada" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="cursos" Relationship="Self.FK_clases_sima_cursos" FromRole="clases_sima" ToRole="cursos" />
+    <NavigationProperty Name="usuarios" Relationship="Self.FK_clases_sima_usuarios" FromRole="clases_sima" ToRole="usuarios" />
+    <NavigationProperty Name="estudiantes_asistentes" Relationship="Self.FK_estudiantes_asistentes_clases_sima" FromRole="clases_sima" ToRole="estudiantes_asistentes" />
+  </EntityType>
+  <EntityType Name="cursos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="periodo" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombre_materia" Type="String" MaxLength="90" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="estado" Type="Byte" Nullable="false" />
+    <Property Name="fecha_finalizacion" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="idUsuario" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="clases_sima" Relationship="Self.FK_clases_sima_cursos" FromRole="cursos" ToRole="clases_sima" />
+    <NavigationProperty Name="materias" Relationship="Self.FK_cursos_materias" FromRole="cursos" ToRole="materias" />
+    <NavigationProperty Name="usuarios" Relationship="Self.FK_cursos_usuarios" FromRole="cursos" ToRole="usuarios" />
+    <NavigationProperty Name="grupos_acargo" Relationship="Self.FK_grupos_acargo_cursos" FromRole="cursos" ToRole="grupos_acargo" />
+  </EntityType>
+  <EntityType Name="estudiantes_asistentes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="estudiante_id" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="clase_id" Type="Int32" Nullable="false" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="clases_sima" Relationship="Self.FK_estudiantes_asistentes_clases_sima" FromRole="estudiantes_asistentes" ToRole="clases_sima" />
+  </EntityType>
+  <EntityType Name="grupos_acargo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idUsuario" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="materia" Type="String" MaxLength="90" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="periodo" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="id_grupo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="id_curso" Type="Int32" Nullable="false" />
+    <Property Name="programa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="cursos" Relationship="Self.FK_grupos_acargo_cursos" FromRole="grupos_acargo" ToRole="cursos" />
+    <NavigationProperty Name="materias" Relationship="Self.FK_grupos_acargo_materias" FromRole="grupos_acargo" ToRole="materias" />
+    <NavigationProperty Name="usuarios" Relationship="Self.FK_grupos_acargo_usuarios" FromRole="grupos_acargo" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="materias">
+    <Key>
+      <PropertyRef Name="nombre" />
+    </Key>
+    <Property Name="nombre" Type="String" MaxLength="90" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="cursos" Relationship="Self.FK_cursos_materias" FromRole="materias" ToRole="cursos" />
+    <NavigationProperty Name="grupos_acargo" Relationship="Self.FK_grupos_acargo_materias" FromRole="materias" ToRole="grupos_acargo" />
+  </EntityType>
+  <EntityType Name="usuarios">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="apellidos" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="celular" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="tipo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="contrasena" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="clases_sima" Relationship="Self.FK_clases_sima_usuarios" FromRole="usuarios" ToRole="clases_sima" />
+    <NavigationProperty Name="cursos" Relationship="Self.FK_cursos_usuarios" FromRole="usuarios" ToRole="cursos" />
+    <NavigationProperty Name="grupos_acargo" Relationship="Self.FK_grupos_acargo_usuarios" FromRole="usuarios" ToRole="grupos_acargo" />
+  </EntityType>
+  <EntityType Name="configuraciones">
+    <Key>
+      <PropertyRef Name="periodo_actual" />
+    </Key>
+    <Property Name="periodo_actual" Type="String" MaxLength="6" FixedLength="true" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_clases_sima_cursos">
+    <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+    <End Role="clases_sima" Type="Self.clases_sima" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cursos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="clases_sima">
+        <PropertyRef Name="cursos_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_clases_sima_usuarios">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="clases_sima" Type="Self.clases_sima" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="clases_sima">
+        <PropertyRef Name="usuarios_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_estudiantes_asistentes_clases_sima">
+    <End Role="clases_sima" Type="Self.clases_sima" Multiplicity="1" />
+    <End Role="estudiantes_asistentes" Type="Self.estudiantes_asistentes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="clases_sima">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="estudiantes_asistentes">
+        <PropertyRef Name="clase_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_cursos_materias">
+    <End Role="materias" Type="Self.materias" Multiplicity="1" />
+    <End Role="cursos" Type="Self.cursos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materias">
+        <PropertyRef Name="nombre" />
+      </Principal>
+      <Dependent Role="cursos">
+        <PropertyRef Name="nombre_materia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_cursos_usuarios">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="cursos" Type="Self.cursos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="cursos">
+        <PropertyRef Name="idUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_grupos_acargo_cursos">
+    <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+    <End Role="grupos_acargo" Type="Self.grupos_acargo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cursos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="grupos_acargo">
+        <PropertyRef Name="id_curso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_grupos_acargo_materias">
+    <End Role="materias" Type="Self.materias" Multiplicity="1" />
+    <End Role="grupos_acargo" Type="Self.grupos_acargo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materias">
+        <PropertyRef Name="nombre" />
+      </Principal>
+      <Dependent Role="grupos_acargo">
+        <PropertyRef Name="materia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_grupos_acargo_usuarios">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="grupos_acargo" Type="Self.grupos_acargo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="grupos_acargo">
+        <PropertyRef Name="idUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="bd_simaEntitie" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" />
+    <EntitySet Name="clases_sima" EntityType="Self.clases_sima" />
+    <EntitySet Name="cursos" EntityType="Self.cursos" />
+    <EntitySet Name="estudiantes_asistentes" EntityType="Self.estudiantes_asistentes" />
+    <EntitySet Name="grupos_acargo" EntityType="Self.grupos_acargo" />
+    <EntitySet Name="materias" EntityType="Self.materias" />
+    <EntitySet Name="usuarios" EntityType="Self.usuarios" />
+    <EntitySet Name="configuraciones" EntityType="Self.configuraciones" />
+    <AssociationSet Name="FK_clases_sima_cursos" Association="Self.FK_clases_sima_cursos">
+      <End Role="cursos" EntitySet="cursos" />
+      <End Role="clases_sima" EntitySet="clases_sima" />
+    </AssociationSet>
+    <AssociationSet Name="FK_clases_sima_usuarios" Association="Self.FK_clases_sima_usuarios">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="clases_sima" EntitySet="clases_sima" />
+    </AssociationSet>
+    <AssociationSet Name="FK_estudiantes_asistentes_clases_sima" Association="Self.FK_estudiantes_asistentes_clases_sima">
+      <End Role="clases_sima" EntitySet="clases_sima" />
+      <End Role="estudiantes_asistentes" EntitySet="estudiantes_asistentes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_cursos_materias" Association="Self.FK_cursos_materias">
+      <End Role="materias" EntitySet="materias" />
+      <End Role="cursos" EntitySet="cursos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_cursos_usuarios" Association="Self.FK_cursos_usuarios">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="cursos" EntitySet="cursos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_grupos_acargo_cursos" Association="Self.FK_grupos_acargo_cursos">
+      <End Role="cursos" EntitySet="cursos" />
+      <End Role="grupos_acargo" EntitySet="grupos_acargo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_grupos_acargo_materias" Association="Self.FK_grupos_acargo_materias">
+      <End Role="materias" EntitySet="materias" />
+      <End Role="grupos_acargo" EntitySet="grupos_acargo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_grupos_acargo_usuarios" Association="Self.FK_grupos_acargo_usuarios">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="grupos_acargo" EntitySet="grupos_acargo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

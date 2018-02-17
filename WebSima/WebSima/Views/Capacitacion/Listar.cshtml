@@ -1,0 +1,136 @@
+﻿@model IEnumerable<WebSima.Models.MCapacitacion>
+
+@{
+    Layout = null;
+    ViewBag.Title = "Capacitiaciones ";   
+    
+} 
+    
+  
+    <div class="box-body table-responsive no-padding">
+        <table id="tab" class="table tablaPaginacion table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.encargado)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tema)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.fecha)
+                    </th>
+                    <th class="text-right" style="width:150px">
+                        @Html.DisplayNameFor(model => model.File)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.encargado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tema)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fecha)
+                        </td>
+                        <td class="text-right">
+                            @if (!item.File.Equals("-"))
+                            {
+                                @Html.ActionLink(" ", "Descargar", new { archivoNombre = item.File }, new { @class = "btn btn-default fa  fa-cloud-download", title = "Descargar evidencia", })
+
+                            }
+                            @*@Html.ActionLink(" ", "Edit", new { id = item.cap_id }, new { @class = "btn btn-light fa fa-pencil-square-o ", title = "Editar", })*@@Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default  fa fa-eye", title = "detalle", })
+                            @Html.ActionLink(" ", "Delete", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar", title = "Eliminar", style = "color:red;" })
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.encargado)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tema)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.fecha)
+                    </th>
+                    <th class="text-right" style="width:150px">
+                        @Html.DisplayNameFor(model => model.File)
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+
+<script>
+    $(document).ready(function () {
+        // se configura la tabla, esta funcion está en helper.js
+        configurar_dataTable("tablaPaginacion");
+        $(".eliminar").click(function (e) {
+            e.preventDefault();
+            // se obtiene el href  de <a> que apunta a la ruta elininar del registro
+            var url = $(this).attr('href');
+            // para eliminar la fila cuando se haya eliminado el registro de la BD
+            var tr = $(this).parents("tr");
+        
+            $.confirm({
+                title: 'Eliminar!',
+                content: "¿Desea eliminar la capacitación?",
+                buttons: {
+                    ACEPTAR: function () {
+                        $.ajax({                       
+                            url: url,
+                            type: 'post',
+                            beforeSend: function () {},
+                            success: function (response) {                
+                            
+                                if (response["RESPUESTA"] == "OK") {
+                                    tr.remove();
+                                } else if (response["RESPUESTA"] == "ERROR") {
+                                    tr.remove();
+                                    $.alert(response["MENSAJE"], "Error");
+                                }
+                                else if (response["RESPUESTA"] == "LOGIN") {
+                                    location.href = "/";
+                                }
+                        
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                            
+                                $.alert("Error  al realizar la cosnulta", "Error");
+                            }
+                        });
+                    },
+                    CANCELAR: function () {
+                    
+                    },
+                }
+            });
+      
+        });
+    });
+    </script>
+
+

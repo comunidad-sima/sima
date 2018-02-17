@@ -1,0 +1,63 @@
+﻿@model WebSima.Models.MCurso
+
+@{
+    ViewBag.Title = "Detalles";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item ">Home</li>
+    <li class="breadcrumb-item active">Grupos</li>
+    <li class="breadcrumb-item active">Detalles</li>
+</ol>
+
+
+<div class=" panelBorder">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong> Detalles de grupo</strong>
+        </div>
+        <div class="panel-body ">
+
+            <dl class="row">
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Número:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.id</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">
+                    @Html.DisplayNameFor(model => model.nombre_materia)
+                </dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">
+                    @Html.DisplayFor(model => model.nombre_materia)
+                </dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Encargado:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.usuarios.nombre @Model.usuarios.apellidos</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Identificacion:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.idUsuario</dd>
+
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Estado:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">
+                    @if (Model.estado == 0)
+                    {
+                        <div>Abierto</div>
+                    }
+                    else
+                    {
+                        <div>Cerrado</div>
+                    }
+                </dd>
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Periodo:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.periodo</dd>
+                <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Fecha de cierre:</dt>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9 ">@Model.fecha_finalizacion</dd>
+
+
+            </dl>
+
+            <div class="text-right">
+                @Html.ActionLink("Editar", "Edit", new { id = Model.id }, new { @class = "btn btn-primary" }) |
+                @Html.ActionLink("Listar", "Index", null, new { @class = "btn  btn-info  " })
+            </div>
+        </div>
+    </div>
+</div>
+

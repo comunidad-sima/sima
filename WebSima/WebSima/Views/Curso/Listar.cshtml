@@ -1,0 +1,165 @@
+﻿@model IEnumerable<WebSima.Models.MCurso>
+
+@{
+    Layout = null;
+   
+    String cerrado = "Cerrado", abierto = "Abierto";
+    //List<WebSima.Models.MMateria> materias = ViewBag.materias;
+  
+    String materia = ViewBag.materia;
+    String periodo = ViewBag.periodo;
+   
+  
+}
+
+
+
+
+   
+   
+
+    <div class="table-responsive">
+        <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id)
+                    </th>
+
+                    <th>
+                        Monitor
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.periodo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.nombre_materia)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.estado)
+                    </th>
+
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.usuarios.nombre)
+                            @Html.DisplayFor(modelItem => item.usuarios.apellidos)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.periodo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nombre_materia)
+                        </td>
+                        <td>
+                            @if (item.estado == 1)
+                            {
+                                @abierto
+                            }
+                            else
+                            {
+                                @cerrado
+                            }
+
+                        </td>
+
+
+                        <td class="text-right">
+                            @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle", })
+                            <button class="btn btn-default fa  fa-pencil-square-o editar" data-toggle="modal" data-target="#modal-editar-curso"></button>
+                            @Html.ActionLink(" ", "Delete", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar ", title = "Eliminar", style = "color:red;" })
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+@*modal donde se carga el formalario para editar el usuario*@
+<div class="modal fade" id="modal-editar-curso">
+    <div class="modal-dialog">
+        <div class="modal-content" id="cuerpo_modal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Editar grupo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Cargando formulario&hellip;</p>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    $(document).ready(function () {
+        // se configura la tabla, esta funcion está en helper.js
+        configurar_dataTable("tablaPaginacion");
+        // se cargaga en el modal el formulario edit
+        $(".editar").click(function () {
+            // se obtiene el id de la dela tabla
+            var id = $(this).parents("tr").find("td")[0].innerHTML;
+            $("#cuerpo_modal").load("/Curso/edit/" + id.trim())
+        });
+
+        $(".eliminar").click(function (e) {
+            e.preventDefault();
+            // se obtiene el href  de <a> que apunta a la ruta elininar del registro
+            var url = $(this).attr('href');
+            // para eliminar la fila cuando se haya eliminado el registro de la BD
+            var tr = $(this).parents("tr");
+
+            $.confirm({
+                title: 'Eliminar!',
+                content: "¿Desea eliminar la capacitación?",
+                buttons: {
+                    ACEPTAR: function () {
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            beforeSend: function () { },
+                            success: function (response) {
+
+                                if (response["RESPUESTA"] == "OK") {
+                                    tr.remove();
+                                } else if (response["RESPUESTA"] == "ERROR") {
+                                    tr.remove();
+                                    $.alert(response["MENSAJE"], "Error");
+                                }
+                                else if (response["RESPUESTA"] == "LOGIN") {
+                                    location.href = "/";
+                                }
+
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                                $.alert("Error  al realizar la cosnulta", "Error");
+                            }
+                        });
+                    },
+                    CANCELAR: function () {
+
+                    },
+                }
+            });
+
+        });
+
+    });
+</script>
+
+
+
