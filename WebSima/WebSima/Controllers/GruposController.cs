@@ -41,10 +41,7 @@ namespace WebSima.Controllers
                     }
                 }
             }
-            List<grupos_acargo> grupos_acargo = (
-                      from p in db.grupos_acargo
-                      where p.idUsuario == idUsuario && p.periodo == periodo
-                      select p).ToList();
+            List<grupos_acargo> grupos_acargo = (new MGrupo().getGrupuposPerido(db,idUsuario,periodo));
             
             ViewBag.datos = datos;
             ViewBag.grupos_acargo = grupos_acargo;

@@ -15,6 +15,7 @@
     List<String> materiasMonitor = ViewBag.materiasMonitor;
     String programa= ViewBag.materia;
     String selected_ ="selected";
+    List<WebSima.Models.grupos_acargo> grupos_acargo = ViewBag.grupos_acargo;
 }
 
 <ol class="breadcrumb">
@@ -87,17 +88,18 @@
                     @if (estudiantes != null)
                     {
                         //filtramos los progrogramas(contaduria,admnistracion,etc)
-                        programas = estudiantes.Select(o => o.nom_unidad).Distinct().ToList();
+                       // programas = estudiantes.Select(o => o.nom_unidad).Distinct().ToList();
+                        programas=grupos_acargo.Select(o => o.programa).Distinct().ToList();
 
 
 
                         foreach (String programa_ in programas)
                         {
                             // filtramos los grupos de cada programa
-                            grupos = (from s in estudiantes
-                                      where (s.nom_unidad == programa_)
+                            //grupos = (from s in estudiantes where (s.nom_unidad == programa_)   select s).ToList().Select(oo => oo.num_grupo).Distinct().ToList().OrderBy(x => x).ToList();
+                            grupos = (from s in grupos_acargo where (s.programa == programa_)  
+                                      select s).ToList().Select(oo => oo.id_grupo).ToList().OrderBy(x => x).ToList();
 
-                                      select s).ToList().Select(oo => oo.num_grupo).Distinct().ToList().OrderBy(x => x).ToList();
                             //idPanel++;
 
 
