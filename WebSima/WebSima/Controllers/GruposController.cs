@@ -64,7 +64,7 @@ namespace WebSima.Controllers
             int idCuro = MCurso.getIdCurso(db, materia, periodo, idMonitor);
 
             bool error=false;
-
+            Respusta respuesta = new Respusta();
 
             using (var transaccion = new TransactionScope())
             {
@@ -101,14 +101,18 @@ namespace WebSima.Controllers
                     catch (Exception)
                     {
                         error = true;
+                        respuesta.RESPUESTA = "ERROR";
+                        respuesta.MENSAJE = "No se pudo actualizar los grupos.";
                     }
                     if (!error)
                     {
                         transaccion.Complete();
+                        respuesta.RESPUESTA = "OK";
+                        respuesta.MENSAJE = "Grupos actualizados.";
                     }
                 }
             }
-            return null;
+            return Json(respuesta); 
         }
         //
         // GET: /Grupos/Details/5
