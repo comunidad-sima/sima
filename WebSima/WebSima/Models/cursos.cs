@@ -26,6 +26,7 @@ namespace WebSima.Models
         public byte estado { get; set; }
         public System.DateTime fecha_finalizacion { get; set; }
         public string idUsuario { get; set; }
+        public Nullable<byte> eliminado { get; set; }
     
         public virtual ICollection<clases_sima> clases_sima { get; set; }
         public virtual materias materias { get; set; }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="bd_simaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="bd_simaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="capacitaciones">
           <Key>
             <PropertyRef Name="id" />
@@ -49,6 +49,7 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
           <Property Name="estado" Type="tinyint" Nullable="false" />
           <Property Name="fecha_finalizacion" Type="date" Nullable="false" />
           <Property Name="idUsuario" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="eliminado" Type="tinyint" />
         </EntityType>
         <EntityType Name="estudiantes_asistentes">
           <Key>
@@ -88,6 +89,7 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
           <Property Name="tipo" Type="varchar" MaxLength="15" />
           <Property Name="contrasena" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="fecha_registro" Type="date" Nullable="false" />
+          <Property Name="eliminado" Type="tinyint" />
         </EntityType>
         <Association Name="FK_clases_sima_cursos">
           <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
@@ -231,8 +233,7 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
             <End Role="grupos_acargo" EntitySet="grupos_acargo" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="bd_simaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -279,6 +280,7 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <NavigationProperty Name="materias" Relationship="Self.FK_cursos_materias" FromRole="cursos" ToRole="materias" />
           <NavigationProperty Name="usuarios" Relationship="Self.FK_cursos_usuarios" FromRole="cursos" ToRole="usuarios" />
           <NavigationProperty Name="grupos_acargo" Relationship="Self.FK_grupos_acargo_cursos" FromRole="cursos" ToRole="grupos_acargo" />
+          <Property Name="eliminado" Type="Byte" />
         </EntityType>
         <EntityType Name="estudiantes_asistentes">
           <Key>
@@ -327,6 +329,7 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <NavigationProperty Name="clases_sima" Relationship="Self.FK_clases_sima_usuarios" FromRole="usuarios" ToRole="clases_sima" />
           <NavigationProperty Name="cursos" Relationship="Self.FK_cursos_usuarios" FromRole="usuarios" ToRole="cursos" />
           <NavigationProperty Name="grupos_acargo" Relationship="Self.FK_grupos_acargo_usuarios" FromRole="usuarios" ToRole="grupos_acargo" />
+          <Property Name="eliminado" Type="Byte" />
         </EntityType>
         <EntityType Name="configuraciones">
           <Key>
@@ -509,6 +512,7 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <EntitySetMapping Name="cursos">
             <EntityTypeMapping TypeName="bd_simaModel.cursos">
               <MappingFragment StoreEntitySet="cursos">
+                <ScalarProperty Name="eliminado" ColumnName="eliminado" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="periodo" ColumnName="periodo" />
                 <ScalarProperty Name="nombre_materia" ColumnName="nombre_materia" />
@@ -550,6 +554,7 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <EntitySetMapping Name="usuarios">
             <EntityTypeMapping TypeName="bd_simaModel.usuarios">
               <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="eliminado" ColumnName="eliminado" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="apellidos" ColumnName="apellidos" />

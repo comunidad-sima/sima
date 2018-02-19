@@ -172,7 +172,6 @@
     <Compile Include="Models\MCapacitacion.cs" />
     <Compile Include="Models\Mclase.cs" />
     <Compile Include="Models\MCurso.cs" />
-    <Compile Include="Models\MGrupo.cs" />
     <Compile Include="Models\MGrupos_acargo.cs" />
     <Compile Include="Models\MMateria.cs" />
     <Compile Include="Models\Model_sima.Context.cs">

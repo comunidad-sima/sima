@@ -29,6 +29,7 @@ namespace WebSima.Models
         public string tipo { get; set; }
         public string contrasena { get; set; }
         public System.DateTime fecha_registro { get; set; }
+        public Nullable<byte> eliminado { get; set; }
     
         public virtual ICollection<clases_sima> clases_sima { get; set; }
         public virtual ICollection<cursos> cursos { get; set; }
