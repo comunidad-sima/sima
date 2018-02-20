@@ -41,10 +41,7 @@ namespace WebSima.Controllers
                     }
                 }
             }
-            List<grupos_acargo> grupos_acargo = (
-                      from p in db.grupos_acargo
-                      where p.idUsuario == idUsuario && p.periodo == periodo
-                      select p).ToList();
+            List<grupos_acargo> grupos_acargo = (new MGrupos_acargo().getGrupuposPerido(db,idUsuario,periodo));
             
             ViewBag.datos = datos;
             ViewBag.grupos_acargo = grupos_acargo;
@@ -84,18 +81,21 @@ namespace WebSima.Controllers
                             contestTransaccion.grupos_acargo.Remove(element);
                             contestTransaccion.SaveChanges();
                         }
-                        foreach (String element in idGrupo)
+                        if (idGrupo != null)
                         {
-                            carrera_idCurso = element.Split('|');
-                            grupos_acargo gruposAcargos = new grupos_acargo();
-                            gruposAcargos.idUsuario = idMonitor;
-                            gruposAcargos.materia = materia;
-                            gruposAcargos.periodo = periodo;
-                            gruposAcargos.id_grupo = carrera_idCurso[1];
-                            gruposAcargos.programa = carrera_idCurso[0];
-                            gruposAcargos.id_curso = idCuro;
-                            contestTransaccion.grupos_acargo.Add(gruposAcargos);
-                            contestTransaccion.SaveChanges();
+                            foreach (String element in idGrupo)
+                            {
+                                carrera_idCurso = element.Split('|');
+                                grupos_acargo gruposAcargos = new grupos_acargo();
+                                gruposAcargos.idUsuario = idMonitor;
+                                gruposAcargos.materia = materia;
+                                gruposAcargos.periodo = periodo;
+                                gruposAcargos.id_grupo = carrera_idCurso[1];
+                                gruposAcargos.programa = carrera_idCurso[0];
+                                gruposAcargos.id_curso = idCuro;
+                                contestTransaccion.grupos_acargo.Add(gruposAcargos);
+                                contestTransaccion.SaveChanges();
+                            }
                         }
                     }
                     catch (Exception)

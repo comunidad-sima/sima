@@ -43,6 +43,7 @@
     <NavigationProperty Name="materias" Relationship="Self.FK_cursos_materias" FromRole="cursos" ToRole="materias" />
     <NavigationProperty Name="usuarios" Relationship="Self.FK_cursos_usuarios" FromRole="cursos" ToRole="usuarios" />
     <NavigationProperty Name="grupos_acargo" Relationship="Self.FK_grupos_acargo_cursos" FromRole="cursos" ToRole="grupos_acargo" />
+    <Property Name="eliminado" Type="Byte" />
   </EntityType>
   <EntityType Name="estudiantes_asistentes">
     <Key>
@@ -91,6 +92,7 @@
     <NavigationProperty Name="clases_sima" Relationship="Self.FK_clases_sima_usuarios" FromRole="usuarios" ToRole="clases_sima" />
     <NavigationProperty Name="cursos" Relationship="Self.FK_cursos_usuarios" FromRole="usuarios" ToRole="cursos" />
     <NavigationProperty Name="grupos_acargo" Relationship="Self.FK_grupos_acargo_usuarios" FromRole="usuarios" ToRole="grupos_acargo" />
+    <Property Name="eliminado" Type="Byte" />
   </EntityType>
   <EntityType Name="configuraciones">
     <Key>

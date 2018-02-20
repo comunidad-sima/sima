@@ -102,7 +102,8 @@ namespace WebSima.Controllers
                             celular = usuario.celular,
                             tipo = usuario.tipo,
                             fecha_registro = fecha,
-                            contrasena = contrasena
+                            contrasena = contrasena,
+                            eliminado=0
                         };
                         String guardar = usuario.guardar(c, db);
                         if (guardar != null)
@@ -242,7 +243,9 @@ namespace WebSima.Controllers
                 {
                     if (usuarios.cursos.Count() == 0)
                     {
-                        db.usuarios.Remove(usuarios);
+                        usuarios.eliminado = 1;
+                        //db.usuarios.Remove(usuarios);
+                        db.Entry(usuarios).State = EntityState.Modified;
                         db.SaveChanges();
                         respuesta.RESPUESTA = "OK";
                     }

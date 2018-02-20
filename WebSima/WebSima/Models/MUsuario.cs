@@ -55,6 +55,7 @@ namespace WebSima.Models
         public System.DateTime fecha_registro { get; set; }
         public virtual ICollection<clases_sima> clases_sima { get; set; }
         public virtual ICollection<cursos> cursos { get; set; }
+        public Nullable<byte> eliminado { get; set; }
 
         public String guardar(usuarios usuario, bd_simaEntitie db)
         {
@@ -123,7 +124,8 @@ namespace WebSima.Models
         {
            
             var usuario = (from user in db.usuarios
-                           where (user.nombre + " " + user.apellidos).Contains(buscar) || user.id.StartsWith(buscar)            
+                           where ((user.nombre + " " + user.apellidos).Contains(buscar) || user.id.StartsWith(buscar) 
+                           )&& user.eliminado==0
                                 
                                  select new MUsuario
                                  {
@@ -150,7 +152,7 @@ namespace WebSima.Models
         {
             var usuario = (from user in db.usuarios
                             where ((user.nombre + " " + user.apellidos).Contains(buscar) || user.id.StartsWith(buscar)) &&
-                            user.tipo=="Monitor"
+                            user.tipo=="Monitor" && user.eliminado==0
                             select new MUsuario
                             {
                                 id = user.id,

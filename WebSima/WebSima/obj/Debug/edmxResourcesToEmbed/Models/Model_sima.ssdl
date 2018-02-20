@@ -44,6 +44,7 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
     <Property Name="estado" Type="tinyint" Nullable="false" />
     <Property Name="fecha_finalizacion" Type="date" Nullable="false" />
     <Property Name="idUsuario" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="eliminado" Type="tinyint" />
   </EntityType>
   <EntityType Name="estudiantes_asistentes">
     <Key>
@@ -83,6 +84,7 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
     <Property Name="tipo" Type="varchar" MaxLength="15" />
     <Property Name="contrasena" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="fecha_registro" Type="date" Nullable="false" />
+    <Property Name="eliminado" Type="tinyint" />
   </EntityType>
   <Association Name="FK_clases_sima_cursos">
     <End Role="cursos" Type="Self.cursos" Multiplicity="1" />

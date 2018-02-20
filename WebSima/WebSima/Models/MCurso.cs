@@ -34,7 +34,7 @@ namespace WebSima.Models
         [Required]
         public string idUsuario { get; set; }
           [Display(Name = "Monitor")]
-
+        public Nullable<byte> eliminado { get; set; }
         public virtual ICollection<clases_sima> clases_sima { get; set; }
           public virtual materias materias { get; set; }
           public virtual usuarios usuarios { get; set; }

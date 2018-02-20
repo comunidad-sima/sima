@@ -32,6 +32,7 @@
     <EntitySetMapping Name="cursos">
       <EntityTypeMapping TypeName="bd_simaModel.cursos">
         <MappingFragment StoreEntitySet="cursos">
+          <ScalarProperty Name="eliminado" ColumnName="eliminado" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="periodo" ColumnName="periodo" />
           <ScalarProperty Name="nombre_materia" ColumnName="nombre_materia" />
@@ -73,6 +74,7 @@
     <EntitySetMapping Name="usuarios">
       <EntityTypeMapping TypeName="bd_simaModel.usuarios">
         <MappingFragment StoreEntitySet="usuarios">
+          <ScalarProperty Name="eliminado" ColumnName="eliminado" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="nombre" ColumnName="nombre" />
           <ScalarProperty Name="apellidos" ColumnName="apellidos" />

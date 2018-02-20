@@ -131,6 +131,7 @@ namespace WebSima.Controllers
                     var tienMateria = MCurso.tieneCurso(db, materia, periodo, id_usuario);
                     if (tienMateria)
                     {
+                        List<grupos_acargo> grupos_acargo = (new MGrupos_acargo().getGrupuposPeridoMateria(db, id_usuario, periodo, materia));
                         sesion.setSesion(materia, "materia");
                         List<EstudianteMateria> estudiantes = null;
                         if (!materia.Equals(""))
@@ -141,6 +142,7 @@ namespace WebSima.Controllers
                         }
 
                         ViewBag.estudiantes = estudiantes;
+                        ViewBag.grupos_acargo = grupos_acargo;
                     }
                     else if (!materia.Equals(""))
                     {
