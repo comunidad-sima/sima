@@ -17,7 +17,7 @@ namespace WebSima.Controllers
 
         public ActionResult Home()
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 IEnumerable<SelectListItem> periodos = null;
                 IEnumerable<SelectListItem> materias = null;
@@ -53,7 +53,7 @@ namespace WebSima.Controllers
         {
 
 
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
 
                 List<MCurso> cursos = new List<MCurso>();
@@ -80,7 +80,7 @@ namespace WebSima.Controllers
         public ActionResult Details(int id = 0)
         {
 
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 MCurso cursos = MCurso.getCursoId(db, id);
                 if (cursos == null)
@@ -102,7 +102,7 @@ namespace WebSima.Controllers
         public ActionResult Create()
         {
 
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
 
                 ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text"); ;
@@ -123,7 +123,7 @@ namespace WebSima.Controllers
         public JsonResult Create(MCurso curso)
         {
             Respusta respuesta = new Respusta();
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
 
                 if (ModelState.IsValid)
@@ -190,7 +190,7 @@ namespace WebSima.Controllers
         public ActionResult Edit(int id = 0)
         {
 
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 MCurso cursos = MCurso.getCursoId(db, id);
                 if (cursos == null)
@@ -216,7 +216,7 @@ namespace WebSima.Controllers
         {
             Respusta respuesta = new Respusta();
 
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 try
                 {
@@ -315,7 +315,7 @@ namespace WebSima.Controllers
         public JsonResult Delete(int id)
         {
             Respusta respuesta = new Respusta();
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 cursos cursos = db.cursos.Find(id);
                 if (cursos != null)

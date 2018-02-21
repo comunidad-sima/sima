@@ -17,15 +17,12 @@ namespace WebSima.Controllers
         String nombreCarpeta = "~/Uploads";
         Sesion sesion = new Sesion();
 
-
         //
         // GET: /Capacitacion/
 
         public ActionResult Listar(String periodo="2017-2"){
-            if (sesion.esUsuarioValido(db, "Administrador"))
-            {
-             
-                        
+            if (sesion.esAdministrador(db))
+            {               
                 return View(MCapacitacion.getCapacitacionesPeriodo(db, periodo));
             }
             return null;
@@ -33,7 +30,7 @@ namespace WebSima.Controllers
 
         public ActionResult Home(String periodo = "2017-2")
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 ViewBag.periodos = MCapacitacion.getPeriodos(db);
                 return View();
@@ -48,7 +45,7 @@ namespace WebSima.Controllers
         // GET: /Capacitacion/Details/5
 
         public ActionResult Details(int id = 0){
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
 
                 MCapacitacion mCapacitacion = MCapacitacion.getCapacitacionId(db, id);
@@ -65,7 +62,7 @@ namespace WebSima.Controllers
         }
         public FileResult Descargar(String archivoNombre)
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
 
                 string ruta = Server.MapPath(nombreCarpeta + "/" + archivoNombre);
@@ -100,7 +97,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Create(MCapacitacion Mcapacitacion){
             Respusta respuesta = new Respusta();
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                
                 string ruta = Server.MapPath(nombreCarpeta);
@@ -157,7 +154,7 @@ namespace WebSima.Controllers
         //[ValidateAntiForgeryToken]
         public JsonResult Delete(int id=0){
             Respusta respuesta = new Respusta();
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {            
                     capacitaciones capacitaciones = db.capacitaciones.Find(id);
                     if (capacitaciones != null)

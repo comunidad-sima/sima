@@ -23,7 +23,7 @@ namespace WebSima.Controllers
 
         public ActionResult Index()
         {
-            String idUsuario=sesion.getSesion("id_usuario");
+            String idUsuario=sesion.getIdUsuario();
             List<List<EstudianteMateria>> datos = new List<List<EstudianteMateria>>();
             List<String> materias_ = MCurso.getNombreMateriaMonitorDeCursos(db, idUsuario, periodo, 1);
 
@@ -54,7 +54,7 @@ namespace WebSima.Controllers
         [HttpPost]
         public JsonResult SetGrupos(String materia, String[] idGrupo = null)
         {
-            String idMonitor = sesion.getSesion("id_usuario");
+            String idMonitor = sesion.getIdUsuario();
 
             string[] carrera_idCurso;
             // se obtien el id del grupo a partir de la materia y el id del monitor  y perido 

@@ -16,7 +16,7 @@ namespace WebSima.Controllers
         Sesion sesion = new Sesion();
         public ActionResult Home(String periodo = "2017-2")
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {               
                 return View();
             }
@@ -30,7 +30,7 @@ namespace WebSima.Controllers
 
         public ActionResult Listar(String buscar="")
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                
                 return View(MUsuario.getUsuarios(db, buscar));
@@ -46,7 +46,7 @@ namespace WebSima.Controllers
 
         public ActionResult Details(String id = "0")
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 MUsuario usuario = MUsuario.getUsuarioId(db, id);
                 if (usuario == null)
@@ -66,7 +66,7 @@ namespace WebSima.Controllers
 
         public ActionResult Create()
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 return View();
             }
@@ -84,7 +84,7 @@ namespace WebSima.Controllers
         public JsonResult Create(MUsuario usuario)
         {
             Respusta respuesta = new Respusta();
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 if (ModelState.IsValid)
                 {
@@ -140,7 +140,7 @@ namespace WebSima.Controllers
 
         public ActionResult Edit(String id = "0")
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
             MUsuario usuario = MUsuario.getUsuarioId(db, id);
             if (usuario == null)
@@ -163,7 +163,7 @@ namespace WebSima.Controllers
         public JsonResult Edit(MUsuario usuario, String idAntiguo)
         {
             Respusta respuesta = new Respusta();
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 if (ModelState.IsValid)
                 {
@@ -235,8 +235,8 @@ namespace WebSima.Controllers
         public JsonResult Delete(String id)
         {
             Respusta respuesta = new Respusta();
-            
-            if (sesion.esUsuarioValido(db, "Administrador"))
+
+            if (sesion.esAdministrador(db))
             {
                 usuarios usuarios = db.usuarios.Find(id);
                 if (usuarios != null)
