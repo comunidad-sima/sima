@@ -24,6 +24,10 @@ namespace WebSima.Controllers
             return View();
         }
 
+        public ActionResult Reporte_asistencia()
+        {
+            return View("Reporte_asistencia");
+        }
         //
         // GET: /Informe/Create
 
