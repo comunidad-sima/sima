@@ -1,15 +1,97 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = " ";
-  
- }
+
+}
 <div>
     <ol class="breadcrumb " style="background-color: #ffffff">
         <li class="breadcrumb-item ">Home</li>
-        <li class="breadcrumb-item active"></li>
+        <li class="breadcrumb-item active">Informe</li>
 
     </ol>
 </div>
 
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-success">
+
+            <div class="box-body">
+
+                <!-- /input-group -->
+                <h3 class="margin">Programas <code>CECAR</code></h3>
+                <div class="input-group input-group-sm col-sm-6">
+
+                    <select class="form-control select2 ">
+                        <option selected="selected">Programacion</option>
+                        <option>Matematica</option>
+                        <option>Programacion</option>
+                        <option>Cachamita</option>
+                    </select>
+
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-success btn-flat">Buscar</button>
+                    </span>
+                </div>
+                <!-- /input-group -->
+            </div>
+
+        </div>
+            <!-- Primer despliegue -->
+        <div class="box box-body">
+            <div class="box-header with-border">
+                <h3 class="box-title">Matematica Basica</h3>
+                <div class=" pull-right">
+                    <a href="#" class="btn btn-success fa fa-plus-square"> Exportar</a>
+
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    
+                </div>
+            </div>
+            
+            <div class="box-body " >
+                <!-- segundo despligue -->
+                <div class=" box-body " style="border: 1px solid #e0e0e0; " >
+                    <div class=" box box-header with-border">
+                        <h3 class="box-title">Grupo #1</h3>
+                        <div class="box-tools pull-right">
+                            <a href="#" class="btn btn-success fa fa-plus-square"> Exportar</a>
+                                <button type="button" class="btn btn-box-tool buttonDespliegue">
+                                    <i class="fa fa-arrow-right"></i>
+                                </button>
+                        </div>
+                    </div>
+                    <div class="box-body " id="despliegue1">
+                        <div class="col-sm-12 table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NOMBRE</th>
+                                    <th>OPCION</th>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td>Cachami</td>
+                                    <td> <a href="#">Detalles</a> </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+      </div>
+   </div>
+
+
+<script>
+    $(document).ready(function () {
+        $(".buttonDespliegue").click(function () {
+            $("#despliegue1").toggle();
+        });
+    });
+</script>
 
 
