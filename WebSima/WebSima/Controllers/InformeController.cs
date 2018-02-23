@@ -15,7 +15,13 @@ namespace WebSima.Controllers
         {
             return View();
         }
+        //
+        // GET: /Informe/Details/5
 
+        public ActionResult Modal_ferfil_estudiante()
+        {
+            return View("modal_informe");
+        }
         //
         // GET: /Informe/Details/5
 

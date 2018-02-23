@@ -72,7 +72,7 @@
                                 <tr>
                                     <td>12</td>
                                     <td>Cachami</td>
-                                    <td> <a href="#">Detalles</a> </td>
+                                    <td> <a class="detalle" href="/Informe/Modal_ferfil_estudiante/1">Detalles</a> </td>
                                 </tr>
                             </table>
                         </div>
@@ -85,11 +85,38 @@
       </div>
    </div>
 
-
+<div class="modal fade  " id="modal-ferfil1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-green">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Perfil Del Estudiante</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 <script>
     $(document).ready(function () {
         $(".buttonDespliegue").click(function () {
             $("#despliegue1").toggle();
+        });
+        // cuando se se da click en el link detalles 
+        $('.detalle').click(function (event) {
+            // se cancela el elevento para que no redireccione
+            event.preventDefault();
+            // se obtiene la url
+            var href = $(this).attr('href');
+            // se carga el contenido del modal
+            $('.modal-body').load(href, function () {
+                // se muestra el modal
+                $('#modal-ferfil1').modal({ show: true });
+            });
         });
     });
 </script>
