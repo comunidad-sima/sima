@@ -24,13 +24,13 @@ namespace WebSima.Controllers
 
         public ActionResult Index(String materia="")
         {
-            if (sesion.esUsuarioValido(db, "Monitor"))
+            if (sesion.esMonitor(db))
             {
 
                 ViewBag.materiaSeleccionada = materia;
                 // var clases_sima = db.clases_sima.Include(c => c.cursos).Include(c => c.usuarios);
-                ViewBag.materiasMonitor = MCurso.getNombreMateriaMonitorDeCursos(db, sesion.getSesion("id_usuario"), periodo, 1);
-                return View(Mclase.getClasesMonitorPerido(db, periodo, sesion.getSesion("id_usuario"), materia));
+                ViewBag.materiasMonitor = MCurso.getNombreMateriaMonitorDeCursos(db, sesion.getIdUsuario(), periodo, 1);
+                return View(Mclase.getClasesMonitorPerido(db, periodo, sesion.getIdUsuario(), materia));
             }
             else
             {
@@ -39,7 +39,7 @@ namespace WebSima.Controllers
         }
         public ActionResult Avance(String materia = "", String periodoBuscar = "2017-2", String idMonitor = "")
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 if (idMonitor.Equals("")) materia = "";
 
@@ -64,7 +64,7 @@ namespace WebSima.Controllers
 
         public ActionResult Registros(String materia = "",String periodoBuscar="2017-2",String idMonitor="")
         {
-            if (sesion.esUsuarioValido(db, "Administrador"))
+            if (sesion.esAdministrador(db))
             {
                 if (idMonitor.Equals("")) materia = "";
 
@@ -92,9 +92,9 @@ namespace WebSima.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            if (!sesion.getSesion("id_usuario").Equals(""))
+            if (!sesion.getIdUsuario().Equals(""))
             {
-                ViewBag.perfil = sesion.getSesion("tipo_usuario");
+                ViewBag.perfil = sesion.getIPerfilUsusrio();
                 clases_sima clases_sima = db.clases_sima.Find(id);
                 if (clases_sima == null)
                 {
@@ -121,18 +121,17 @@ namespace WebSima.Controllers
 
         public ActionResult Create(String materia="")
         {
-            if (sesion.esUsuarioValido(db, "Monitor"))
+            if (sesion.esMonitor(db))
             {
 
                 ViewBag.materiasMonitor = null;
-                if (sesion.esUsuarioValido(db, tipo_usuario))
-                {
-                    String id_usuario = sesion.getSesion("id_usuario");
+                
+                    String id_usuario = sesion.getIdUsuario();
                     var tienMateria = MCurso.tieneCurso(db, materia, periodo, id_usuario);
                     if (tienMateria)
                     {
                         List<grupos_acargo> grupos_acargo = (new MGrupos_acargo().getGrupuposPeridoMateria(db, id_usuario, periodo, materia));
-                        sesion.setSesion(materia, "materia");
+                        sesion.setMateria(materia);
                         List<EstudianteMateria> estudiantes = null;
                         if (!materia.Equals(""))
                         {
@@ -154,8 +153,8 @@ namespace WebSima.Controllers
                     ViewBag.materiasMonitor = MCurso.getNombreMateriaMonitorDeCursos(db, id_usuario, periodo, 1);
                     ViewBag.materiaSeleccionada = materia;
                     return View();
-                }
-                return RedirectToAction("Index");
+                
+               
             }
             else
             {
@@ -170,19 +169,17 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Mclase clase,String[]asistentes=null)
         {
-            if (sesion.esUsuarioValido(db, "Monitor"))
+            if (sesion.esMonitor(db))
             {
                 try
                 {
-                    // se comprueba que haya iniciado sesion y que el usuario tenga el perfil monitor y q exieta en la bd
-                    if (sesion.esUsuarioValido(db, tipo_usuario))
-                    {
+                    
 
                         if (ModelState.IsValid)
                         {
                             string ruta = Server.MapPath(nombreCarpeta);
-                            String materia = sesion.getSesion("materia");
-                            String idMonitor = sesion.getSesion("id_usuario");
+                            String materia = sesion.getMateria();
+                            String idMonitor = sesion.getIdUsuario();
                             // se verifica que tenga la materia a cargo para evitar que se cambie el monbre de la materia en el select
                             var tienMateria = MCurso.tieneCurso(db, materia, periodo, idMonitor);
                             if (tienMateria)
@@ -223,7 +220,7 @@ namespace WebSima.Controllers
                                                 {
                                                     // si los asistentes se registras se guardan los cambisos en bd 
                                                     transaccion.Complete();
-                                                    sesion.setSesion("", "materia");
+                                                    sesion.setMateria("");
                                                 }
                                                 return RedirectToAction("Index");
                                             }
@@ -238,12 +235,12 @@ namespace WebSima.Controllers
                             else
                             {
                                 ViewBag.mensajeError = "Asignatura " + materia + " No valida";
-                                sesion.setSesion("", "materia");
+                                sesion.setMateria("");
                             }
                         }
-                        ViewBag.materiaSeleccionada = sesion.getSesion("materia");
+                        ViewBag.materiaSeleccionada = sesion.getMateria();
                         return View(clase);
-                    }
+                    
                 }
                 catch (Exception e)
                 {

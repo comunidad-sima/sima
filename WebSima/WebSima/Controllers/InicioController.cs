@@ -44,8 +44,8 @@ namespace WebSima.Controllers
                     String contra = Seguridad.DesEncriptar(u.contrasena);
                     if (contra.Equals(contrasena))
                     {
-                        sesion.setSesion(id, "id_usuario");
-                        sesion.setSesion(u.tipo, "tipo_usuario");
+                        sesion.setIdUsurio(id);
+                        sesion.setIPerfilUsusrio(u.tipo);
                         if (u.tipo.Equals("Administrador"))
                         {
                             return Redirect("~/Capacitacion/Home");
@@ -87,9 +87,9 @@ namespace WebSima.Controllers
         }
         public ActionResult Login()
         {
-            if (!sesion.getSesion("id_usuario").Equals(""))
+            if (!sesion.getIdUsuario().Equals(""))
             {
-                String tipo_usuario = sesion.getSesion("tipo_usuario");
+                String tipo_usuario = sesion.getIPerfilUsusrio();
                 if (tipo_usuario.Equals("Administrador"))
                 {
                     return Redirect("~/Capacitacion/Home");
