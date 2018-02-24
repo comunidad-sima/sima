@@ -12,7 +12,7 @@ namespace WebSima.Models
     public class MInforme
     {
         /// <summary>
-        /// Consulta las asistencia de los de los estundintes a partir de una materia, retorna una list(String[]) donde String[0] es la cantidad de asistencia y String[1] la id , 
+        /// Consulta las asistencia de los de los estundintes a monitoria  a partir de una materia, retorna una list(String[]) donde String[0] es la cantidad de asistencia y String[1] la id , 
         /// </summary>
         /// <param name="materia"> materia a consultar las asistencia</param>
         /// <returns>retorna un liasta con la cantidad de asistencia y la id del estudiante</returns>
