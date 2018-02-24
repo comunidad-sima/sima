@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebSima.Models;
+using WebSima.Models.WebApi;
 
 namespace WebSima.Controllers
 {
+   
     public class InformeController : Controller
     {
+        String periodo = "2017-2";
+        private bd_simaEntitie db = new bd_simaEntitie();
         //
         // GET: /Informe/
 
@@ -30,6 +35,20 @@ namespace WebSima.Controllers
             return View();
         }
 
+        public ActionResult Reporte_asistencia(String materia = "TALLER DE LENGUA I")
+        {
+            List<String> idEstudiantes = null;
+
+            MInforme info = new MInforme();            
+            List<String[]> datos= info.consultarAsistencia( materia);
+            idEstudiantes = datos.Select(m => m[1]).ToList();
+            List<EstudianteMateria> datos_2 = ConsumidorAppi.getDatosEstudiantesMateria(periodo, materia, idEstudiantes);
+            ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text");
+            ViewBag.asistencia = datos;
+            ViewBag.datos_estudiante = datos_2;
+
+            return View("Reporte_asistencia");
+        }
         //
         // GET: /Informe/Create
 

@@ -105,7 +105,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
 
-                ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text"); ;
+                ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text"); 
                 return View();
             }
             else

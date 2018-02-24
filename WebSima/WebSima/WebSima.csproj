@@ -141,7 +141,6 @@
     <Compile Include="Controllers\CapacitacionController.cs" />
     <Compile Include="Controllers\ClaseController.cs" />
     <Compile Include="Controllers\CursoController.cs" />
-    <Compile Include="Controllers\modalImformeController.cs" />
     <Compile Include="Controllers\GruposController.cs" />
     <Compile Include="Controllers\InformeController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -174,6 +173,7 @@
     <Compile Include="Models\Mclase.cs" />
     <Compile Include="Models\MCurso.cs" />
     <Compile Include="Models\MGrupos_acargo.cs" />
+    <Compile Include="Models\MInforme.cs" />
     <Compile Include="Models\MMateria.cs" />
     <Compile Include="Models\Model_sima.Context.cs">
       <AutoGen>True</AutoGen>
@@ -7433,6 +7433,12 @@
     <Content Include="Views\Grupos\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\informe\home.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\informe\modal_informe.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <EntityDeploy Include="Models\Model_sima.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model_sima.Designer.cs</LastGenOutput>
@@ -7454,10 +7460,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\informe\home.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\informe\modal_informe.cshtml" />
+    <Content Include="Views\informe\Reporte_asistencia.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
