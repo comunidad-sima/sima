@@ -40,6 +40,30 @@ namespace WebSima.Models
             this.sesion = Convert.ToString(HttpContext.Current.Session["Materia"]);
             return sesion;
         }
+
+
+        public void setMateriaReporteAsistencia(String dato)
+        {
+            HttpContext.Current.Session["materia_reporte_asistencia"] = dato;
+
+        }
+        public String getMateriaReporteAsistencia()
+        {
+            this.sesion = Convert.ToString(HttpContext.Current.Session["materia_reporte_asistencia"]);
+            return sesion;
+        }
+        public void setPeridoReporteAsistencia(String dato)
+        {
+            HttpContext.Current.Session["perido_reporte_asistencia"] = dato;
+
+        }
+        public String getperiodoReporteAsistencia()
+        {
+            this.sesion = Convert.ToString(HttpContext.Current.Session["perido_reporte_asistencia"]);
+            return sesion;
+        }
+
+
         public void destruirSesion(){
             HttpContext.Current.Session.Abandon();
         }

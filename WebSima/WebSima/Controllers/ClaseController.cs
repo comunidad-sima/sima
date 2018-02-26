@@ -14,7 +14,7 @@ namespace WebSima.Controllers
     public class ClaseController : Controller
     {
         String periodo = "2017-2";
-        String tipo_usuario = "Monitor";
+        //String tipo_usuario = "Monitor";
          String nombreCarpeta = "~/Uploads";
         private bd_simaEntitie db = new bd_simaEntitie();
         private Sesion sesion = new Sesion();

@@ -1,9 +1,13 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
+using WebSima.clases;
 using WebSima.Models;
 using WebSima.Models.WebApi;
 
@@ -14,6 +18,7 @@ namespace WebSima.Controllers
     {String nombreCarpeta = "~/Uploads";
         String periodo = "2017-2";
         private bd_simaEntitie db = new bd_simaEntitie();
+        Sesion session = new Sesion();
         //
         // GET: /Informe/
 
@@ -36,7 +41,7 @@ namespace WebSima.Controllers
             return View();
         }
 
-        public ActionResult Reporte_asistencia(String materia = "Seleccione asignatura")
+        public ActionResult Reporte_asistencia(String periodo="2017-2",String materia = "Seleccione asignatura")
         {
             List<String> idEstudiantes = new List<string>();
             List<EstudianteMateria> datos_2 = new List<EstudianteMateria>();
@@ -48,10 +53,14 @@ namespace WebSima.Controllers
                 idEstudiantes = datos.Select(m => m[1]).ToList();
                 datos_2 = ConsumidorAppi.getDatosEstudiantesMateria(periodo, materia, idEstudiantes);
             }
+            ViewBag.periodos = Mclase.getPeriodosRegistradosDeClase(db);
             ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text");
             ViewBag.asistencia = datos;
             ViewBag.datos_estudiante = datos_2;
             ViewBag.asignatura = materia;
+            ViewBag.peridoSeleccionado = periodo;
+            session.setMateriaReporteAsistencia(materia);
+            session.setPeridoReporteAsistencia(periodo);
             return View("Reporte_asistencia");
         }
         //
@@ -61,36 +70,24 @@ namespace WebSima.Controllers
         {
             return View();
         }
-        public FileResult Download()
+        public FileResult Download_reporte_asistencia()
         {
-            Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+            
+            DataTable dt = new Excel_informe().getExceAsistenciaMonitoria(); ;
+          
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    var file = File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "reporte_asistencia_sima.xlsx");
+                    stream.Dispose();
+                    stream.Close();
+                    return file;
 
-            Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
-            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet;
-
-            object misValue = System.Reflection.Missing.Value;
-
-            xlWorkBook = xlApp.Workbooks.Add(misValue);
-            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-
-            xlWorkSheet.Cells[1, 1] = "ID";
-            xlWorkSheet.Cells[1, 2] = "Name";
-            xlWorkSheet.Cells[2, 1] = "1";
-            xlWorkSheet.Cells[2, 2] = "One";
-            xlWorkSheet.Cells[3, 1] = "2";
-            xlWorkSheet.Cells[3, 2] = "Two";
-
-
-            var path = nombreCarpeta + "/ WidgetData.xlsx";
-            xlWorkBook.SaveAs(path);
-            xlWorkBook.Close(true, misValue, misValue);
-            xlApp.Quit();
-
-            Marshal.ReleaseComObject(xlWorkSheet);
-            Marshal.ReleaseComObject(xlWorkBook);
-            Marshal.ReleaseComObject(xlApp);
-            var f = File(path, "application/vnd.ms-excel", "WidgetData.xlsx");
-            return f;
+                }
+            }
         }
         //
         // POST: /Informe/Create
