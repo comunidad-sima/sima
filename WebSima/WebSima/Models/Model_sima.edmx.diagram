@@ -4,23 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7bfa28b395084bef99b588b66f7f8004" Name="Diagram1">
-        <EntityTypeShape EntityType="bd_simaModel.capacitaciones" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
+      <Diagram DiagramId="ce01c4a07d294cdc8ac6e30636de9e9b" Name="Diagram1">
+        <EntityTypeShape EntityType="bd_simaModel.capacitaciones" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
         <EntityTypeShape EntityType="bd_simaModel.clases_sima" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="bd_simaModel.cursos" Width="1.5" PointX="6" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="bd_simaModel.cursos" Width="1.5" PointX="6" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="bd_simaModel.estudiantes_asistentes" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="bd_simaModel.grupos_acargo" Width="1.5" PointX="8.25" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="bd_simaModel.materias" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="bd_simaModel.usuarios" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="bd_simaModel.configuraciones" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="bd_simaModel.usuarios" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="bd_simaModel.configuraciones" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
         <AssociationConnector Association="bd_simaModel.FK_clases_sima_cursos" ManuallyRouted="false" />
         <AssociationConnector Association="bd_simaModel.FK_clases_sima_usuarios" ManuallyRouted="false" />
         <AssociationConnector Association="bd_simaModel.FK_estudiantes_asistentes_clases_sima" ManuallyRouted="false" />
         <AssociationConnector Association="bd_simaModel.FK_cursos_materias" ManuallyRouted="false" />
         <AssociationConnector Association="bd_simaModel.FK_cursos_usuarios" ManuallyRouted="false" />
-        <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_cursos" ManuallyRouted="false" />
-        <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_materias" ManuallyRouted="false" />
-        <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_usuarios" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="bd_simaModel.grupos_acargo" Width="1.5" PointX="8.25" PointY="2.5" />
+        <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_cursos" />
+        <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_materias" />
+        <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_usuarios" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

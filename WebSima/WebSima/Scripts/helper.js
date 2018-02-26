@@ -4,7 +4,7 @@
     "sZeroRecords": "No se encontraron resultados",
     "sEmptyTable": "Ningún dato disponible en esta tabla",
     "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "sInfoEmpty": "Mostrando  del 0 al 0 de un total de 0 registros",
     "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
     "sInfoPostFix": "",
     "sSearch": "Buscar:",
@@ -28,11 +28,11 @@ function  configurar_dataTable(clase) {
     $('.'+clase).DataTable({
         'language': language,
         'paging': true,
-        'lengthChange': false,
-        'searching': false,
+        'lengthChange': true,
+        'searching': true,
         'ordering': true,
         'info': true,
-        'autoWidth': false
+        'autoWidth': true
     });
 }
 // se configura el input para las fechas

@@ -11,12 +11,15 @@ namespace WebSima.Models
     public class MMateria
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Se requiere una Asignatura")]  
-        /// <summary>
-        /// 
-        /// </summary>
-        /// 
+
         public string nombre { get; set; }
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        /// <summary>
+        /// consulta las materias registrada en sima
+        /// </summary>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]  
+       
         public static List<SelectListItem> getMaterias(bd_simaEntitie db)
         {
             var maerias = (from m in db.materias
@@ -24,8 +27,8 @@ namespace WebSima.Models
                                {
                                    Value = m.nombre,
                                    Text = m.nombre
-                               }).ToList();
-            return maerias;
+                               });
+            return maerias.ToList();
 
         }
 
