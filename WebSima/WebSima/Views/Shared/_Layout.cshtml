@@ -7,6 +7,8 @@
     <title>SIMA</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- handsontable-->
+    <link href="~/Content/Handsontable/css/handsontable.full.css"  rel="stylesheet" />
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -295,6 +297,19 @@
 
                         </ul>
                     </li>
+
+                    <li id="asistencia" class="treeview">
+                        <a href="#">
+                            <i class="fa fa-dashboard"></i> <span>Asistencia</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="home_asistencia" class="active"><a href="/Asistencia/Home"><i class="fa fa-circle-o"></i>Home</a></li>
+
+                        </ul>
+                    </li>
                     <li class="header">LABELS</li>
                     <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
 
@@ -315,6 +330,9 @@
             reserved.
         </footer>
     </div>
+ 
+    <!-- handsontable-->
+    <script src="/Content/Handsontable/js/handsontable.full.js"></script>
     <!-- DataTables -->
     <script src="/Content/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>

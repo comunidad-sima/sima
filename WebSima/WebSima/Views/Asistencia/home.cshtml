@@ -1,0 +1,91 @@
+﻿@{ ViewBag.Title = "home"; }
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title  col-sm-6 ">Notas Del Estudiante</h3>
+                <div class=" pull-right col-sm-6">
+
+                    <form method="POST" action="#" enctype="">
+                        <!-- COMPONENT START -->
+                        <div class="form-group">
+                            <div class="input-group input-file" name="Fichier1">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success btn-choose" type="button">Cargar Archivo</button>
+                                </span>
+                                <input type="text" class="form-control" placeholder='Choose a file...' />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success " type="submit">Enviar</button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body ">
+                <div id="example" class="hot handsontable col-sm-12" style="overflow-y: auto; overflow-x: auto;"></div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+<script>
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+        var data = [
+          ["", "Actividad1", "Actividad2", "Taller", "Parcial", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", ],
+          ["Fredys", 10, 11, 12, 13],
+          ["Jean", 20, 11, 14, 13],
+          ["Osnaider", 30, 15, 12, 13]
+        ];
+
+        var container = document.getElementById('example');
+        var hot = new Handsontable(container, {
+            data: data,
+            rowHeaders: true,
+            colHeaders: true
+        });
+
+    });
+
+
+
+    // codigo input file
+
+    function bs_input_file() {
+        $(".input-file").before(
+          function () {
+              if (!$(this).prev().hasClass('input-ghost')) {
+                  var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+                  element.attr("name", $(this).attr("name"));
+                  element.change(function () {
+                      element.next(element).find('input').val((element.val()).split('\\').pop());
+                  });
+                  $(this).find("button.btn-choose").click(function () {
+                      element.click();
+                  });
+
+                  $(this).find('input').css("cursor", "pointer");
+                  $(this).find('input').mousedown(function () {
+                      $(this).parents('.input-file').prev().click();
+                      return false;
+                  });
+                  return element;
+              }
+          }
+        );
+    }
+    $(function () {
+        bs_input_file();
+    });
+</script>

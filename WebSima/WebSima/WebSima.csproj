@@ -138,6 +138,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="clases\Archivo.cs" />
     <Compile Include="clases\Seguridad.cs" />
+    <Compile Include="Controllers\AsistenciaController.cs" />
     <Compile Include="Controllers\CapacitacionController.cs" />
     <Compile Include="Controllers\ClaseController.cs" />
     <Compile Include="Controllers\CursoController.cs" />
@@ -7458,6 +7459,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\informe\modal_informe.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Asistencia.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Asistencia\home.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
