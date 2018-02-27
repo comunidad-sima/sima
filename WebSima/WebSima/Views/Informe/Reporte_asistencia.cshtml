@@ -7,7 +7,7 @@
     List<String> periodos = ViewBag.periodos;
     String seleted = "selected";
     String peridoSeleccionado = ViewBag.peridoSeleccionado;
-}
+    }
 
 <div>
     <ol class="breadcrumb " style="background-color: #ffffff">
@@ -23,14 +23,14 @@
             
                 <div class="box-body">
                     <div class="row">
-                        @using (Html.BeginForm("Reporte_asistencia", "Informe", FormMethod.Get, new { }))
+                        @using (Html.BeginForm("Reporte_asistencia", "Informe", FormMethod.Get, new { id="formdato"}))
                         {
                             <div class="col-sm-12 col-12  col-lg-5 ">
                                 <h3 class=" margin">
                                     Período
                                 </h3>
-                                <select class="form-control" name="periodo" >
-                                    <option value="-">Selecciona</option>
+                                <select required class="form-control " id="peorido" name="periodo" >
+                                   <option>tttttt</option>
                                     @foreach (String periodo in periodos)
                                     {
                                         if (peridoSeleccionado.Equals(periodo)){
@@ -94,7 +94,7 @@
                                     <th>ASISTENCIA</th>
                                 </tr>
                                 </thead>
-<tbody>
+                            <tbody>
                                 @{
                                     int i = 1;
 
@@ -103,10 +103,10 @@
                                         var estudiante = datos_estudiante.Where(e => e.num_identificacion.Equals(item[1])).Select(e => new { e.nom_largo, e.nom_prog_matricula_estudiante }).Distinct().ToArray();
                                         // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
                                         <tr>
-                                            <td><center>@(i++)</center> </td>
+                                            <td>@(i++)</td>
                                             <td>@item[1]</td>
                                             <td>
-                                                    @if (estudiante.Count()>0)
+                                                @if (estudiante.Count()>0)
                                                         {
                                                             @estudiante[0].nom_largo;
                                                         }
@@ -117,8 +117,10 @@
                                                     }
                                             
                                             </td>
+                                           
                                             <td>
-                                                @if (estudiante.Count()>0)
+
+                                                @if (estudiante.Count() > 0)
                                                 {
                                                     @estudiante[0].nom_prog_matricula_estudiante
                                                 }
@@ -128,14 +130,14 @@
                                                     @mesanje;
                                                 }                                            
                                            </td>
-                                            <td>@item[0]</td>
+                                            <td>@item[0]</td>                                          
                                         </tr>
                                     }
                                 }
                             </tbody>
                         </table>
                         @if (asistencia.Count() > 0) { 
-                         <a href="/informe/Download_reporte_asistencia" class="btn btn-success  fa-external-link-square"> Exportar</a>
+                         <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o">Exportar</i> </a>
                     
                         }
                         </div>
@@ -152,6 +154,10 @@
         $('.select2').select2();
         // se configura la tabla, esta funcion está en helper.js
         configurar_dataTable("tablaPaginacion");
+
+        $("#peorido").change(function () {
+            $("#formdato").submit();
+        });
     });
 </script>
 

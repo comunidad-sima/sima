@@ -15,7 +15,7 @@ namespace WebSima.Controllers
 {
    
     public class InformeController : Controller
-    {String nombreCarpeta = "~/Uploads";
+    {
         String periodo = "2017-2";
         private bd_simaEntitie db = new bd_simaEntitie();
         Sesion session = new Sesion();
@@ -26,6 +26,13 @@ namespace WebSima.Controllers
         {
             return View();
         }
+
+
+        public ActionResult Test_aprobacion()
+        {
+            return View("Test_aprobacion");
+        }
+
         //
         // GET: /Informe/Details/5
 
@@ -43,12 +50,13 @@ namespace WebSima.Controllers
 
         public ActionResult Reporte_asistencia(String periodo="-",String materia = "Seleccione asignatura")
         {
-            
+            if (periodo.Equals("-"))
+                periodo = "2017-2";
             List<String> idEstudiantes = new List<string>();
             List<EstudianteMateria> datos_2 = new List<EstudianteMateria>();
             MInforme info = new MInforme();
              List<String[]> datos= new List<string[]>();
-             if (!periodo.Equals("-"))
+             if (!materia.Equals("Seleccione asignatura"))
              {
                  datos = info.consultarAsistencia(materia);
 
@@ -60,7 +68,7 @@ namespace WebSima.Controllers
                  }
              }
             ViewBag.periodos = Mclase.getPeriodosRegistradosDeClase(db);
-            ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text");
+            ViewBag.materias = new SelectList(MMateria.getMaterias_registro_grupos( db,periodo), "Value", "Text");
             ViewBag.asistencia = datos;
             ViewBag.datos_estudiante = datos_2;
             ViewBag.asignatura = materia;
