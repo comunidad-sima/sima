@@ -26,6 +26,13 @@ namespace WebSima.Controllers
         {
             return View();
         }
+
+
+        public ActionResult Test_aprobacion()
+        {
+            return View("Test_aprobacion");
+        }
+
         //
         // GET: /Informe/Details/5
 

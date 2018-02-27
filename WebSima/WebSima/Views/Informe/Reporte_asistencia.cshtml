@@ -7,6 +7,8 @@
     List<String> periodos = ViewBag.periodos;
     String seleted = "selected";
     String peridoSeleccionado = ViewBag.peridoSeleccionado;
+    String estudiantenoID="ESTUDIANTE NO IDENTIFICADO";
+    String programanoID = "PROGRAMA NO IDENTIFICADO";
 }
 
 <div>
@@ -103,18 +105,37 @@
                                         var estudiante = datos_estudiante.Where(e => e.num_identificacion.Equals(item[1])).Select(e => new { e.nom_largo, e.nom_prog_matricula_estudiante }).Distinct().ToArray();
                                         // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
                                         <tr>
-                                            <td><center>@(i++)</center> </td>
                                             <td>@item[1]</td>
-                                            <td>@estudiante[0].nom_largo</td>
-                                            <td>@estudiante[0].nom_prog_matricula_estudiante</td>
+                                            <td>
+                                                @if (estudiante.Count() > 0)
+                                                {
+                                                    @estudiante[0].nom_largo
+                                                }
+                                                else
+                                                {
+                                                    @estudiantenoID;
+                                                }
+                                            </td>
+                                            <td>
+
+                                                @if (estudiante.Count() > 0)
+                                                {
+                                                    @estudiante[0].nom_prog_matricula_estudiante
+                                                }
+                                                else
+                                                {
+                                                    @programanoID;
+                                                }
+                                            </td>
                                             <td>@item[0]</td>
+                                          
                                         </tr>
                                     }
                                 }
                             </tbody>
                         </table>
                         @if (asistencia.Count() > 0) { 
-                         <a href="/informe/Download_reporte_asistencia" class="btn btn-success  fa-external-link-square"> Exportar</a>
+                         <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o">Exportar</i> </a>
                     
                         }
                         </div>
