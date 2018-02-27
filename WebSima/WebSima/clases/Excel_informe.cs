@@ -31,7 +31,7 @@ namespace WebSima.clases
                 datos_2 = ConsumidorAppi.getDatosEstudiantesMateria(periodo, materia, idEstudiantes);
             }
             // se  crea la cabecera
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable("reporte_asistencia_sima");
             dt.Columns.AddRange(new DataColumn[4] { new DataColumn("Identificación"),
                                             new DataColumn("Nombre"),
                                             new DataColumn("Programa"),

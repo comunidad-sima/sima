@@ -41,18 +41,24 @@ namespace WebSima.Controllers
             return View();
         }
 
-        public ActionResult Reporte_asistencia(String periodo="2017-2",String materia = "Seleccione asignatura")
+        public ActionResult Reporte_asistencia(String periodo="-",String materia = "Seleccione asignatura")
         {
+            
             List<String> idEstudiantes = new List<string>();
             List<EstudianteMateria> datos_2 = new List<EstudianteMateria>();
-            MInforme info = new MInforme();            
-            List<String[]> datos= info.consultarAsistencia( materia);
-            if (datos.Count() > 0)
-            {
-                // seleccionamaos todas las id de los estudiantes 
-                idEstudiantes = datos.Select(m => m[1]).ToList();
-                datos_2 = ConsumidorAppi.getDatosEstudiantesMateria(periodo, materia, idEstudiantes);
-            }
+            MInforme info = new MInforme();
+             List<String[]> datos= new List<string[]>();
+             if (!periodo.Equals("-"))
+             {
+                 datos = info.consultarAsistencia(materia);
+
+                 if (datos.Count() > 0)
+                 {
+                     // seleccionamaos todas las id de los estudiantes 
+                     idEstudiantes = datos.Select(m => m[1]).ToList();
+                     datos_2 = ConsumidorAppi.getDatosEstudiantesMateria(periodo, materia, idEstudiantes);
+                 }
+             }
             ViewBag.periodos = Mclase.getPeriodosRegistradosDeClase(db);
             ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text");
             ViewBag.asistencia = datos;

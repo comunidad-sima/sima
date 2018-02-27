@@ -14,7 +14,6 @@ namespace WebSima.Models
     
     public partial class grupos_acargo
     {
-        public int id { get; set; }
         public string idUsuario { get; set; }
         public string materia { get; set; }
         public string periodo { get; set; }

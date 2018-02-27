@@ -365,3 +365,7 @@ C:\Users\fredys\Dropbox\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Razor.re
 C:\Users\fredys\Dropbox\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
 C:\Users\fredys\Dropbox\sima\WebSima\WebSima\obj\Debug\WebSima.dll
 C:\Users\fredys\Dropbox\sima\WebSima\WebSima\obj\Debug\WebSima.pdb
+C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\ClosedXML.dll
+C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\DocumentFormat.OpenXml.dll
+C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\ClosedXML.pdb
+C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\ClosedXML.xml
