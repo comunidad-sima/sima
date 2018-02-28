@@ -1,0 +1,22 @@
+﻿@model WebSima.Models.configuracion_app
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>configuracion_app</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.periodo_actual)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.periodo_actual)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

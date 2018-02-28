@@ -16,13 +16,14 @@ namespace WebSima.Controllers
     {
         private bd_simaEntitie db = new bd_simaEntitie();
         Sesion sesion = new Sesion();
-        String periodo = "2017-2";
+      
 
         //
         // GET: /Grupos/
 
         public ActionResult Index()
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             String idUsuario=sesion.getIdUsuario();
             List<List<EstudianteMateria>> datos = new List<List<EstudianteMateria>>();
             List<String> materias_ = MCurso.getNombreMateriaMonitorDeCursos(db, idUsuario, periodo, 1);
@@ -54,6 +55,7 @@ namespace WebSima.Controllers
         [HttpPost]
         public JsonResult SetGrupos(String materia, String[] idGrupo = null)
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             String idMonitor = sesion.getIdUsuario();
 
             string[] carrera_idCurso;

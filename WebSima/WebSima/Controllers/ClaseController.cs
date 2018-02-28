@@ -13,7 +13,7 @@ namespace WebSima.Controllers
 {
     public class ClaseController : Controller
     {
-        String periodo = "2017-2";
+       
         //String tipo_usuario = "Monitor";
          String nombreCarpeta = "~/Uploads";
         private bd_simaEntitie db = new bd_simaEntitie();
@@ -24,6 +24,7 @@ namespace WebSima.Controllers
 
         public ActionResult Index(String materia="")
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             if (sesion.esMonitor(db))
             {
 
@@ -39,6 +40,7 @@ namespace WebSima.Controllers
         }
         public ActionResult Avance(String materia = "", String periodoBuscar = "2017-2", String idMonitor = "")
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             if (sesion.esAdministrador(db))
             {
                 if (idMonitor.Equals("")) materia = "";
@@ -64,6 +66,7 @@ namespace WebSima.Controllers
 
         public ActionResult Registros(String materia = "",String periodoBuscar="2017-2",String idMonitor="")
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             if (sesion.esAdministrador(db))
             {
                 if (idMonitor.Equals("")) materia = "";
@@ -92,6 +95,7 @@ namespace WebSima.Controllers
 
         public ActionResult Details(int id = 0)
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             if (!sesion.getIdUsuario().Equals(""))
             {
                 ViewBag.perfil = sesion.getIPerfilUsusrio();
@@ -121,6 +125,7 @@ namespace WebSima.Controllers
 
         public ActionResult Create(String materia="")
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             if (sesion.esMonitor(db))
             {
 
@@ -169,6 +174,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Mclase clase,String[]asistentes=null)
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             if (sesion.esMonitor(db))
             {
                 try

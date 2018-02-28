@@ -31,13 +31,12 @@
           <Property Name="evidencia" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="fecha_realizada" Type="date" Nullable="false" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <EntityType Name="configuraciones">
+        <EntityType Name="configuracion_app">
           <Key>
-            <PropertyRef Name="periodo_actual" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="periodo_actual" Type="nchar" MaxLength="6" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="periodo_actual" Type="varchar" MaxLength="6" Nullable="false" />
         </EntityType>
         <EntityType Name="cursos">
           <Key>
@@ -80,6 +79,21 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
             <PropertyRef Name="nombre" />
           </Key>
           <Property Name="nombre" Type="varchar" MaxLength="90" Nullable="false" />
+        </EntityType>
+        <EntityType Name="notas_periodo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="nota" Type="float" Nullable="false" />
+          <Property Name="id_docente" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="id_estudiante" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="corte" Type="int" Nullable="false" />
+          <Property Name="periodo" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="fecha_registro" Type="datetime" Nullable="false" />
+          <Property Name="asignatura" Type="varchar" MaxLength="90" Nullable="false" />
+          <Property Name="grupo" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="programa" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="usuarios">
           <Key>
@@ -155,18 +169,6 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_grupos_acargo_cursos">
-          <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
-          <End Role="grupos_acargo" Type="Self.grupos_acargo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="cursos">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="grupos_acargo">
-              <PropertyRef Name="id_curso" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_grupos_acargo_materias">
           <End Role="materias" Type="Self.materias" Multiplicity="1" />
           <End Role="grupos_acargo" Type="Self.grupos_acargo" Multiplicity="*" />
@@ -191,19 +193,28 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_notas_periodo_materias">
+          <End Role="materias" Type="Self.materias" Multiplicity="1" />
+          <End Role="notas_periodo" Type="Self.notas_periodo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="materias">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="notas_periodo">
+              <PropertyRef Name="asignatura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="bd_simaModelStoreContainer">
           <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="clases_sima" EntityType="Self.clases_sima" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="configuracion_app" EntityType="Self.configuracion_app" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="cursos" EntityType="Self.cursos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="estudiantes_asistentes" EntityType="Self.estudiantes_asistentes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="grupos_acargo" EntityType="Self.grupos_acargo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="materias" EntityType="Self.materias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notas_periodo" EntityType="Self.notas_periodo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="configuraciones" EntityType="Self.configuraciones" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[configuraciones].[periodo_actual] AS [periodo_actual]
-FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_clases_sima_cursos" Association="Self.FK_clases_sima_cursos">
             <End Role="cursos" EntitySet="cursos" />
             <End Role="clases_sima" EntitySet="clases_sima" />
@@ -224,10 +235,6 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
             <End Role="clases_sima" EntitySet="clases_sima" />
             <End Role="estudiantes_asistentes" EntitySet="estudiantes_asistentes" />
           </AssociationSet>
-          <AssociationSet Name="FK_grupos_acargo_cursos" Association="Self.FK_grupos_acargo_cursos">
-            <End Role="cursos" EntitySet="cursos" />
-            <End Role="grupos_acargo" EntitySet="grupos_acargo" />
-          </AssociationSet>
           <AssociationSet Name="FK_grupos_acargo_materias" Association="Self.FK_grupos_acargo_materias">
             <End Role="materias" EntitySet="materias" />
             <End Role="grupos_acargo" EntitySet="grupos_acargo" />
@@ -235,6 +242,10 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <AssociationSet Name="FK_grupos_acargo_usuarios" Association="Self.FK_grupos_acargo_usuarios">
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="grupos_acargo" EntitySet="grupos_acargo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notas_periodo_materias" Association="Self.FK_notas_periodo_materias">
+            <End Role="materias" EntitySet="materias" />
+            <End Role="notas_periodo" EntitySet="notas_periodo" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -253,15 +264,8 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="nom_File" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityType Name="configuraciones">
-          <Key>
-            <PropertyRef Name="periodo_actual" />
-          </Key>
-          <Property Name="periodo_actual" Type="String" MaxLength="6" FixedLength="true" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityContainer Name="bd_simaEntitie" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" />
-          <EntitySet Name="configuraciones" EntityType="Self.configuraciones" />
           <EntitySet Name="clases_sima" EntityType="bd_simaModel.clases_sima" />
           <EntitySet Name="cursos" EntityType="bd_simaModel.cursos" />
           <EntitySet Name="estudiantes_asistentes" EntityType="bd_simaModel.estudiantes_asistentes" />
@@ -299,6 +303,12 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <AssociationSet Name="FK_grupos_acargo_usuarios" Association="bd_simaModel.FK_grupos_acargo_usuarios">
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="grupos_acargo" EntitySet="grupos_acargo" />
+          </AssociationSet>
+          <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
+          <EntitySet Name="notas_periodo" EntityType="bd_simaModel.notas_periodo" />
+          <AssociationSet Name="FK_notas_periodo_materias" Association="bd_simaModel.FK_notas_periodo_materias">
+            <End Role="materias" EntitySet="materias" />
+            <End Role="notas_periodo" EntitySet="notas_periodo" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="clases_sima">
@@ -369,6 +379,7 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
           <Property Name="nombre" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="cursos" Relationship="bd_simaModel.FK_cursos_materias" FromRole="materias" ToRole="cursos" />
           <NavigationProperty Name="grupos_acargo" Relationship="bd_simaModel.FK_grupos_acargo_materias" FromRole="materias" ToRole="grupos_acargo" />
+          <NavigationProperty Name="notas_periodo" Relationship="bd_simaModel.FK_notas_periodo_materias" FromRole="materias" ToRole="notas_periodo" />
         </EntityType>
         <EntityType Name="usuarios">
           <Key>
@@ -483,6 +494,41 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="configuracion_app">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="periodo_actual" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="notas_periodo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="nota" Type="Double" Nullable="false" />
+          <Property Name="id_docente" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="id_estudiante" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="corte" Type="Int32" Nullable="false" />
+          <Property Name="periodo" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="asignatura" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
+          <Property Name="grupo" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="programa" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="materias" Relationship="bd_simaModel.FK_notas_periodo_materias" FromRole="notas_periodo" ToRole="materias" />
+        </EntityType>
+        <Association Name="FK_notas_periodo_materias">
+          <End Type="bd_simaModel.materias" Role="materias" Multiplicity="1" />
+          <End Type="bd_simaModel.notas_periodo" Role="notas_periodo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="materias">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="notas_periodo">
+              <PropertyRef Name="asignatura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -499,13 +545,6 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
                 <ScalarProperty Name="comentarios" ColumnName="comentarios" />
                 <ScalarProperty Name="fecha" ColumnName="fecha" />
                 <ScalarProperty Name="nom_File" ColumnName="nom_File" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="configuraciones">
-            <EntityTypeMapping TypeName="bd_simaModel.configuraciones">
-              <MappingFragment StoreEntitySet="configuraciones">
-                <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -576,6 +615,30 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
                 <ScalarProperty Name="apellidos" ColumnName="apellidos" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="configuracion_app">
+            <EntityTypeMapping TypeName="bd_simaModel.configuracion_app">
+              <MappingFragment StoreEntitySet="configuracion_app">
+                <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notas_periodo">
+            <EntityTypeMapping TypeName="bd_simaModel.notas_periodo">
+              <MappingFragment StoreEntitySet="notas_periodo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="programa" ColumnName="programa" />
+                <ScalarProperty Name="grupo" ColumnName="grupo" />
+                <ScalarProperty Name="asignatura" ColumnName="asignatura" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="periodo" ColumnName="periodo" />
+                <ScalarProperty Name="corte" ColumnName="corte" />
+                <ScalarProperty Name="id_estudiante" ColumnName="id_estudiante" />
+                <ScalarProperty Name="id_docente" ColumnName="id_docente" />
+                <ScalarProperty Name="nota" ColumnName="nota" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

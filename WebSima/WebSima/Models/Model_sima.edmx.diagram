@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="ce01c4a07d294cdc8ac6e30636de9e9b" Name="Diagram1">
         <EntityTypeShape EntityType="bd_simaModel.capacitaciones" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="bd_simaModel.configuraciones" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="bd_simaModel.clases_sima" Width="1.5" PointX="5.625" PointY="3.875" />
         <EntityTypeShape EntityType="bd_simaModel.cursos" Width="1.5" PointX="8.625" PointY="4" />
         <EntityTypeShape EntityType="bd_simaModel.estudiantes_asistentes" Width="1.5" PointX="7.875" PointY="8.75" />
@@ -21,6 +20,9 @@
         <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_cursos" />
         <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_materias" />
         <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_usuarios" />
+        <EntityTypeShape EntityType="bd_simaModel.configuracion_app" Width="1.5" PointX="1.125" PointY="0.5" />
+        <EntityTypeShape EntityType="bd_simaModel.notas_periodo" Width="1.5" PointX="6" PointY="10.375" />
+        <AssociationConnector Association="bd_simaModel.FK_notas_periodo_materias" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

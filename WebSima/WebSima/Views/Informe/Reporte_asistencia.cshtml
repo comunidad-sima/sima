@@ -17,30 +17,35 @@
     </ol>
 </div>
 
-<div class="row">
-    <div class="col-sm-12  ">
-        <div class="box box-success">
-            
+<div class="box box-success">
+    <div class="box-header with-border">
+
+        <div class="col-sm-12  ">
+
+            <div class="box box-success">
+
                 <div class="box-body">
                     <div class="row">
-                        @using (Html.BeginForm("Reporte_asistencia", "Informe", FormMethod.Get, new { id="formdato"}))
+                        @using (Html.BeginForm("Reporte_asistencia", "Informe", FormMethod.Get, new { id = "formdato" }))
                         {
                             <div class="col-sm-12 col-12  col-lg-5 ">
                                 <h3 class=" margin">
                                     Período
                                 </h3>
-                                <select required class="form-control " id="peorido" name="periodo" >
+                                <select required class="form-control " id="peorido" name="periodo">
                                     @foreach (String periodo in periodos)
                                     {
-                                        if (peridoSeleccionado.Equals(periodo)){
+                                        if (peridoSeleccionado.Equals(periodo))
+                                        {
                                             <option @seleted value="@periodo">@periodo</option>
-                                         }
-                                        else{
-                                         <option value="@periodo">@periodo</option>
                                         }
+                                        else
+                                        {
+                                            <option value="@periodo">@periodo</option>
                                         }
+                                    }
                                 </select>
-                                </div>                          
+                            </div>
                             <div class="col-sm-12 col-12  col-lg-5 ">
                                 <h3 class=" margin">
                                     Asignaturas
@@ -57,93 +62,91 @@
                                         </div>
                                         <!-- /input-group -->
                                     </div>
-
                                 </div>
                             </div>
-
                         }
                     </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-sm-12">
-        <div class="box box-body">
+            <div class="col-sm-12">
+                <div class="box box-body">
 
 
-            <div class="box-body ">
-                <!-- segundo despligue -->
-                <div class=" box-body " style="border: 1px solid #e0e0e0; ">
+                    <div class="box-body ">
+                        <!-- segundo despligue -->
+                        <div class=" box-body " style="border: 1px solid #e0e0e0; ">
 
-                    <div class="box-tools pull-right">
-
-
-                    </div>
+                            <div class="box-tools pull-right">
 
 
-                    <div class="col-sm-12 table-responsive">
-                        <table class="table tablaPaginacion table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>IDENTIFICACÓN</th>
-                                    <th>NOMBRE COMPLETO</th>
-                                    <th>PROGRAMA</th>
-                                    <th>ASISTENCIA</th>
-                                </tr>
-                                </thead>
-                            <tbody>
-                                @{
-                                    int i = 1;
+                            </div>
 
-                                    foreach (String[] item in asistencia)
-                                    {
-                                        var estudiante = datos_estudiante.Where(e => e.num_identificacion.Equals(item[1])).Select(e => new { e.nom_largo, e.nom_prog_matricula_estudiante }).Distinct().ToArray();
-                                        // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
+
+                            <div class="col-sm-12 table-responsive">
+                                <table class="table tablaPaginacion table-bordered table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>@(i++)</td>
-                                            <td>@item[1]</td>
-                                            <td>
-                                                @if (estudiante.Count()>0)
+                                            <th></th>
+                                            <th>IDENTIFICACÓN</th>
+                                            <th>NOMBRE COMPLETO</th>
+                                            <th>PROGRAMA</th>
+                                            <th>ASISTENCIA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 1;
+
+                                            foreach (String[] item in asistencia)
+                                            {
+                                                var estudiante = datos_estudiante.Where(e => e.num_identificacion.Equals(item[1])).Select(e => new { e.nom_largo, e.nom_prog_matricula_estudiante }).Distinct().ToArray();
+                                                // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
+                                                <tr>
+                                                    <td>@(i++)</td>
+                                                    <td>@item[1]</td>
+                                                    <td>
+                                                        @if (estudiante.Count() > 0)
                                                         {
                                                             @estudiante[0].nom_largo;
                                                         }
                                                         else
                                                         {
-                                                            String mesanje = "Nombre no identificado"; 
+                                                            String mesanje = "Nombre no identificado";
                                                             @mesanje;
-                                                    }
-                                            
-                                            </td>
-                                           
-                                            <td>
+                                                        }
 
-                                                @if (estudiante.Count() > 0)
-                                                {
-                                                    @estudiante[0].nom_prog_matricula_estudiante
-                                                }
-                                                else
-                                                {
-                                                    String mesanje = "Programa no identificado";
-                                                    @mesanje;
-                                                }                                            
-                                           </td>
-                                            <td>@item[0]</td>                                          
-                                        </tr>
-                                    }
+                                                    </td>
+
+                                                    <td>
+
+                                                        @if (estudiante.Count() > 0)
+                                                        {
+                                                            @estudiante[0].nom_prog_matricula_estudiante
+                                                        }
+                                                        else
+                                                        {
+                                                            String mesanje = "Programa no identificado";
+                                                            @mesanje;
+                                                        }
+                                                    </td>
+                                                    <td>@item[0]</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                                @if (asistencia.Count() > 0)
+                                {
+                                    <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o"></i>Exportar </a>
+
                                 }
-                            </tbody>
-                        </table>
-                        @if (asistencia.Count() > 0) { 
-                         <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o"></i>Exportar </a>
-                    
-                        }
+                            </div>
                         </div>
 
+                    </div>
                 </div>
-
             </div>
         </div>
-
     </div>
 </div>
 <script>
