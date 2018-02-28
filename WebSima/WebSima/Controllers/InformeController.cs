@@ -16,7 +16,7 @@ namespace WebSima.Controllers
    
     public class InformeController : Controller
     {
-        String periodo = "2017-2";
+        //String periodo = "2017-2";
         private bd_simaEntitie db = new bd_simaEntitie();
         Sesion session = new Sesion();
         //
