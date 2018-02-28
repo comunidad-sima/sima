@@ -1,40 +1,51 @@
 ﻿@{ ViewBag.Title = "home"; }
 
+<div class="panelborder">
+    <div class="row ">
+        <div class="col-sm-12">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <div class="col-sm-4 ">
+                        <h3 class="box-title  ">Notas Del Estudiante</h3>
+                    </div>
+                    <div class=" col-sm-2 ">
+                        <a href="#" class="btn btn-success right">Cargar Plantilla</a>
+                    </div>
+                        <div class=" pull-right col-sm-6">
 
-<div class="row">
-    <div class="col-sm-12">
-        <div class="box box-success">
-            <div class="box-header with-border">
-                <h3 class="box-title  col-sm-6 ">Notas Del Estudiante</h3>
-                <div class=" pull-right col-sm-6">
+                            
 
-                    <form method="POST" action="#" enctype="">
-                        <!-- COMPONENT START -->
-                        <div class="form-group">
-                            <div class="input-group input-file" name="Fichier1">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success btn-choose" type="button">Cargar Archivo</button>
-                                </span>
-                                <input type="text" class="form-control" placeholder='Choose a file...' />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success " type="submit">Enviar</button>
-                                </span>
+                        <form method="POST" action="#" enctype="">
+                            <!-- COMPONENT START -->
+                            <div class="form-group">
+                                <div class="input-group input-file" name="Fichier1">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success btn-choose" type="button">Cargar Archivo</button>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder='Choose a file...' />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success " type="submit">Enviar</button>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <!-- /.box-header -->
+                <!-- /.box-header -->
 
-            <div class="box-body ">
-                <div id="example" class="hot handsontable col-sm-12" style="overflow-y: auto; overflow-x: auto;"></div>
-
+                <div class="box-body panelBorder">
+                        <h4 class="box-header with-border">Plantilla Prediseñada</h4>
+                        
+                    
+                        <div id="example" class="hot handsontable col-sm-12 " style="overflow-y: auto; overflow-x: auto;"></div>
+                    
+                </div>
+                <!-- /.box-body -->
             </div>
-            <!-- /.box-body -->
+            <!-- /.box -->
         </div>
-        <!-- /.box -->
+        <!-- /.col -->
     </div>
-    <!-- /.col -->
 </div>
 <script>
 

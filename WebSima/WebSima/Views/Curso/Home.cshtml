@@ -44,63 +44,62 @@
                         </div><br />
                        
 
-                            <div class="row">
-                                <div class="col-sm-12 col-12   col-lg-3">
-                                    <label>Periodo</label>
-                                    <select class="form-control buscarGrupo" name="periodoBuscar" id="periodoBuscar">
-                                        <option value="--">Seleccione período</option>
-                                        @if (periodos != null)
+                        <div class="row ">
+                            <div class="col-sm-12 col-12   col-lg-3 ">
+                                <label>Período</label>
+                                <select class="form-control buscarGrupo" name="periodoBuscar" id="periodoBuscar">
+                                    <option value="--">Seleccione período</option>
+                                    @if (periodos != null)
+                                    {
+                                        foreach (var e in periodos)
                                         {
-                                            foreach (var e in periodos)
-                                            {
-                                                <option value="@e.Value">
-                                                    @e.Text
-                                                </option>
-                                            }
+                                            <option value="@e.Value">
+                                                @e.Text
+                                            </option>
                                         }
-                                        
-                                           
-                                        
-                                    </select>
+                                    }
 
-                                </div>
-                                <div class="col-sm-12 col-12  col-lg-5 ">
-                                    <label>Asignatura</label>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <select class="form-control    select2  " style="width: 100%; " id="materiaBuscar" name="materiaBuscar">
-                                                <option selected value="">Ingrese ó seleccione una asignatura</option>
-                                                 @if (materias != null)
-                                                {
-                                                    foreach (var item in materias)
-                                                    {
-                                                        <option value="@item.Value">@item.Value</option>
-                                                    }
-                                                }                                              
-                                                
-                                                  
-                                                
 
-                                            </select>
-                                            @*<input class=" form-control buscarGrupo" placeholder="Ingrese ó seleccione una asignatura" autocomplete="off" id="materiaBuscar" name="materiaBuscar" list="materias_" />*@
-                                            <span class="input-group-btn"><input type="button" class="btn btn-success " value="Buscar" id="buscar_grupos" /></span>
-                                        </div>
-                                    </div>
-                                    @*<datalist id="materias_">
-                                        @if (materias != null)
-                                                {
-                                                    foreach (var item in materias)
-                                                    {
-                                                        <option value="@item.Value">@item.Value</option>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                            <option value="--">slecciones Asignatura</option>
-                                        }
-                                    </datalist>*@
-                                </div>                               
+
+                                </select>
                             </div>
+                            <div class="col-sm-12 col-12  col-lg-5 ">
+                                <label>Asignatura</label>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <select class="form-control    select2  " style="width: 100%; " id="materiaBuscar" name="materiaBuscar">
+                                            <option selected value="">Ingrese ó seleccione una asignatura</option>
+                                            @if (materias != null)
+                                            {
+                                                foreach (var item in materias)
+                                                {
+                                                    <option value="@item.Value">@item.Value</option>
+                                                }
+                                            }
+
+
+
+                                        </select>
+                                        @*<input class=" form-control buscarGrupo" placeholder="Ingrese ó seleccione una asignatura" autocomplete="off" id="materiaBuscar" name="materiaBuscar" list="materias_" />*@
+                                        <span class="input-group-btn"><input type="button" class="btn btn-success " value="Buscar" id="buscar_grupos" /></span>
+                                    </div>
+                                </div>
+                                @*<datalist id="materias_">
+                    @if (materias != null)
+                            {
+                                foreach (var item in materias)
+                                {
+                                    <option value="@item.Value">@item.Value</option>
+                                }
+                            }
+                            else
+                            {
+                        <option value="--">slecciones Asignatura</option>
+                    }
+                </datalist>*@
+                            </div>
+                        </div>
+
                         @*se carga el contenido de la tabla de registros*@
                         <div id="registro">
 
