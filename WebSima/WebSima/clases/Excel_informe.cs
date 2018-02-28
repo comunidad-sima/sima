@@ -32,10 +32,13 @@ namespace WebSima.clases
             }
             // se  crea la cabecera
             DataTable dt = new DataTable("reporte_asistencia_sima");
-            dt.Columns.AddRange(new DataColumn[4] { new DataColumn("Identificación"),
-                                            new DataColumn("Nombre"),
-                                            new DataColumn("Programa"),
-                                            new DataColumn("Asistencias") });
+            dt.Columns.AddRange(
+                new DataColumn[4] {
+                        new DataColumn("Identificación"),                                            
+                        new DataColumn("Nombre"),
+                        new DataColumn("Programa"),
+                        new DataColumn("Asistencias")
+                });
          //  cargamos los datos
             foreach (var dato in datos)
             {

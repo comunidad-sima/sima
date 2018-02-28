@@ -30,6 +30,7 @@
                                     Período
                                 </h3>
                                 <select required class="form-control " id="peorido" name="periodo" >
+                                   
                                     @foreach (String periodo in periodos)
                                     {
                                         if (peridoSeleccionado.Equals(periodo)){
@@ -40,8 +41,10 @@
                                         }
                                         }
                                 </select>
-                                </div>                          
+
+                                </div>
                             <div class="col-sm-12 col-12  col-lg-5 ">
+
                                 <h3 class=" margin">
                                     Asignaturas
                                 </h3>

@@ -151,7 +151,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="clases\Archivo.cs" />
-    <Compile Include="clases\ExcelDato.cs" />
     <Compile Include="clases\Excel_informe.cs" />
     <Compile Include="clases\Seguridad.cs" />
     <Compile Include="Controllers\AsistenciaController.cs" />
@@ -161,6 +160,7 @@
     <Compile Include="Controllers\GruposController.cs" />
     <Compile Include="Controllers\InformeController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -7489,7 +7489,7 @@
     <Content Include="Views\Asistencia\home.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\informe\Test_aprobacion.cshtml" />
+    <Content Include="Views\Test\add_pregunta.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -41,7 +41,6 @@ namespace WebSima.Models
             return sesion;
         }
 
-
         public void setMateriaReporteAsistencia(String dato)
         {
             HttpContext.Current.Session["materia_reporte_asistencia"] = dato;
