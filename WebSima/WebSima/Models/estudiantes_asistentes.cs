@@ -16,7 +16,6 @@ namespace WebSima.Models
     {
         public string estudiante_id { get; set; }
         public int clase_id { get; set; }
-        public int id { get; set; }
     
         public virtual clases_sima clases_sima { get; set; }
     }

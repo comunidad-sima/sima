@@ -52,8 +52,8 @@ namespace WebSima.Models
                 conn.Close();
             }
             //List<String> f = datos.Select(m => m[1]).ToList();
-            
-            return datos;
+
+            return datos.OrderByDescending(m => m[0]).ToList();
         }
     }
 }

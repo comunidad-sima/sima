@@ -1,0 +1,29 @@
+ Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
+            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet;
+
+            object misValue = System.Reflection.Missing.Value;
+
+            xlWorkBook = xlApp.Workbooks.Add(misValue);
+            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+            xlWorkSheet.Cells[1, 1] = "ID";
+            xlWorkSheet.Cells[1, 2] = "Name";
+            xlWorkSheet.Cells[2, 1] = "1";
+            xlWorkSheet.Cells[2, 2] = "One";
+            xlWorkSheet.Cells[3, 1] = "2";
+            xlWorkSheet.Cells[3, 2] = "Two";
+
+            string path = Server.MapPath(nombreCarpeta);
+
+
+            xlWorkBook.SaveAs(path + "/exportar.xlsx");
+            xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+            path = Server.MapPath(nombreCarpeta + "/exportar.xlsx");
+            Marshal.ReleaseComObject(xlWorkSheet);
+            Marshal.ReleaseComObject(xlWorkBook);
+            Marshal.ReleaseComObject(xlApp);
+            var f = File(path, "application/vnd.ms-excel", "exportar.xlsx");
+            return f;

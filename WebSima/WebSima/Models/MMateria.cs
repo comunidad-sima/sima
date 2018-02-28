@@ -22,13 +22,36 @@ namespace WebSima.Models
        
         public static List<SelectListItem> getMaterias(bd_simaEntitie db)
         {
-            var maerias = (from m in db.materias
+            var materias = (from m in db.materias
                            select new SelectListItem
                                {
                                    Value = m.nombre,
                                    Text = m.nombre
                                });
-            return maerias.ToList();
+            return materias.ToList();
+
+        }
+        /// <summary>
+        /// consulta el nombre de las materias que se le ha creado un curso en un perido
+        /// </summary>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        public static List<SelectListItem> getMaterias_registro_grupos(bd_simaEntitie db, String periodo )
+        {
+            //List<cursos> materia = ((from m in db.cursos
+            //                where(m.periodo.Equals(periodo))
+            //                          select m)).ToList();
+
+            var k = (from mm in db.cursos
+                     where (mm.periodo.Equals(periodo))
+                group mm by mm.nombre_materia into temp
+                select new SelectListItem
+                        {
+                            Value = temp.Key,
+                            Text = temp.Key
+                        }).ToList();
+   
+            return k;
 
         }
 

@@ -1,1 +1,4 @@
 Cecar123 = QwBlAGMAYQByADEAMgAzAA==
+
+
+https://www.aspsnippets.com/Articles/ClosedXML-MVC-Example-Export-to-Excel-using-ClosedXML-in-ASPNet-MVC.aspx

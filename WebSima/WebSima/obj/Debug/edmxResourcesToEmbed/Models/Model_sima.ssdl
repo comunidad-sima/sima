@@ -48,17 +48,21 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
   </EntityType>
   <EntityType Name="estudiantes_asistentes">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="estudiante_id" />
+      <PropertyRef Name="clase_id" />
     </Key>
     <Property Name="estudiante_id" Type="varchar" MaxLength="12" Nullable="false" />
     <Property Name="clase_id" Type="int" Nullable="false" />
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
   <EntityType Name="grupos_acargo">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="idUsuario" />
+      <PropertyRef Name="materia" />
+      <PropertyRef Name="periodo" />
+      <PropertyRef Name="id_grupo" />
+      <PropertyRef Name="id_curso" />
+      <PropertyRef Name="programa" />
     </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="idUsuario" Type="varchar" MaxLength="12" Nullable="false" />
     <Property Name="materia" Type="varchar" MaxLength="90" Nullable="false" />
     <Property Name="periodo" Type="varchar" MaxLength="6" Nullable="false" />

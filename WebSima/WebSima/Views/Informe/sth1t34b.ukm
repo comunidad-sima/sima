@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "Reporte de asistencia";
+    SelectList materias = ViewBag.materias;
+    List<String[]> asistencia = ViewBag.asistencia;
+    List<WebSima.Models.WebApi.EstudianteMateria> datos_estudiante = ViewBag.datos_estudiante;
+    String asignatura = ViewBag.asignatura;
+    List<String> periodos = ViewBag.periodos;
+    String seleted = "selected";
+    String peridoSeleccionado = ViewBag.peridoSeleccionado;
+    }
+
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Home</li>
+        <li class="breadcrumb-item active">Informe</li>
+
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-sm-12  ">
+        <div class="box box-success">
+            
+                <div class="box-body">
+                    <div class="row">
+                        @using (Html.BeginForm("Reporte_asistencia", "Informe", FormMethod.Get, new { id="formdato"}))
+                        {
+                            <div class="col-sm-12 col-12  col-lg-5 ">
+                                <h3 class=" margin">
+                                    Período
+                                </h3>
+                                <select required class="form-control " id="peorido" name="periodo" >
+                                   
+                                    @foreach (String periodo in periodos)
+                                    {
+                                        if (peridoSeleccionado.Equals(periodo)){
+                                            <option @seleted value="@periodo">@periodo</option>
+                                         }
+                                        else{
+                                         <option value="@periodo">@periodo</option>
+                                        }
+                                        }
+                                </select>
+
+                                </div>
+                            <div class="col-sm-12 col-12  col-lg-5 ">
+
+                                <h3 class=" margin">
+                                    Asignaturas
+                                </h3>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group  ">
+                                            @Html.DropDownList("materia", materias, asignatura,
+                           new { @class = "form-control select2", style = "width: 100%" })
+
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-success">Buscar</button>
+                                            </span>
+                                        </div>
+                                        <!-- /input-group -->
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="box box-body">
+
+
+            <div class="box-body ">
+                <!-- segundo despligue -->
+                <div class=" box-body " style="border: 1px solid #e0e0e0; ">
+
+                    <div class="box-tools pull-right">
+
+
+                    </div>
+
+
+                    <div class="col-sm-12 table-responsive">
+                        <table class="table tablaPaginacion table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>IDENTIFICACÓN</th>
+                                    <th>NOMBRE COMPLETO</th>
+                                    <th>PROGRAMA</th>
+                                    <th>ASISTENCIA</th>
+                                </tr>
+                                </thead>
+                            <tbody>
+                                @{
+                                    int i = 1;
+
+                                    foreach (String[] item in asistencia)
+                                    {
+                                        var estudiante = datos_estudiante.Where(e => e.num_identificacion.Equals(item[1])).Select(e => new { e.nom_largo, e.nom_prog_matricula_estudiante }).Distinct().ToArray();
+                                        // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
+                                        <tr>
+                                            <td>@(i++)</td>
+                                            <td>@item[1]</td>
+                                            <td>
+                                                @if (estudiante.Count()>0)
+                                                        {
+                                                            @estudiante[0].nom_largo;
+                                                        }
+                                                        else
+                                                        {
+                                                            String mesanje = "Nombre no identificado"; 
+                                                            @mesanje;
+                                                    }
+                                            
+                                            </td>
+                                           
+                                            <td>
+
+                                                @if (estudiante.Count() > 0)
+                                                {
+                                                    @estudiante[0].nom_prog_matricula_estudiante
+                                                }
+                                                else
+                                                {
+                                                    String mesanje = "Programa no identificado";
+                                                    @mesanje;
+                                                }                                            
+                                           </td>
+                                            <td>@item[0]</td>                                          
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        @if (asistencia.Count() > 0) { 
+                         <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o">Exportar</i> </a>
+                    
+                        }
+                        </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.select2').select2();
+        // se configura la tabla, esta funcion está en helper.js
+        configurar_dataTable("tablaPaginacion");
+
+        $("#peorido").change(function () {
+            $("#formdato").submit();
+        });
+    });
+</script>
+
+
