@@ -46,6 +46,5 @@ C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.Razor.
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPages.resources.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Razor.resources.dll
-C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.pdb
