@@ -51,7 +51,7 @@ namespace WebSima.Controllers
         public ActionResult Reporte_asistencia(String periodo="-",String materia = "Seleccione asignatura")
         {
             if (periodo.Equals("-"))
-                periodo = "2017-2";
+                periodo  = MConfiguracionApp.getPeridoActual(db);;
             List<String> idEstudiantes = new List<string>();
             List<EstudianteMateria> datos_2 = new List<EstudianteMateria>();
             MInforme info = new MInforme();

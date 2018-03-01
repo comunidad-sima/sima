@@ -11,9 +11,10 @@ namespace WebSima.Controllers
 {
     public class CursoController : Controller
     {
-        String periodo = "2017-2";
+        
         Sesion sesion = new Sesion();
         private bd_simaEntitie db = new bd_simaEntitie();
+       // String periodo = MConfiguracionApp.getPeridoActual(db);
 
         public ActionResult Home()
         {
@@ -122,6 +123,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Create(MCurso curso)
         {
+           String periodo = MConfiguracionApp.getPeridoActual(db);
             Respusta respuesta = new Respusta();
             if (sesion.esAdministrador(db))
             {
@@ -145,6 +147,7 @@ namespace WebSima.Controllers
                                     idUsuario = curso.idUsuario,
                                     nombre_materia = curso.nombre_materia.ToUpper(),
                                     periodo = periodo,
+                                    eliminado=0,
                                     usuarios = usuario
                                 };
                                 db.cursos.Add(cur);
@@ -214,6 +217,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Edit(MCurso curso)
         {
+            String periodo = MConfiguracionApp.getPeridoActual(db);
             Respusta respuesta = new Respusta();
 
             if (sesion.esAdministrador(db))

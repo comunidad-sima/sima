@@ -12,19 +12,9 @@ namespace WebSima.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class materias
+    public partial class configuracion_app
     {
-        public materias()
-        {
-            this.cursos = new HashSet<cursos>();
-            this.grupos_acargo = new HashSet<grupos_acargo>();
-            this.notas_periodo = new HashSet<notas_periodo>();
-        }
-    
-        public string nombre { get; set; }
-    
-        public virtual ICollection<cursos> cursos { get; set; }
-        public virtual ICollection<grupos_acargo> grupos_acargo { get; set; }
-        public virtual ICollection<notas_periodo> notas_periodo { get; set; }
+        public int id { get; set; }
+        public string periodo_actual { get; set; }
     }
 }

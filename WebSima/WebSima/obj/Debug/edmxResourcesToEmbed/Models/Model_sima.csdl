@@ -12,15 +12,8 @@
     <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="nom_File" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
   </EntityType>
-  <EntityType Name="configuraciones">
-    <Key>
-      <PropertyRef Name="periodo_actual" />
-    </Key>
-    <Property Name="periodo_actual" Type="String" MaxLength="6" FixedLength="true" Unicode="true" Nullable="false" />
-  </EntityType>
   <EntityContainer Name="bd_simaEntitie" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" />
-    <EntitySet Name="configuraciones" EntityType="Self.configuraciones" />
     <EntitySet Name="clases_sima" EntityType="bd_simaModel.clases_sima" />
     <EntitySet Name="cursos" EntityType="bd_simaModel.cursos" />
     <EntitySet Name="estudiantes_asistentes" EntityType="bd_simaModel.estudiantes_asistentes" />
@@ -58,6 +51,12 @@
     <AssociationSet Name="FK_grupos_acargo_usuarios" Association="bd_simaModel.FK_grupos_acargo_usuarios">
       <End Role="usuarios" EntitySet="usuarios" />
       <End Role="grupos_acargo" EntitySet="grupos_acargo" />
+    </AssociationSet>
+    <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
+    <EntitySet Name="notas_periodo" EntityType="bd_simaModel.notas_periodo" />
+    <AssociationSet Name="FK_notas_periodo_materias" Association="bd_simaModel.FK_notas_periodo_materias">
+      <End Role="materias" EntitySet="materias" />
+      <End Role="notas_periodo" EntitySet="notas_periodo" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="clases_sima">
@@ -128,6 +127,7 @@
     <Property Name="nombre" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="cursos" Relationship="bd_simaModel.FK_cursos_materias" FromRole="materias" ToRole="cursos" />
     <NavigationProperty Name="grupos_acargo" Relationship="bd_simaModel.FK_grupos_acargo_materias" FromRole="materias" ToRole="grupos_acargo" />
+    <NavigationProperty Name="notas_periodo" Relationship="bd_simaModel.FK_notas_periodo_materias" FromRole="materias" ToRole="notas_periodo" />
   </EntityType>
   <EntityType Name="usuarios">
     <Key>
@@ -239,6 +239,41 @@
       </Principal>
       <Dependent Role="grupos_acargo">
         <PropertyRef Name="idUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="configuracion_app">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="periodo_actual" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="notas_periodo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="nota" Type="Double" Nullable="false" />
+    <Property Name="id_docente" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="id_estudiante" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="corte" Type="Int32" Nullable="false" />
+    <Property Name="periodo" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="asignatura" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
+    <Property Name="grupo" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="programa" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="materias" Relationship="bd_simaModel.FK_notas_periodo_materias" FromRole="notas_periodo" ToRole="materias" />
+  </EntityType>
+  <Association Name="FK_notas_periodo_materias">
+    <End Type="bd_simaModel.materias" Role="materias" Multiplicity="1" />
+    <End Type="bd_simaModel.notas_periodo" Role="notas_periodo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materias">
+        <PropertyRef Name="nombre" />
+      </Principal>
+      <Dependent Role="notas_periodo">
+        <PropertyRef Name="asignatura" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

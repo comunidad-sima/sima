@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace WebSima.Controllers
 {
-    public class AsistenciaController : Controller
+    public class CalificacionesController : Controller
     {
         //
         // GET: /Asistencia/
@@ -27,7 +27,7 @@ namespace WebSima.Controllers
         //
         // GET: /Asistencia/Create
 
-        public ActionResult Create()
+        public ActionResult Registrar()
         {
             return View();
         }

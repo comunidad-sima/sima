@@ -1,0 +1,36 @@
+﻿@model WebSima.Models.configuracion_app
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>configuracion_app</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.periodo_actual)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.periodo_actual)
+            @Html.ValidationMessageFor(model => model.periodo_actual)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

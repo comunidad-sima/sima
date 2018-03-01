@@ -26,13 +26,12 @@
     <Property Name="evidencia" Type="varchar" MaxLength="40" Nullable="false" />
     <Property Name="fecha_realizada" Type="date" Nullable="false" />
   </EntityType>
-  <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-  <EntityType Name="configuraciones">
+  <EntityType Name="configuracion_app">
     <Key>
-      <PropertyRef Name="periodo_actual" />
+      <PropertyRef Name="id" />
     </Key>
-    <Property Name="periodo_actual" Type="nchar" MaxLength="6" Nullable="false" />
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="periodo_actual" Type="varchar" MaxLength="6" Nullable="false" />
   </EntityType>
   <EntityType Name="cursos">
     <Key>
@@ -75,6 +74,21 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
       <PropertyRef Name="nombre" />
     </Key>
     <Property Name="nombre" Type="varchar" MaxLength="90" Nullable="false" />
+  </EntityType>
+  <EntityType Name="notas_periodo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="nota" Type="float" Nullable="false" />
+    <Property Name="id_docente" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="id_estudiante" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="corte" Type="int" Nullable="false" />
+    <Property Name="periodo" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="fecha_registro" Type="datetime" Nullable="false" />
+    <Property Name="asignatura" Type="varchar" MaxLength="90" Nullable="false" />
+    <Property Name="grupo" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="programa" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
   <EntityType Name="usuarios">
     <Key>
@@ -150,18 +164,6 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_grupos_acargo_cursos">
-    <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
-    <End Role="grupos_acargo" Type="Self.grupos_acargo" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="cursos">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="grupos_acargo">
-        <PropertyRef Name="id_curso" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_grupos_acargo_materias">
     <End Role="materias" Type="Self.materias" Multiplicity="1" />
     <End Role="grupos_acargo" Type="Self.grupos_acargo" Multiplicity="*" />
@@ -186,19 +188,28 @@ advertencia 6002: La tabla o vista 'bd_sima.dbo.configuraciones' no tiene defini
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_notas_periodo_materias">
+    <End Role="materias" Type="Self.materias" Multiplicity="1" />
+    <End Role="notas_periodo" Type="Self.notas_periodo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materias">
+        <PropertyRef Name="nombre" />
+      </Principal>
+      <Dependent Role="notas_periodo">
+        <PropertyRef Name="asignatura" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="bd_simaModelStoreContainer">
     <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="clases_sima" EntityType="Self.clases_sima" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="configuracion_app" EntityType="Self.configuracion_app" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="cursos" EntityType="Self.cursos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="estudiantes_asistentes" EntityType="Self.estudiantes_asistentes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="grupos_acargo" EntityType="Self.grupos_acargo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="materias" EntityType="Self.materias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="notas_periodo" EntityType="Self.notas_periodo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="configuraciones" EntityType="Self.configuraciones" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-[configuraciones].[periodo_actual] AS [periodo_actual]
-FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK_clases_sima_cursos" Association="Self.FK_clases_sima_cursos">
       <End Role="cursos" EntitySet="cursos" />
       <End Role="clases_sima" EntitySet="clases_sima" />
@@ -219,10 +230,6 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
       <End Role="clases_sima" EntitySet="clases_sima" />
       <End Role="estudiantes_asistentes" EntitySet="estudiantes_asistentes" />
     </AssociationSet>
-    <AssociationSet Name="FK_grupos_acargo_cursos" Association="Self.FK_grupos_acargo_cursos">
-      <End Role="cursos" EntitySet="cursos" />
-      <End Role="grupos_acargo" EntitySet="grupos_acargo" />
-    </AssociationSet>
     <AssociationSet Name="FK_grupos_acargo_materias" Association="Self.FK_grupos_acargo_materias">
       <End Role="materias" EntitySet="materias" />
       <End Role="grupos_acargo" EntitySet="grupos_acargo" />
@@ -230,6 +237,10 @@ FROM [dbo].[configuraciones] AS [configuraciones]</DefiningQuery>
     <AssociationSet Name="FK_grupos_acargo_usuarios" Association="Self.FK_grupos_acargo_usuarios">
       <End Role="usuarios" EntitySet="usuarios" />
       <End Role="grupos_acargo" EntitySet="grupos_acargo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notas_periodo_materias" Association="Self.FK_notas_periodo_materias">
+      <End Role="materias" EntitySet="materias" />
+      <End Role="notas_periodo" EntitySet="notas_periodo" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

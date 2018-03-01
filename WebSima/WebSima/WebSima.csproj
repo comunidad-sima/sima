@@ -153,9 +153,10 @@
     <Compile Include="clases\Archivo.cs" />
     <Compile Include="clases\Excel_informe.cs" />
     <Compile Include="clases\Seguridad.cs" />
-    <Compile Include="Controllers\AsistenciaController.cs" />
+    <Compile Include="Controllers\CalificacionesController.cs" />
     <Compile Include="Controllers\CapacitacionController.cs" />
     <Compile Include="Controllers\ClaseController.cs" />
+    <Compile Include="Controllers\ConfigAppController.cs" />
     <Compile Include="Controllers\CursoController.cs" />
     <Compile Include="Controllers\GruposController.cs" />
     <Compile Include="Controllers\HorarioController.cs" />
@@ -172,7 +173,8 @@
     <Compile Include="Models\clases_sima.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\configuraciones.cs">
+    <Compile Include="Models\MConfiguracionApp.cs" />
+    <Compile Include="Models\configuracion_app.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\cursos.cs">
@@ -209,6 +211,9 @@
       <DependentUpon>Model_sima.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\MUsuario.cs" />
+    <Compile Include="Models\notas_periodo.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Respusta.cs" />
     <Compile Include="clases\Sesion.cs" />
     <Compile Include="Models\usuarios.cs">
@@ -7488,10 +7493,25 @@
     <Content Include="Views\Asistencia.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Asistencia\home.cshtml" />
+    <Content Include="Views\Calificaciones\Registrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Test\add_pregunta.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ConfigApp\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ConfigApp\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ConfigApp\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ConfigApp\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ConfigApp\Delete.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
