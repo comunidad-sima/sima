@@ -46,6 +46,7 @@ namespace WebSima.Controllers
                     {
                         sesion.setIdUsurio(id);
                         sesion.setIPerfilUsusrio(u.tipo);
+                        sesion.setINombreUsuario(u.nombre + " " + u.apellidos);
                         if (u.tipo.Equals("Administrador"))
                         {
                             return Redirect("~/Capacitacion/Home");
@@ -109,6 +110,13 @@ namespace WebSima.Controllers
            
             return View();
         }
+        public ActionResult Salir()
+        {
+            sesion.destruirSesion();
+
+            return Redirect("~/Inicio/Login");
+        }
+
 
     }
 }

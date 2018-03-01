@@ -9,6 +9,17 @@ namespace WebSima.Models
     {
        private String sesion;
 
+       public String getNombreUsuario()
+       {
+           this.sesion = Convert.ToString(HttpContext.Current.Session["nombre_usuario"]);
+           return sesion;
+       }
+
+       public void setINombreUsuario(String dato)
+       {
+           HttpContext.Current.Session["nombre_usuario"] = dato;
+
+       }
        public String getIdUsuario()
        {
            this.sesion = Convert.ToString(HttpContext.Current.Session["id_usuario"]);

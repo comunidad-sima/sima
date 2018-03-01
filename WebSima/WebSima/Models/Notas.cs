@@ -12,19 +12,14 @@ namespace WebSima.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class notas_periodo
+    public partial class Notas
     {
-        public double nota { get; set; }
-        public string id_docente { get; set; }
+        public double valor { get; set; }
+        public int id_calificaciones_periodo { get; set; }
+        public string tipo { get; set; }
         public string id_estudiante { get; set; }
-        public int corte { get; set; }
-        public string periodo { get; set; }
-        public System.DateTime fecha_registro { get; set; }
-        public string asignatura { get; set; }
-        public string grupo { get; set; }
-        public string programa { get; set; }
         public int id { get; set; }
     
-        public virtual materias materias { get; set; }
+        public virtual calificaciones_periodo calificaciones_periodo { get; set; }
     }
 }

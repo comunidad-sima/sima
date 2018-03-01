@@ -5,24 +5,25 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="ce01c4a07d294cdc8ac6e30636de9e9b" Name="Diagram1">
-        <EntityTypeShape EntityType="bd_simaModel.capacitaciones" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="bd_simaModel.clases_sima" Width="1.5" PointX="5.625" PointY="3.875" />
-        <EntityTypeShape EntityType="bd_simaModel.cursos" Width="1.5" PointX="8.625" PointY="4" />
-        <EntityTypeShape EntityType="bd_simaModel.estudiantes_asistentes" Width="1.5" PointX="7.875" PointY="8.75" />
-        <EntityTypeShape EntityType="bd_simaModel.grupos_acargo" Width="1.5" PointX="10.875" PointY="4.125" />
-        <EntityTypeShape EntityType="bd_simaModel.materias" Width="1.5" PointX="6.375" PointY="0.75" />
-        <EntityTypeShape EntityType="bd_simaModel.usuarios" Width="1.5" PointX="3.375" PointY="3.875" />
+        <EntityTypeShape EntityType="bd_simaModel.calificaciones_periodo" PointX="0.75" PointY="0.75" Width="1.5" />
+        <EntityTypeShape EntityType="bd_simaModel.capacitaciones" Width="1.5" PointX="2.625" PointY="4.75" />
+        <EntityTypeShape EntityType="bd_simaModel.clases_sima" Width="1.5" PointX="10.125" PointY="7" />
+        <EntityTypeShape EntityType="bd_simaModel.configuracion_app" Width="1.5" PointX="7.625" PointY="0.75" />
+        <EntityTypeShape EntityType="bd_simaModel.cursos" Width="1.5" PointX="7.875" PointY="3.25" />
+        <EntityTypeShape EntityType="bd_simaModel.estudiantes_asistentes" Width="1.5" PointX="12.375" PointY="7.875" />
+        <EntityTypeShape EntityType="bd_simaModel.grupos_acargo" Width="1.5" PointX="10.875" PointY="3.5" />
+        <EntityTypeShape EntityType="bd_simaModel.materias" Width="1.5" PointX="0.75" PointY="1.375" />
+        <EntityTypeShape EntityType="bd_simaModel.Notas" Width="1.5" PointX="5.25" PointY="1.125" />
+        <EntityTypeShape EntityType="bd_simaModel.usuarios" Width="1.5" PointX="5.625" PointY="4.875" />
+        <AssociationConnector Association="bd_simaModel.FK_calificaciones_periodo_materias" />
+        <AssociationConnector Association="bd_simaModel.FK_Notas_calificaciones_periodo" />
         <AssociationConnector Association="bd_simaModel.FK_clases_sima_cursos" />
         <AssociationConnector Association="bd_simaModel.FK_clases_sima_usuarios" />
         <AssociationConnector Association="bd_simaModel.FK_estudiantes_asistentes_clases_sima" />
         <AssociationConnector Association="bd_simaModel.FK_cursos_materias" />
         <AssociationConnector Association="bd_simaModel.FK_cursos_usuarios" />
-        <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_cursos" />
         <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_materias" />
         <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_usuarios" />
-        <EntityTypeShape EntityType="bd_simaModel.configuracion_app" Width="1.5" PointX="1.125" PointY="0.5" />
-        <EntityTypeShape EntityType="bd_simaModel.notas_periodo" Width="1.5" PointX="6" PointY="10.375" />
-        <AssociationConnector Association="bd_simaModel.FK_notas_periodo_materias" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
