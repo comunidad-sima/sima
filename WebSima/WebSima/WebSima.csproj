@@ -223,8 +223,13 @@
     <Compile Include="Models\usuarios.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\WebApi\ComportamientoNotaEstudiente .cs" />
     <Compile Include="Models\WebApi\ConsumidorAppi.cs" />
     <Compile Include="Models\WebApi\EstudianteMateria.cs" />
+    <Compile Include="Models\WebApi\PragramaCECAR.cs" />
+    <Compile Include="Models\WebApi\GrupoPrograma.cs" />
+    <Compile Include="Models\WebApi\HorarioEstudiante.cs" />
+    <Compile Include="Models\WebApi\HorarioEstudianteID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,9 @@ using System.Web;
 
 namespace WebSima.Models.WebApi
 {
+    /// <summary>
+    /// Datos de los estudiantes que estan viendo una asignatura en CECAR
+    /// </summary>
     public class EstudianteMateria
     {
         public string id_grupo { get; set; }
