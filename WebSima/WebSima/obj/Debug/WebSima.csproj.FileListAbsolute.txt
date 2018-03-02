@@ -21,7 +21,6 @@ C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\System.Web.WebPages.
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\System.Web.WebPages.Razor.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\WebGrease.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\Antlr3.Runtime.pdb
-C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\ClosedXML.pdb
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\ClosedXML.xml
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\Newtonsoft.Json.xml
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\RestSharp.xml
@@ -46,9 +45,9 @@ C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.Razor.
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPages.resources.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Razor.resources.dll
-C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.pdb
+C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\bin\WebSima.dll.config
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\bin\WebSima.dll
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\bin\WebSima.pdb

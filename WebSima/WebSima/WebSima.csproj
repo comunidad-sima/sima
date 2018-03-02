@@ -167,6 +167,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PerfilHelper.cs" />
+    <Compile Include="Models\calificaciones_periodo.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\capacitaciones.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
@@ -211,7 +215,7 @@
       <DependentUpon>Model_sima.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\MUsuario.cs" />
-    <Compile Include="Models\notas_periodo.cs">
+    <Compile Include="Models\Notas.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Respusta.cs" />

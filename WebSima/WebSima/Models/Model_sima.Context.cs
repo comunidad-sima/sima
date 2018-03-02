@@ -25,14 +25,15 @@ namespace WebSima.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<calificaciones_periodo> calificaciones_periodo { get; set; }
         public DbSet<capacitaciones> capacitaciones { get; set; }
         public DbSet<clases_sima> clases_sima { get; set; }
+        public DbSet<configuracion_app> configuracion_app { get; set; }
         public DbSet<cursos> cursos { get; set; }
         public DbSet<estudiantes_asistentes> estudiantes_asistentes { get; set; }
         public DbSet<grupos_acargo> grupos_acargo { get; set; }
         public DbSet<materias> materias { get; set; }
+        public DbSet<Notas> Notas { get; set; }
         public DbSet<usuarios> usuarios { get; set; }
-        public DbSet<configuracion_app> configuracion_app { get; set; }
-        public DbSet<notas_periodo> notas_periodo { get; set; }
     }
 }

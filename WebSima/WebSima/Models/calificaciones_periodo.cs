@@ -12,16 +12,23 @@ namespace WebSima.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class grupos_acargo
+    public partial class calificaciones_periodo
     {
-        public string idUsuario { get; set; }
-        public string materia { get; set; }
+        public calificaciones_periodo()
+        {
+            this.Notas = new HashSet<Notas>();
+        }
+    
+        public string id_docente { get; set; }
+        public int corte { get; set; }
         public string periodo { get; set; }
-        public string id_grupo { get; set; }
-        public int id_curso { get; set; }
+        public System.DateTime fecha_registro { get; set; }
+        public string asignatura { get; set; }
+        public string grupo { get; set; }
         public string programa { get; set; }
+        public int id { get; set; }
     
         public virtual materias materias { get; set; }
-        public virtual usuarios usuarios { get; set; }
+        public virtual ICollection<Notas> Notas { get; set; }
     }
 }
