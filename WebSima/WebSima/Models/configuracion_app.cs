@@ -16,5 +16,6 @@ namespace WebSima.Models
     {
         public int id { get; set; }
         public string periodo_actual { get; set; }
+        public string contrasena_defecto_usuario { get; set; }
     }
 }

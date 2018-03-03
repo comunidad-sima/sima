@@ -45,6 +45,7 @@
     </Key>
     <Property Name="id" Type="int" Nullable="false" />
     <Property Name="periodo_actual" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="contrasena_defecto_usuario" Type="varchar" MaxLength="40" Nullable="false" />
   </EntityType>
   <EntityType Name="cursos">
     <Key>

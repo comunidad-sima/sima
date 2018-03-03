@@ -4,7 +4,6 @@
     <EntitySet Name="calificaciones_periodo" EntityType="bd_simaModel.calificaciones_periodo" />
     <EntitySet Name="capacitaciones" EntityType="bd_simaModel.capacitaciones" />
     <EntitySet Name="clases_sima" EntityType="bd_simaModel.clases_sima" />
-    <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
     <EntitySet Name="cursos" EntityType="bd_simaModel.cursos" />
     <EntitySet Name="estudiantes_asistentes" EntityType="bd_simaModel.estudiantes_asistentes" />
     <EntitySet Name="grupos_acargo" EntityType="bd_simaModel.grupos_acargo" />
@@ -47,6 +46,7 @@
       <End Role="usuarios" EntitySet="usuarios" />
       <End Role="grupos_acargo" EntitySet="grupos_acargo" />
     </AssociationSet>
+    <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
   </EntityContainer>
   <EntityType Name="calificaciones_periodo">
     <Key>
@@ -91,13 +91,6 @@
     <NavigationProperty Name="cursos" Relationship="bd_simaModel.FK_clases_sima_cursos" FromRole="clases_sima" ToRole="cursos" />
     <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_clases_sima_usuarios" FromRole="clases_sima" ToRole="usuarios" />
     <NavigationProperty Name="estudiantes_asistentes" Relationship="bd_simaModel.FK_estudiantes_asistentes_clases_sima" FromRole="clases_sima" ToRole="estudiantes_asistentes" />
-  </EntityType>
-  <EntityType Name="configuracion_app">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" />
-    <Property Name="periodo_actual" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="cursos">
     <Key>
@@ -286,4 +279,12 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="configuracion_app">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="periodo_actual" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="contrasena_defecto_usuario" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

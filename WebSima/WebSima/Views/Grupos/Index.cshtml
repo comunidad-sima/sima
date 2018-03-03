@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout_monitor.cshtml";
     //List<String> materiasMonitor = ViewBag.materiasMonitor;
-    List<List<WebSima.Models.WebApi.EstudianteMateria>> datos = ViewBag.datos;
+    List<List<WebSima.Models.WebApi.AsignaturaGrupo>> datos = ViewBag.datos;
     List<WebSima.Models.grupos_acargo> grupos_acargo = ViewBag.grupos_acargo;
     List<WebSima.Models.grupos_acargo> auxGurpos = null;
     String seleccionar="";
@@ -15,85 +15,104 @@
     <li class="breadcrumb-item active">Detalles</li>
 </ol>
 
-<div class="row">
-    @*para mostar las materias que tiene a cargo el monitor*@
-    @foreach (List<WebSima.Models.WebApi.EstudianteMateria> dato in datos)
-    {
-        <div class="col-md-12">
-            @*los grupos de las materias*@
-            @using (Html.BeginForm("SetGrupos", "Grupos", FormMethod.Post, new { id = "fDatosGrupos", @class = "grupos" }))
+<div class="  panelBorder">
+    <h3>Selección de grupos</h3>
+    <hr />
+    <div class="row">
+
+        @using (Html.BeginForm("SetGrupos", "Grupos", FormMethod.Post, new { id = "fDatosGrupos" }))
+        {
+            @*para mostar las materias que tiene a cargo el monitor*@
+            foreach (List<WebSima.Models.WebApi.AsignaturaGrupo> dato in datos)
             {
                 //filtramos los progrogramas
                 List<String> programas = dato.Select(o => o.nom_unidad).Distinct().ToList();
                 // filtramos las materia de un programa
                 List<String> materia = dato.Select(o => o.nom_materia).Distinct().ToList();
+                <div class=" col-md-12 ">
+                    @*los grupos de las materias*@
 
-                <div class="box box-success box-solid">
-                    <input name="materia" id="materia" type="hidden" value='@materia.ElementAt(0)' />
-                    <div class="box-header with-border">
-                        <h3 class="box-title">@materia.ElementAt(0)</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="box box-success box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">@materia.ElementAt(0)</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /.box-tools -->
                         </div>
-                        <!-- /.box-tools -->
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="form-group">
-                            @foreach (var programa in programas)
-                            {
-                                // filtramos los grupos de cada programa
-                                List<String> grupos = (from s in dato
-                                                       where (s.nom_unidad == programa)
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            @*<div class="form-group  ">*@
 
-                                                       select s).ToList().Select(oo => oo.num_grupo).Distinct().ToList().OrderBy(x => x).ToList();
-                                <h4>@programa</h4>
-                                foreach (var grupo in grupos)
+                                @*muestra los programas de la asignatura*@
+                                @foreach (var programa in programas)
                                 {
-                                    seleccionar = "";
-                                    if (grupos_acargo != null)
-                                    {   // se busca si el monitor ha seleccionado ateriormrte el grupo, para mostrarlo seleccionado
-                                        auxGurpos = (from grup in grupos_acargo
-                                                     where grup.materia == materia.ElementAt(0) &&
-                                                 grup.programa == programa && grup.id_grupo == grupo
-                                                     select grup).ToList();
-                                        if (auxGurpos.Count() > 0)
+                                    // filtramos los grupos de cada programa
+                                    List<String> grupos = (from s in dato
+                                                           where (s.nom_unidad == programa)
+
+                                                           select s).ToList().Select(oo => oo.num_grupo).Distinct().ToList().OrderBy(x => x).ToList();
+                                    <div class="panelBorder">
+                                        <h4 class="">@programa</h4>
+                                        @*muestra los grupos a cargos*@
+                                        @foreach (var grupo in grupos)
                                         {
-                                            seleccionar = "checked";
+                                            seleccionar = "";
+                                            if (grupos_acargo != null)
+                                            {   // se busca si el monitor ha seleccionado ateriormrte el grupo, para mostrarlo seleccionado
+                                                auxGurpos = (from grup in grupos_acargo
+                                                             where grup.materia == materia.ElementAt(0) &&
+                                                             grup.programa == programa && grup.id_grupo == grupo
+                                                             select grup).ToList();
+                                                if (auxGurpos.Count() > 0)
+                                                {
+                                                    seleccionar = "checked";
+                                                }
+                                            }
+                                            <label>
+                                                GRUPO-@grupo
+                                                <input type="checkbox" class="minimal" name="idGrupo" @seleccionar value="@programa|@grupo|@materia.ElementAt(0)">
+                                            </label>
+                                            <br />
                                         }
-                                    }
-                                    <label class="">
-                                        GRUPO-@grupo
-                                        <input type="checkbox" name="idGrupo" @seleccionar value="@programa|@grupo">
-                                    </label>
-                                    <br />
+                                    </div><br />
                                 }
-                            }
+                            @*</div>*@
+                            <!-- /.box-body -->
                         </div>
-                        <div class="text-right">
-                            <input type="submit" value="Guardar" class="btn btn-success" />
-                        </div>
-                        <!-- /.box-body -->
+                        <!-- /.box -->
+
+
                     </div>
-                    <!-- /.box -->
-                    
-                    
+                    <!-- /.col -->
+
                 </div>
-    <!-- /.col -->
             }
-        </div>
-    }
+            <div class="box-body">
+                <div class="text-right">
+                    <input type="submit" value="Guardar" class="btn btn-success " id="enviar" />
+                </div>
+            </div>
+            
+        }
+
+    </div>
+
+
+
+
+
 </div>
 <script>
 
-    $(".grupos").submit(function (e) {
+    $("#fDatosGrupos").submit(function (e) {
         e.preventDefault();
 
         var datos = $(this).serialize();
         console.log(datos);
-        var btn = $(".enviar");
+        var btn = $("#enviar");
         btn.val("Guardando...");
         btn.prop("disabled", true);
         $.ajax({
@@ -106,7 +125,8 @@
                 // se activa el boton enviar
                 btn.val("Guardar");
                 btn.prop("disabled", false);
-                alert("Ergistros actualizados");
+               
+                alert(response["MENSAJE"])
             }, error: function (error) {
                 alert("Error");
                 btn.val("Guardar");
@@ -115,6 +135,15 @@
         });
 
     });
+    $(function () {
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-green',
+            radioClass: 'iradio_minimal-blue'
+        })
+    });
+
+        
 </script>
 
 

@@ -43,14 +43,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="configuracion_app">
-      <EntityTypeMapping TypeName="bd_simaModel.configuracion_app">
-        <MappingFragment StoreEntitySet="configuracion_app">
-          <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="cursos">
       <EntityTypeMapping TypeName="bd_simaModel.cursos">
         <MappingFragment StoreEntitySet="cursos">
@@ -113,6 +105,15 @@
           <ScalarProperty Name="correo" ColumnName="correo" />
           <ScalarProperty Name="apellidos" ColumnName="apellidos" />
           <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="configuracion_app">
+      <EntityTypeMapping TypeName="bd_simaModel.configuracion_app">
+        <MappingFragment StoreEntitySet="configuracion_app">
+          <ScalarProperty Name="contrasena_defecto_usuario" ColumnName="contrasena_defecto_usuario" />
+          <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>

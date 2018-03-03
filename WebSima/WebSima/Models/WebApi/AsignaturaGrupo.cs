@@ -14,17 +14,17 @@ namespace WebSima.Models.WebApi
     /// </summary>
     public class AsignaturaGrupo
     {
-        String cod_unidad{ get; set; }
-        String nom_unidad{ get; set; }
-        String nom_sede{ get; set; }           
-        String cod_modalidad{ get; set; }
-        String nom_modalidad{ get; set; }
-        String est_metodologica{ get; set; }
-        String nom_est_metodologica{ get; set; }
-        String cod_materia{ get; set; }
-        String nom_materia{ get; set; }
-        String num_grupo{ get; set; }
-        String id_grupo{ get; set; }
+        public String cod_unidad { get; set; }
+        public String nom_unidad { get; set; }
+        public String nom_sede { get; set; }
+        public String cod_modalidad { get; set; }
+        public String nom_modalidad { get; set; }
+        public String est_metodologica { get; set; }
+        public String nom_est_metodologica { get; set; }
+        public String cod_materia { get; set; }
+        public String nom_materia { get; set; }
+        public String num_grupo { get; set; }
+        public String id_grupo { get; set; }
     
     }
 }

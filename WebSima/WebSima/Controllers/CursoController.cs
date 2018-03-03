@@ -324,16 +324,20 @@ namespace WebSima.Controllers
                 cursos cursos = db.cursos.Find(id);
                 if (cursos != null)
                 {
-                    if (cursos.clases_sima.Count() == 0)
-                    {
-                        db.cursos.Remove(cursos);
+                    //if (cursos.clases_sima.Count() == 0)
+                    //{
+                        //db.cursos.Remove(cursos);
+                        cursos.eliminado = 1;
+                        cursos.estado = 0;
+                        db.Entry(cursos).State = EntityState.Modified;
                         db.SaveChanges();
                         respuesta.RESPUESTA = "OK";
-                    }
-                    else
+
+                    //}
+                    if (cursos.clases_sima.Count() > 0) // else
                     {
                         respuesta.RESPUESTA = "ERROR";
-                        respuesta.MENSAJE = "Grupo no se puede eliminar porque tiene clases registradas.";
+                        respuesta.MENSAJE = "Grupo no se puede eliminar por completo porque tiene clases registradas, solo se marcara como eliminado";
                     }
                 }
                 else
@@ -365,7 +369,7 @@ namespace WebSima.Controllers
         {
             MUsuario usuario = null;
             usuarios user = db.usuarios.Find(id);
-            if (user != null)
+            if (user != null && user.eliminado == 0)
             {
                 usuario = new MUsuario
                 {
@@ -379,6 +383,7 @@ namespace WebSima.Controllers
                     fecha_registro = user.fecha_registro
                 };
             }
+
 
             return Json(usuario);
         }

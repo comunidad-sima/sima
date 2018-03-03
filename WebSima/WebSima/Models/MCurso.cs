@@ -52,7 +52,7 @@ namespace WebSima.Models
             try
             {
                 var curos = (from cur in db.cursos
-                             where (cur.nombre_materia.StartsWith(materia)) && cur.periodo == periodo
+                             where (cur.nombre_materia.StartsWith(materia)) && cur.periodo == periodo && cur.eliminado==0
                              select new MCurso
                              {
                                  id = cur.id,
@@ -102,7 +102,7 @@ namespace WebSima.Models
 
         }
         /// <summary>
-        /// Esta funcion verifica si un monitor tiene un curso a cardo
+        /// Esta funcion verifica si un monitor tiene un curso a cargo y est esta activo en cualquier periodo
         /// </summary>
         /// <param name="db"></param>
         /// <param name="materia"></param>
@@ -114,8 +114,8 @@ namespace WebSima.Models
             bool tieneCurso = false;
 
             var cursos = (from cur in db.cursos
-                           where (cur.nombre_materia == materia && cur.periodo == periodo && cur.idUsuario == idMonitor)
-                           ||(cur.nombre_materia == materia && cur.idUsuario == idMonitor && cur.estado==1)
+                          where (cur.nombre_materia == materia && cur.periodo == periodo && cur.idUsuario == idMonitor )
+                              ||(cur.nombre_materia == materia && cur.idUsuario == idMonitor && cur.estado==1 )
                            select cur).Select(c => c.id);
             if (cursos.ToList().Count() > 0)
                 tieneCurso = true;
@@ -156,7 +156,7 @@ namespace WebSima.Models
             bool tieneCurso = false;
 
             var cursos = (from cur in db.cursos
-                          where (cur.estado == 1 && cur.idUsuario == idMonitor)
+                          where (cur.estado == 1 && cur.idUsuario == idMonitor && cur.eliminado==0)
                           select cur).Select(c => c.nombre_materia).ToList();
 
             if (cursos.Count() > 0)
@@ -194,7 +194,7 @@ namespace WebSima.Models
          [MethodImpl(MethodImplOptions.Synchronized)]
         public static List<String> getNombreMateriaMonitorDeCursos(bd_simaEntitie db, String id_usuario, String periodo, int estado = 1)
         {
-            List<String> materias = db.cursos.Where(x => x.idUsuario == id_usuario && x.periodo == periodo && x.estado == estado).Select(x => x.nombre_materia).ToList();
+            List<String> materias = db.cursos.Where(x => x.idUsuario == id_usuario && x.periodo == periodo && x.estado == estado && x.eliminado==0).Select(x => x.nombre_materia).ToList();
             return materias;
         }
         /// <summary>
@@ -206,7 +206,7 @@ namespace WebSima.Models
         /// <returns></returns>
          public static List<String> getMateriasMonitorAcargo(bd_simaEntitie db, String id_usuario, String periodo)
          {
-             List<String> materias = db.cursos.Where(x => x.idUsuario == id_usuario && x.periodo == periodo).Select(x => x.nombre_materia).ToList();
+             List<String> materias = db.cursos.Where(x => x.idUsuario == id_usuario && x.periodo == periodo && x.eliminado==0).Select(x => x.nombre_materia).ToList();
              return materias;
          }
 

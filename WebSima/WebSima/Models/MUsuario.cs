@@ -124,8 +124,8 @@ namespace WebSima.Models
         {
            
             var usuario = (from user in db.usuarios
-                           where ((user.nombre + " " + user.apellidos).Contains(buscar) || user.id.StartsWith(buscar) 
-                           )&& user.eliminado==0
+                           where ((user.nombre + " " + user.apellidos).Contains(buscar) || user.id.StartsWith(buscar)
+                           ) && user.eliminado == 0
                                 
                                  select new MUsuario
                                  {
@@ -137,7 +137,34 @@ namespace WebSima.Models
                                      tipo = user.tipo,
                                      contrasena = user.contrasena,
                                      fecha_registro = user.fecha_registro
-                                 }).Take(20);
+                                 }).Take(50);
+            return usuario.ToList();
+
+        }
+        /// <summary>
+        /// consulta los usurios segun el estado de eliminado
+        /// </summary>
+        /// <param name="db"> conexión BD</param>
+        /// <param name="buscar"> cadena por la que se desea buscar</param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static List<MUsuario> getUsuariosEliminados(bd_simaEntitie db, int eliminado)
+        {
+
+            var usuario = (from user in db.usuarios
+                           where (user.eliminado == eliminado)
+
+                           select new MUsuario
+                           {
+                               id = user.id,
+                               nombre = user.nombre,
+                               apellidos = user.apellidos,
+                               correo = user.correo,
+                               celular = user.celular,
+                               tipo = user.tipo,
+                               contrasena = user.contrasena,
+                               fecha_registro = user.fecha_registro
+                           });
             return usuario.ToList();
 
         }
@@ -208,7 +235,7 @@ namespace WebSima.Models
                   var datos =
                   ( from usu in db.usuarios
                    join cur in db.cursos on usu.id equals cur.idUsuario
-                   where cur.periodo == periodo
+                   where cur.periodo == periodo && cur.eliminado==0
                    select new MUsuario { 
                     nombre=usu.nombre,
                     apellidos=usu.apellidos,

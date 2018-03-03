@@ -41,6 +41,49 @@ namespace WebSima.Controllers
             }
         }
 
+        public ActionResult Rehacer(String id)
+        {
+            Respusta respuesta = new Respusta();
+
+            if (sesion.esAdministrador(db))
+            {
+                usuarios usuarios = db.usuarios.Find(id);
+                if (usuarios != null)
+                {                 
+                        usuarios.eliminado = 0;
+                        //db.usuarios.Remove(usuarios);
+                        db.Entry(usuarios).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return Redirect("~/Usuario/Home");
+                    
+
+                }
+                else
+                {
+                    //respuesta.RESPUESTA = "ERROR";
+                    //respuesta.MENSAJE = "Usuario no exite.";
+                }
+            }
+            else
+            {
+                return Redirect("~/Inicio/Login");
+            }
+            return Redirect("~/Usuario/Eliminados");
+        }
+
+        public ActionResult eliminados()
+        {
+            if (sesion.esAdministrador(db))
+            {
+
+                return View(MUsuario.getUsuariosEliminados(db,1));
+            }
+            else
+            {
+                return   Redirect("~/Inicio/Login");
+            }
+        }
+
         //
         // GET: /Usuario/Details/5
 
@@ -68,6 +111,8 @@ namespace WebSima.Controllers
         {
             if (sesion.esAdministrador(db))
             {
+                String contrasena_defecto=db.configuracion_app.Find(1).contrasena_defecto_usuario;
+                ViewBag.contrasena_defecto= contrasena_defecto;
                 return View();
             }
             else
@@ -92,7 +137,7 @@ namespace WebSima.Controllers
                     if (usu == null)
                     {
                         DateTime fecha = DateTime.Now;
-                        String contrasena = Seguridad.Encriptar("Cecar123");
+                        String contrasena = Seguridad.Encriptar(db.configuracion_app.Find(1).contrasena_defecto_usuario);
                         usuarios c = new usuarios
                         {
                             id = usuario.id,
@@ -116,9 +161,17 @@ namespace WebSima.Controllers
                             respuesta.MENSAJE = "Error al registrar el usuario.";
                         }
                     }
+
                     else
                     {
                         respuesta.RESPUESTA = "ERROR";
+                        if (usu.eliminado == 1)
+                        {
+                            respuesta.MENSAJE = "El usuario " + usuario.id + " esta registrado en el sistema, "+
+                                "pero esta marcado como eliminado, para rehacer un usuario diríjase"+
+                                "al <a href='/Usuario/Eliminados' title='Detalle'> Usuarios eliminados </a>.";
+                        }
+                        else
                         respuesta.MENSAJE = "Usuario " + usuario.id + " ya existe.";
                     }
                 }
@@ -241,19 +294,28 @@ namespace WebSima.Controllers
                 usuarios usuarios = db.usuarios.Find(id);
                 if (usuarios != null)
                 {
-                    if (usuarios.cursos.Count() == 0)
-                    {
+                    //if (usuarios.cursos.Count() == 0)
+                    //{
                         usuarios.eliminado = 1;
                         //db.usuarios.Remove(usuarios);
                         db.Entry(usuarios).State = EntityState.Modified;
                         db.SaveChanges();
-                        respuesta.RESPUESTA = "OK";
-                    }
-                    else
-                    {
-                        respuesta.RESPUESTA = "ERROR";
-                        respuesta.MENSAJE = "Usuario no se puede eliminar porque tiene grupo a cargo.";
-                    }
+
+                        ICollection<cursos> cursos = usuarios.cursos;
+                        foreach (cursos c in cursos)
+                        {
+                            c.estado = 0;
+                           // c.eliminado = 1;
+                            db.Entry(c).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    //    respuesta.RESPUESTA = "OK";
+                    //}
+                    //else
+                    //{
+                    //    respuesta.RESPUESTA = "ERROR";
+                    //    respuesta.MENSAJE = "Usuario no se puede eliminar porque tiene grupo a cargo.";
+                    //}
                     
                 }
                 else

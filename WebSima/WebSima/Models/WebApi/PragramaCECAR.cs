@@ -10,15 +10,14 @@ namespace WebSima.Models.WebApi
     /// </summary>
     public class PragramaCECAR
     {
-        
-        String cod_unidad{ get; set; }
-        String nom_unidad{ get; set; }
-        String cod_sede{ get; set; }
-        String nom_sede{ get; set; }
-        String cod_modalidad{ get; set; }
-        String nom_modalidad{ get; set; }
-        String est_metodologica{ get; set; }
-        String nom_est_metodologica{ get; set; }
+        public String cod_unidad { get; set; }
+        public String nom_unidad { get; set; }
+        public String cod_sede { get; set; }
+        public String nom_sede { get; set; }
+        public String cod_modalidad { get; set; }
+        public String nom_modalidad { get; set; }
+        public String est_metodologica { get; set; }
+        public String nom_est_metodologica { get; set; }
     
     }
 }

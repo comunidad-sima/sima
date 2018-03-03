@@ -3,6 +3,7 @@
 @{
   
     Layout = null;
+    String contrasena_defecto = ViewBag.contrasena_defecto;
 }    
 <div id="alert_1">
     @*espacio para los mensajer de de respuesta de las consultas*@
@@ -82,7 +83,7 @@
         <div class=" col-sm-12 form-group " >
             <div class="row">
                 <div class=" col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <label>*Contraseña por defecto es: Cecar123</label>
+                    <label>*Contraseña por defecto es: @contrasena_defecto</label>
                 </div>
                 <div class="text-left col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <input class="btn btn-success "id="enviar" type="submit" value="Guardar" />

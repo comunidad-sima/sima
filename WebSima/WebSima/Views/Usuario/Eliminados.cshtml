@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Eliminados";
+}
+
+@model IEnumerable<WebSima.Models.MUsuario>
+
+@{
+    ViewBag.Title = "Eliminados";
+
+}
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Home</li>
+        <li class="breadcrumb-item active">Usuario</li>
+        <li class="breadcrumb-item active">Eliminados</li>
+
+    </ol>
+</div>
+<div class="panelBorder">
+    <div class="table-responsive">
+        <table id="tabla_usurios" class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.apellidos)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tipo)
+                    </th>
+                    <th class="text-right" style="width:180px"></th>
+                </tr>
+            </thead>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.apellidos)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tipo)
+                    </td>
+                    <td class="text-right">
+
+                        @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle" })
+                        @Html.ActionLink("Rehacer", "Rehacer", new { id = item.id }, new { @class = "rehacer btn btn-default fa fa-redo", title = "Restaurar ususrio", style = "color:red;" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // se configura la tabla, esta funcion está en helper.js
+        //configurar_dataTable("tablaPaginacion");
+
+      
+    });
+</script>
+
+

@@ -227,7 +227,7 @@
     <Compile Include="Models\WebApi\ConsumidorAppi.cs" />
     <Compile Include="Models\WebApi\EstudianteMateria.cs" />
     <Compile Include="Models\WebApi\PragramaCECAR.cs" />
-    <Compile Include="Models\WebApi\GrupoPrograma.cs" />
+    <Compile Include="Models\WebApi\AsignaturaGrupo.cs" />
     <Compile Include="Models\WebApi\HorarioEstudiante.cs" />
     <Compile Include="Models\WebApi\HorarioEstudianteID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -7521,6 +7521,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ConfigApp\Delete.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\Eliminados.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
