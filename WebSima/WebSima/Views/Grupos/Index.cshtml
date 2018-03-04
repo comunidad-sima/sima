@@ -54,7 +54,7 @@
                                                            where (s.nom_unidad == programa)
 
                                                            select s).ToList().Select(oo => oo.num_grupo).Distinct().ToList().OrderBy(x => x).ToList();
-                                    <div class="panelBorder ">
+                                    <div class="panelBorder col-sm-6">
                                         <h4 class=""><strong> @programa</strong></h4>
                                         @*muestra los grupos a cargos*@
                                         @foreach (var grupo in grupos)
@@ -77,7 +77,7 @@
                                             </label>
                                             <br />
                                         }
-                                    </div><br />
+                                    </div>
                                 }
                             @*</div>*@
                             <!-- /.box-body -->
