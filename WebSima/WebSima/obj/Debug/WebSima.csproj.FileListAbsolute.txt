@@ -97,3 +97,44 @@ C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Razor.resou
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\obj\Debug\WebSima.dll
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\obj\Debug\WebSima.pdb
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\WebSima.dll.config
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\WebSima.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\WebSima.pdb
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\Antlr3.Runtime.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\ClosedXML.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\DocumentFormat.OpenXml.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\EntityFramework.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\Newtonsoft.Json.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\RestSharp.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.Mvc.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.Optimization.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.Providers.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.Razor.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.WebPages.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.WebPages.Razor.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\WebGrease.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\Antlr3.Runtime.pdb
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\ClosedXML.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\Newtonsoft.Json.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\RestSharp.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.Optimization.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\EntityFramework.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.Mvc.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.Razor.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.WebPages.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\System.Web.WebPages.Razor.xml
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\System.Web.Optimization.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\EntityFramework.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\System.Web.Mvc.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\System.Web.Providers.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\System.Web.Razor.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\System.Web.WebPages.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\obj\Debug\WebSima.dll
+C:\Users\Osnaider\Desktop\pr\sima\WebSima\WebSima\obj\Debug\WebSima.pdb
