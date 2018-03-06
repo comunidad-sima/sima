@@ -23,6 +23,9 @@ namespace WebSima.Controllers
             return View();
         }
 
+
+
+
         //
         // GET: /Horario/Details/5
 
@@ -50,6 +53,17 @@ namespace WebSima.Controllers
         {
             List<HorarioEstudiante> horario = null;
             horario = ConsumidorAppi.getHorarioEstudiante("2018-1", "CALCULO II");
+
+            ViewBag.horarios = horario;
+           
+
+           
+
+
+
+
+
+
 
             return View("create_monitor");
         }

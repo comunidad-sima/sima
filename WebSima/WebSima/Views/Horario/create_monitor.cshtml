@@ -1,13 +1,22 @@
 ﻿@{
     ViewBag.Title = "create_monitor";
-    Layout = "~/Views/Shared/_Layout_monitor.cshtml";
+    List< WebSima.Models.WebApi.HorarioEstudiante> horarioEstudiantes=  ViewBag.horarios ;
+    Layout = "~/Views/Shared/_Layout_monitor.cshtml"; 
 }
 
 <div class="box box-success">
     <div class="box-header with-border">
         <div class="box-header with-border ">
 
+            @*@foreach(WebSima.Models.WebApi.HorarioEstudiante horario in horarioEstudiantes)*@
+            @*{
+                <div>
+                    @horario.fecha_clase;
 
+
+                </div>
+                
+            }*@
             <div class=" box-body " style="border: 1px solid #e0e0e0; ">
                 <div class="col-sm-12 col-12  col-lg-6 ">
 
@@ -55,6 +64,10 @@
                             <tr>
 
                                 <td><h6>8:00 AM</h6></td>
+
+
+
+
 
 
                             </tr>
