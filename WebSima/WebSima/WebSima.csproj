@@ -6823,7 +6823,6 @@
   <ItemGroup>
     <Folder Include="App_Start\App_Data\" />
     <Folder Include="Content\themes\" />
-    <Folder Include="Views\Horario\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -7524,6 +7523,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Usuario\Eliminados.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Horario\create_monitor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Horario\select_administrador.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Horario\select_monitor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -15,7 +15,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- handsontable-->
-    <link href="~/Content/Handsontable/css/handsontable.full.css"  rel="stylesheet" />
+    @*<link href="~/Content/Handsontable/css/handsontable.full.css" rel="stylesheet" />*@
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -25,7 +25,7 @@
 
     <!-- Select2 -->
     <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
-   
+
     <link rel="stylesheet" href="~/Content/plugins/iCheck/all.css">
     <!-- Morris chart -->
     @*<link rel="stylesheet" href="~/Content/bower_components/morris.js/morris.css">*@
@@ -39,21 +39,27 @@
     <link rel="stylesheet" href="~/Content/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
     <!-- Bootstrap Color Picker -->
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
-    
+
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <link href="~/Content/estilos.css" rel="stylesheet" />
     <link href="~/Content/jquery-confirm.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"> 
-    
+    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">
-   
+
     <!-- jQuery 3 -->
     <script src="/Content/bower_components/jquery/dist/jquery.min.js"></script>
+
+    @*handsontable*@
+    <link rel="stylesheet" type="text/css" href="https://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.css">
+    <link rel="stylesheet" type="text/css" href="https://handsontable.com/static/css/main.css">
+    <script src="https://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
+
 </head>
 <body class="hold-transition skin-green sidebar-mini">
     <div class="wrapper">
@@ -235,55 +241,70 @@
                     <li class="header">MENÚ PRINCIPAL</li>
                     <li id="capacitaciones" class="treeview">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Capacitación</span>
+                            <i class="fa fa-object-group"></i> <span>Capacitación</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="home_capacitaciones"><a href="/Capacitacion/Home"><i class="fa fa-circle-o"></i>Home</a></li>                         
+                            <li id="home_capacitaciones"><a href="/Capacitacion/Home"><i class="fa fa-registered"></i>Registrar Capacitacion</a></li>                         
 
                         </ul>
                     </li>
                     <li id="usuarios" class="treeview">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Usuarios</span>
+                            <i class="fa fa-users"></i> <span>Usuarios</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
 
-                            <li id="home_usuarios"><a href="/Usuario/Home"><i class="fa fa-circle-o"></i>Home</a></li>
+                            <li id="home_usuarios"><a href="/Usuario/Home"><i class="fa fa-user"></i>Gestionar Usuarios</a></li>
                           
 
                         </ul>
                     </li>
                     <li id="cursos" class="treeview">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Cursos</span>
+                            <i class="fa fa-slideshare"></i> <span>Cursos</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
 
-                            <li id="home_cursos" class="active"><a href="/Curso/Home"><i class="fa fa-circle-o"></i>Home</a></li>
+                            <li id="home_cursos" class="active"><a href="/Curso/Home"><i class="fa fa-object-ungroup"></i>Gestionar cursos</a></li>
                             
+
+                        </ul>
+                    </li>
+
+                    <li id="Horarios" class="treeview">
+                        <a href="#">
+                            <i class="fa fa-calendar"></i> <span>Horarios</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <li id="Horario_monitores" class="active"><a href="/Horario/consultar_horario"><i class="fa fa-search"></i>Consultar Horarios</a></li>
+
 
                         </ul>
                     </li>
 
                     <li  id="clases_admin" class="treeview">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Clases</span>
+                            <i class="fa fa-list"></i> <span>Clases</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
 
-                            <li id="registros_clases"><a href="/Clase/Registros"><i class="fa fa-circle-o"></i>Registros</a></li>
+                            <li id="registros_clases"><a href="/Clase/Registros"><i class="fa fa-registered"></i>Registros</a></li>
                             <li id="avance_cleses"><a href="/Clase/Avance"><i class="fa fa-circle-o"></i>Avance</a></li>
                             @*<li id=""><a href="/Usuario/Create"><i class="fa fa-circle-o"></i>Nueva</a></li>*@
 
@@ -292,7 +313,7 @@
 
                     <li id="informes" class="treeview">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Informes</span>
+                            <i class="fa fa-file-text-o"></i> <span>Informes</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
@@ -300,20 +321,20 @@
                         <ul class="treeview-menu">
 
                             <li id="home_informes" class="active"><a href="/Informe/Home"><i class="fa fa-circle-o"></i>Home</a></li>
-                            <li id="Reporte_asistencia" class="active"><a href="/Informe/Reporte_asistencia"><i class="fa fa-circle-o"></i>Reporte Asistencia</a></li>
+                            <li id="Reporte_asistencia" class="active"><a href="/Informe/Reporte_asistencia"><i class="fa fa-check-square-o" ></i>Reporte Asistencia</a></li>
 
                         </ul>
                     </li>
                     <li id="informes" class="treeview">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Test</span>
+                            <i class="fa fa-calendar-check-o"></i> <span>Test</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
 
-                           <li id="Test_aprobacion" class="active"><a href="/Test/crear_pregunta"><i class="fa fa-circle-o"></i>Crear nueva pregunta</a></li>
+                           <li id="Test_aprobacion" class="active"><a href="/Test/crear_pregunta"><i class="fa fa-check-square"></i>Crear nueva pregunta</a></li>
 
                         </ul>
                     </li>
@@ -321,13 +342,13 @@
          
                     <li id="asistencia" class="treeview">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Calificaciones</span>
+                            <i class="fa fa-file-o"></i> <span>Calificaciones</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="registro_calificaciones" class="active"><a href="/Calificaciones/Registrar"><i class="fa fa-circle-o"></i>Registrar</a></li>
+                            <li id="registro_calificaciones" class="active"><a href="/Calificaciones/Registrar"><i class="fa fa-registered"></i>Registrar</a></li>
 
                         </ul>
                     </li>
@@ -356,7 +377,7 @@
     </div>
  
     <!-- handsontable-->
-    <script src="/Content/Handsontable/js/handsontable.full.js"></script>
+    @*<script src="/Content/Handsontable/js/handsontable.full.js"></script>*@
     <!-- DataTables -->
     <script src="/Content/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
