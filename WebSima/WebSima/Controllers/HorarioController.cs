@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
+using WebSima.Models;
+using WebSima.Models.WebApi;
+
 
 namespace WebSima.Controllers
 {
@@ -16,12 +23,49 @@ namespace WebSima.Controllers
             return View();
         }
 
+
+
+
         //
         // GET: /Horario/Details/5
 
         public ActionResult Details(int id)
         {
             return View();
+        }
+
+        public ActionResult consultar_horario()
+        {
+           
+
+
+            return View("select_administrador");
+        }
+
+        public ActionResult consultar_horario_monitor()
+        {
+
+
+            return View("select_monitor");
+        }
+
+       public ActionResult registrar_horario()
+        {
+            List<HorarioEstudiante> horario = null;
+            horario = ConsumidorAppi.getHorarioEstudiante("2018-1", "CALCULO II");
+
+            ViewBag.horarios = horario;
+           
+
+           
+
+
+
+
+
+
+
+            return View("create_monitor");
         }
 
         //

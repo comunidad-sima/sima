@@ -214,7 +214,30 @@ namespace WebSima.Models.WebApi
           
         //    return p;
         //}
+         public static List<HorarioEstudiante> getHorarioEstudiante(String periodo, String materia)
+         {
+             List<HorarioEstudiante> horarios = null;
+             try
+             {
+                 // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
+                 periodo = periodo.Replace("-", "");
+                 String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetHorario";
+                 var client = new RestClient(url);
+                 var request = preparaRestRequest();
+                 // se agregan los parametros de la consulta
+                 request.AddParameter("periodo", periodo);
+                 request.AddParameter("nom_materia", materia);
+                 // se hace y la peticion y se reciben los datos
+                 IRestResponse respuetaDatos = client.Execute(request);
+                 // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
+                 horarios = JsonConvert.DeserializeObject<List<HorarioEstudiante>>(respuetaDatos.Content) as List<HorarioEstudiante>;
+             }
+             catch (Exception)
+             {
 
+             }
+             return horarios;
+         }
         
     }
     
