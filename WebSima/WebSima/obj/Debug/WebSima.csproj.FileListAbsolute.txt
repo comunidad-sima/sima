@@ -97,3 +97,4 @@ C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Razor.resou
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\obj\Debug\WebSima.dll
 C:\Users\SYSTEM OPEN\sima\WebSima\WebSima\obj\Debug\WebSima.pdb
+C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
