@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="box box-body">
+
+    <center>
+        <div>
+            <h3 style="background-color: #2C3E50; "><font color="white"><i class="fa fa-file-text"></i> Test de aprobacion</font></h3>
+        </div>
+
+    </center>
+
+    
+
+        <div class="col-sm-12 panelBorder" id="registro">
+
+
+        </div>
+
+        <div class="col-sm-12 panelBorder" style="margin-top:10px;" id="listar">
+
+        </div>
+
+   
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        // se carga el formulario de nuevo registro
+        $("#registro").load("/Test/add_pregunta");
+        // se garga la tabla de registros
+        $("#listar").load("/Test/Listar");
+    });
+</script>
