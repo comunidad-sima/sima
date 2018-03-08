@@ -19,6 +19,14 @@ namespace WebSima.Controllers
         {
             return View();
         }
+        public ActionResult Listar()
+        {
+            return View();
+        }
+        public ActionResult add_pregunta()
+        {
+            return View();
+        }
 
         //
         // GET: /Test/Details/5

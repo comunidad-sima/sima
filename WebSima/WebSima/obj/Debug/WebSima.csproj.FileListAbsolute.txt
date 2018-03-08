@@ -47,3 +47,4 @@ C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPag
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\bin\es\System.Web.WebPages.Razor.resources.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.dll
 C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.pdb
+C:\Users\fredys\Dropbox\Ingenieria\sima\WebSima\WebSima\obj\Debug\WebSima.csprojResolveAssemblyReference.cache
