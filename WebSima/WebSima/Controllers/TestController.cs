@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebSima.Models;
 
 namespace WebSima.Controllers
 {
     public class TestController : Controller
     {
+        Sesion sesion = new Sesion();
+        private bd_simaEntitie db = new bd_simaEntitie();
         //
         // GET: /Test/
 
@@ -21,11 +25,62 @@ namespace WebSima.Controllers
         }
         public ActionResult Listar()
         {
-            return View();
+            if (sesion.esAdministrador(db))
+            { 
+                MPreguntas_test pre= new MPreguntas_test();
+                return View(pre.getCapacitacionesPeriodo( db ,0));
+            }
+            return null;
         }
         public ActionResult add_pregunta()
         {
-            return View();
+            if (sesion.esAdministrador(db))
+            {
+
+                return View();
+            }else
+            {
+                return Redirect("~/Inicio/Login");
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult add_pregunta(MPreguntas_test Mpregunta)
+        {
+
+            Respusta respuesta = new Respusta();
+            if (sesion.esAdministrador(db))
+            {
+                if (ModelState.IsValid)
+                {
+                    preguntas_test pregunta = new preguntas_test();
+                    pregunta.eliminado = 0;
+                    pregunta.Pregunata = Mpregunta.Pregunata;
+                    pregunta.tipo = Mpregunta.tipo;
+                   bool respuesta_guardado= Mpregunta.guardar_pregunta(db, pregunta);
+                   if (respuesta_guardado)
+                   {
+                       respuesta.RESPUESTA = "OK";
+                       respuesta.MENSAJE = "Pregunta guardada correctamente.";
+                   }
+                   else
+                   {
+                       respuesta.RESPUESTA = "ERROR";
+                       respuesta.MENSAJE = "Error al registrar la pregunta.";
+                       
+                   }
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Los datos ingresados son incorrecotos.";
+                }
+            }
+            else
+            {
+                respuesta.RESPUESTA = "LOGIN";
+            }
+            return Json(respuesta);
         }
 
         //
@@ -67,56 +122,45 @@ namespace WebSima.Controllers
             }
         }
 
-        //
-        // GET: /Test/Edit/5
+        
 
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Test/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Test/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        
 
         //
         // POST: /Test/Delete/5
-
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public JsonResult Delete(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            Respusta respuesta = new Respusta();
 
-                return RedirectToAction("Index");
-            }
-            catch
+            if (sesion.esAdministrador(db))
             {
-                return View();
+                preguntas_test pregnta = db.preguntas_test.Find(id);
+                if (pregnta != null)
+                {                    
+                    pregnta.eliminado = 1;                    
+                    db.Entry(pregnta).State = EntityState.Modified;
+                    db.SaveChanges();
+                    respuesta.RESPUESTA = "OK";
+                    respuesta.MENSAJE = "Pregunta eliminada exite.";
+
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Pregunta no exite.";
+                }
             }
+            else
+            {
+                respuesta.RESPUESTA = "LOGIN";
+            }
+            return Json(respuesta);
+        }
+        protected override void Dispose(bool disposing)
+        {
+            db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

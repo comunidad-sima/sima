@@ -118,5 +118,48 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="pregunta_test_responder">
+      <EntityTypeMapping TypeName="bd_simaModel.pregunta_test_responder">
+        <MappingFragment StoreEntitySet="pregunta_test_responder">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="id_pregunta_test" ColumnName="id_pregunta_test" />
+          <ScalarProperty Name="id_test" ColumnName="id_test" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="preguntas_test">
+      <EntityTypeMapping TypeName="bd_simaModel.preguntas_test">
+        <MappingFragment StoreEntitySet="preguntas_test">
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="eliminado" ColumnName="eliminado" />
+          <ScalarProperty Name="Pregunata" ColumnName="Pregunata" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="respuestas">
+      <EntityTypeMapping TypeName="bd_simaModel.respuestas">
+        <MappingFragment StoreEntitySet="respuestas">
+          <ScalarProperty Name="observacion" ColumnName="observacion" />
+          <ScalarProperty Name="punto" ColumnName="punto" />
+          <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+          <ScalarProperty Name="id_preguntas_test_respustas" ColumnName="id_preguntas_test_respustas" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Test">
+      <EntityTypeMapping TypeName="bd_simaModel.Test">
+        <MappingFragment StoreEntitySet="Test">
+          <ScalarProperty Name="periodo" ColumnName="periodo" />
+          <ScalarProperty Name="id_usuario_creado" ColumnName="id_usuario_creado" />
+          <ScalarProperty Name="estado_cierre" ColumnName="estado_cierre" />
+          <ScalarProperty Name="eliminado" ColumnName="eliminado" />
+          <ScalarProperty Name="ferfil_usuario" ColumnName="ferfil_usuario" />
+          <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+          <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

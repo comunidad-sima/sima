@@ -19,6 +19,7 @@ namespace WebSima.Models
             this.clases_sima = new HashSet<clases_sima>();
             this.cursos = new HashSet<cursos>();
             this.grupos_acargo = new HashSet<grupos_acargo>();
+            this.Test = new HashSet<Test>();
         }
     
         public string id { get; set; }
@@ -34,5 +35,6 @@ namespace WebSima.Models
         public virtual ICollection<clases_sima> clases_sima { get; set; }
         public virtual ICollection<cursos> cursos { get; set; }
         public virtual ICollection<grupos_acargo> grupos_acargo { get; set; }
+        public virtual ICollection<Test> Test { get; set; }
     }
 }

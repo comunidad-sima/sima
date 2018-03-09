@@ -1,34 +1,112 @@
-﻿@{
+﻿@model IEnumerable<WebSima.Models.MPreguntas_test>
+@{
     ViewBag.Title = "Listar";
     Layout = null;
 }
 
 <div class="row">
-    <div class="table-responsive">
+    <div class="box-body table-responsive ">
         <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
             <thead>
                 <tr>
                     <th>
-                        Nombre Pregunta
+                        @Html.DisplayNameFor(model => model.id)
+
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Pregunata)
+
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tipo)
+
                     </th>
 
-                    <th>Opciones</th>
+                    <th class="text-center" style="width:150px">Opciones</th>
                 </tr>
             </thead>
-
-            <tr>
-
-                <td>
-                    Ejemplo
-                </td>
+            <tbody>
 
 
-                <td class="text-right">
-                    <button class="btn btn-default fa fa-eye"></button>
-                    <a class="btn btn-default fa fa-eye" title="Detalles" />
-                    <button class="btn btn-default fa  fa-pencil-square-o editar" data-toggle="modal" data-target="#modal-editar-curso"></button>
-                </td>
-            </tr>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Pregunata)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tipo)
+                            </td>
+
+                            <td class="text-center" style="width:150px">
+
+
+
+                                @Html.ActionLink(" ", "Delete", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar", title = "Eliminar", style = "color:red;" })
+
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
         </table>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+       
+        // se configura la tabla, esta funcion está en helper.js
+        configurar_dataTable("tablaPaginacion");
+
+        $(".eliminar").click(function (e) {
+            e.preventDefault();
+            // se obtiene el href  de <a> que apunta a la ruta elininar del registro
+            var url = $(this).attr('href');
+
+            // para eliminar la fila cuando se haya eliminado el registro de la BD
+            var tr = $(this).parents("tr");
+
+            $.confirm({
+                title: 'Eliminar!',
+                content: "¿Desea eliminar la pregunta?",
+                buttons: {
+                    ACEPTAR: function () {
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            beforeSend: function () { },
+                            success: function (response) {
+                                if (response["RESPUESTA"] == "OK") {
+                                    tr.hide();
+                                    //$("#tabla_usurios").row(tr).remove().draw();
+                                } else if (response["RESPUESTA"] == "ERROR") {
+                                    $.alert(response["MENSAJE"], "Error");
+                                }
+                                else if (response["RESPUESTA"] == "LOGIN") {
+                                    location.href = "/";
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                                $.alert("Error  al realizar la cosnulta", "Error");
+                            }
+                        });
+                    },
+                    CANCELAR: function () {
+
+                    },
+                }
+            });
+
+        });
+    });
+</script>

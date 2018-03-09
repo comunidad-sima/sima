@@ -29,7 +29,7 @@ function  configurar_dataTable(clase) {
         'language': language,
         'paging': true,
         'lengthChange': true,
-        'searching': true,
+        'searching': false,
         'ordering': true,
         'info': true,
         'autoWidth': true

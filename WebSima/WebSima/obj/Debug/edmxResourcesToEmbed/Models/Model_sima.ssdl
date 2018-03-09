@@ -99,6 +99,46 @@
     <Property Name="id_estudiante" Type="varchar" MaxLength="12" Nullable="false" />
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
+  <EntityType Name="pregunta_test_responder">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id_test" Type="int" Nullable="false" />
+    <Property Name="id_pregunta_test" Type="int" Nullable="false" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="preguntas_test">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Pregunata" Type="varchar" MaxLength="700" Nullable="false" />
+    <Property Name="eliminado" Type="tinyint" Nullable="false" />
+    <Property Name="tipo" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="respuestas">
+    <Key>
+      <PropertyRef Name="id_preguntas_test_respustas" />
+      <PropertyRef Name="id_persona" />
+    </Key>
+    <Property Name="id_preguntas_test_respustas" Type="int" Nullable="false" />
+    <Property Name="id_persona" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="punto" Type="int" Nullable="false" />
+    <Property Name="observacion" Type="nchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="Test">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fecha_fin" Type="datetime" Nullable="false" />
+    <Property Name="fecha_inicio" Type="datetime" Nullable="false" />
+    <Property Name="ferfil_usuario" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="eliminado" Type="tinyint" Nullable="false" />
+    <Property Name="estado_cierre" Type="tinyint" Nullable="false" />
+    <Property Name="id_usuario_creado" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="periodo" Type="varchar" MaxLength="7" Nullable="false" />
+  </EntityType>
   <EntityType Name="usuarios">
     <Key>
       <PropertyRef Name="id" />
@@ -221,6 +261,54 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_pregunta_test_responder_preguntas_test">
+    <End Role="preguntas_test" Type="Self.preguntas_test" Multiplicity="1" />
+    <End Role="pregunta_test_responder" Type="Self.pregunta_test_responder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="preguntas_test">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="pregunta_test_responder">
+        <PropertyRef Name="id_pregunta_test" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_pregunta_test_responder_Test">
+    <End Role="Test" Type="Self.Test" Multiplicity="1" />
+    <End Role="pregunta_test_responder" Type="Self.pregunta_test_responder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Test">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="pregunta_test_responder">
+        <PropertyRef Name="id_test" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_respuestas_pregunta_test_responder">
+    <End Role="pregunta_test_responder" Type="Self.pregunta_test_responder" Multiplicity="1" />
+    <End Role="respuestas" Type="Self.respuestas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pregunta_test_responder">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="respuestas">
+        <PropertyRef Name="id_preguntas_test_respustas" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Test_usuarios">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="Test" Type="Self.Test" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Test">
+        <PropertyRef Name="id_usuario_creado" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="bd_simaModelStoreContainer">
     <EntitySet Name="calificaciones_periodo" EntityType="Self.calificaciones_periodo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" Schema="dbo" store:Type="Tables" />
@@ -231,6 +319,10 @@
     <EntitySet Name="grupos_acargo" EntityType="Self.grupos_acargo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="materias" EntityType="Self.materias" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Notas" EntityType="Self.Notas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="pregunta_test_responder" EntityType="Self.pregunta_test_responder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="preguntas_test" EntityType="Self.preguntas_test" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="respuestas" EntityType="Self.respuestas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Test" EntityType="Self.Test" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_calificaciones_periodo_materias" Association="Self.FK_calificaciones_periodo_materias">
       <End Role="materias" EntitySet="materias" />
@@ -267,6 +359,22 @@
     <AssociationSet Name="FK_Notas_calificaciones_periodo" Association="Self.FK_Notas_calificaciones_periodo">
       <End Role="calificaciones_periodo" EntitySet="calificaciones_periodo" />
       <End Role="Notas" EntitySet="Notas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_pregunta_test_responder_preguntas_test" Association="Self.FK_pregunta_test_responder_preguntas_test">
+      <End Role="preguntas_test" EntitySet="preguntas_test" />
+      <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_pregunta_test_responder_Test" Association="Self.FK_pregunta_test_responder_Test">
+      <End Role="Test" EntitySet="Test" />
+      <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_respuestas_pregunta_test_responder" Association="Self.FK_respuestas_pregunta_test_responder">
+      <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
+      <End Role="respuestas" EntitySet="respuestas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Test_usuarios" Association="Self.FK_Test_usuarios">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="Test" EntitySet="Test" />
     </AssociationSet>
   </EntityContainer>
 </Schema>
