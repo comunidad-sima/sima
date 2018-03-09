@@ -27,7 +27,10 @@ namespace WebSima.Controllers
         {
             return View();
         }
-
+        public ActionResult Crear_test()
+        {
+            return View();
+        }
         //
         // GET: /Test/Details/5
 

@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Crear_test";
+}
+
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Crear Test</li>
+        <li class="breadcrumb-item active">Test</li>
+
+    </ol>
+</div>
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="box-header with-border panelBorder ">
+
+            <div class="form-group col-sm-4">
+                <h4><label>Quien responde?</label></h4>
+                <div class="input-group date">
+                    <label>
+                        <input type="radio" name="r1" class="flat-red" checked>
+                        Monitores
+                    </label>
+                    <br />
+                    <label>
+                        <input type="radio" name="r1" class="flat-red">
+                        Estudiantes
+                    </label>
+                    <br />
+                    <label>
+                        <input type="radio" name="r1" class="flat-red">
+                        Docentes
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4">
+                <label>Fecha Inicio:</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input class="form-control datepicker" data-val="true" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="yyyy-mm-dd" type="text" value="">
+
+                </div>
+            </div>
+
+            <div class="form-group col-sm-4">
+                <label>Fecha Fin:</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input class="form-control datepicker" data-val="true" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="yyyy-mm-dd" type="text" value="">
+
+                </div>
+            </div>
+        </div>
+        <div class="box-body panelBorder">
+            <!-- segundo despligue -->
+            <div >
+
+
+                <table class="table tablaPaginacion table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th>PREGUNTAS</th>
+                            <th>SELECCIONAR</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>what do you going?</td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="c1" class="flat-red">
+                                </label>
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+
+                <a href="#" class="btn btn-success"><i class="fa fa-floppy-o"></i>  Enviar </a>
+
+
+            </div>
+
+        </div>
+    
+</div>
+    </div>
+<script>
+    $(function () {
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+        configurar_daterangepicker("datepicker");
+    });
+   
+
+</script>
+
+
