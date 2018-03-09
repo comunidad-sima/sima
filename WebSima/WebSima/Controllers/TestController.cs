@@ -82,7 +82,10 @@ namespace WebSima.Controllers
             }
             return Json(respuesta);
         }
-
+        public ActionResult Crear_test()
+        {
+            return View();
+        }
         //
         // GET: /Test/Details/5
 
