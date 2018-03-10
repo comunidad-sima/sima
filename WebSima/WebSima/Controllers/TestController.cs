@@ -82,9 +82,67 @@ namespace WebSima.Controllers
             }
             return Json(respuesta);
         }
-        public ActionResult Crear_test()
+        public ActionResult Crear()
         {
-            return View();
+            if (sesion.esAdministrador(db))
+            {
+                List<MPreguntas_test> preguntas = (new MPreguntas_test()).getPreguntas_test(db, 0);
+                ViewBag.preguntas = preguntas;
+                return View("Crear_test");
+            }
+            else
+            {
+                return Redirect("~/Inicio/Login");
+            }
+           
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Crear(MTest Mtest, int[] id_preguntas=null)
+        {
+            Respusta respuesta = new Respusta();
+            if( id_preguntas==null){
+                respuesta.RESPUESTA = "ERROR";
+                respuesta.MENSAJE = "Debe seleccionar al menos 1 pregunta.";
+            }
+            else if (sesion.esAdministrador(db))
+            {
+                if (ModelState.IsValid)
+                {
+                    Test test_ = new Test();
+                    test_.eliminado = 0;
+                    test_.estado_cierre = 0;
+                    test_.id_usuario_creado = sesion.getIdUsuario();
+                    test_.fecha_fin=Mtest.fecha_fin;
+                    test_.fecha_inicio = Mtest.fecha_inicio;
+                    test_.periodo = MConfiguracionApp.getPeridoActual(db);
+                    test_.ferfil_usuario = Mtest.ferfil_usuario;
+
+
+                    bool respuesta_guardado = Mtest.guardar_Test(db,test_, id_preguntas);
+                    if (respuesta_guardado)
+                    {
+                        respuesta.RESPUESTA = "OK";
+                        respuesta.MENSAJE = "Test guardada correctamente.";
+                    }
+                    else
+                    {
+                        respuesta.RESPUESTA = "ERROR";
+                        respuesta.MENSAJE = "Error al registrar al Test.";
+
+                    }
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Los datos ingresados son incorrecotos.";
+                }
+            }
+            else
+            {
+                respuesta.RESPUESTA = "LOGIN";
+            }
+            return Json(respuesta);
         }
         //
         // GET: /Test/Details/5

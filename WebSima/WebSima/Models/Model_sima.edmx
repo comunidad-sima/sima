@@ -136,8 +136,8 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="fecha_fin" Type="datetime" Nullable="false" />
-          <Property Name="fecha_inicio" Type="datetime" Nullable="false" />
+          <Property Name="fecha_fin" Type="date" Nullable="false" />
+          <Property Name="fecha_inicio" Type="date" Nullable="false" />
           <Property Name="ferfil_usuario" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="eliminado" Type="tinyint" Nullable="false" />
           <Property Name="estado_cierre" Type="tinyint" Nullable="false" />
@@ -436,18 +436,18 @@
           <EntitySet Name="pregunta_test_responder" EntityType="bd_simaModel.pregunta_test_responder" />
           <EntitySet Name="preguntas_test" EntityType="bd_simaModel.preguntas_test" />
           <EntitySet Name="respuestas" EntityType="bd_simaModel.respuestas" />
-          <EntitySet Name="Test" EntityType="bd_simaModel.Test" />
           <AssociationSet Name="FK_pregunta_test_responder_preguntas_test" Association="bd_simaModel.FK_pregunta_test_responder_preguntas_test">
             <End Role="preguntas_test" EntitySet="preguntas_test" />
-            <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
-          </AssociationSet>
-          <AssociationSet Name="FK_pregunta_test_responder_Test" Association="bd_simaModel.FK_pregunta_test_responder_Test">
-            <End Role="Test" EntitySet="Test" />
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
           </AssociationSet>
           <AssociationSet Name="FK_respuestas_pregunta_test_responder" Association="bd_simaModel.FK_respuestas_pregunta_test_responder">
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
             <End Role="respuestas" EntitySet="respuestas" />
+          </AssociationSet>
+          <EntitySet Name="Test" EntityType="bd_simaModel.Test" />
+          <AssociationSet Name="FK_pregunta_test_responder_Test" Association="bd_simaModel.FK_pregunta_test_responder_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
           </AssociationSet>
           <AssociationSet Name="FK_Test_usuarios" Association="bd_simaModel.FK_Test_usuarios">
             <End Role="usuarios" EntitySet="usuarios" />
@@ -702,8 +702,8 @@
           <Property Name="id_pregunta_test" Type="Int32" Nullable="false" />
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="preguntas_test" Relationship="bd_simaModel.FK_pregunta_test_responder_preguntas_test" FromRole="pregunta_test_responder" ToRole="preguntas_test" />
-          <NavigationProperty Name="Test" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="pregunta_test_responder" ToRole="Test" />
           <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="pregunta_test_responder" ToRole="respuestas" />
+          <NavigationProperty Name="Test" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="pregunta_test_responder" ToRole="Test" />
         </EntityType>
         <EntityType Name="preguntas_test">
           <Key>
@@ -726,21 +726,6 @@
           <Property Name="observacion" Type="String" MaxLength="150" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="respuestas" ToRole="pregunta_test_responder" />
         </EntityType>
-        <EntityType Name="Test">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fecha_fin" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ferfil_usuario" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="eliminado" Type="Byte" Nullable="false" />
-          <Property Name="estado_cierre" Type="Byte" Nullable="false" />
-          <Property Name="id_usuario_creado" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="periodo" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="Test" ToRole="pregunta_test_responder" />
-          <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_Test_usuarios" FromRole="Test" ToRole="usuarios" />
-        </EntityType>
         <Association Name="FK_pregunta_test_responder_preguntas_test">
           <End Type="bd_simaModel.preguntas_test" Role="preguntas_test" Multiplicity="1" />
           <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="*" />
@@ -753,18 +738,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_pregunta_test_responder_Test">
-          <End Type="bd_simaModel.Test" Role="Test" Multiplicity="1" />
-          <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Test">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="pregunta_test_responder">
-              <PropertyRef Name="id_test" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_respuestas_pregunta_test_responder">
           <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="1" />
           <End Type="bd_simaModel.respuestas" Role="respuestas" Multiplicity="*" />
@@ -774,6 +747,33 @@
             </Principal>
             <Dependent Role="respuestas">
               <PropertyRef Name="id_preguntas_test_respustas" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_fin" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ferfil_usuario" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="eliminado" Type="Byte" Nullable="false" />
+          <Property Name="estado_cierre" Type="Byte" Nullable="false" />
+          <Property Name="id_usuario_creado" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="periodo" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="Test" ToRole="pregunta_test_responder" />
+          <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_Test_usuarios" FromRole="Test" ToRole="usuarios" />
+        </EntityType>
+        <Association Name="FK_pregunta_test_responder_Test">
+          <End Type="bd_simaModel.Test" Role="Test" Multiplicity="1" />
+          <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pregunta_test_responder">
+              <PropertyRef Name="id_test" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

@@ -1,5 +1,8 @@
-﻿@{
+﻿@model WebSima.Models.MTest
+
+@{
     ViewBag.Title = "Crear_test";
+    List<WebSima.Models.MPreguntas_test> preguntas =   ViewBag.preguntas;
 }
 
 <div>
@@ -9,90 +12,94 @@
 
     </ol>
 </div>
-
+@using (Html.BeginForm("Crear", "Test", FormMethod.Post, new {  id="fDatos_nuevo_test" }))
+            {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
 <div class="box box-success">
     <div class="box-header with-border">
         <div class="box-header with-border panelBorder ">
-
+            <div id="alert_1"></div>
             <div class="form-group col-sm-4">
                 <h4><label>Quien responde?</label></h4>
                 <div class="input-group date">
                     <label>
-                        <input type="radio" name="r1" class="flat-red" checked>
-                        Monitores
-                    </label>
-                    <br />
-                    <label>
-                        <input type="radio" name="r1" class="flat-red">
+                        <input class="flat-red " type="radio" value="Estudiante" id="ferfil_usuario" checked name="ferfil_usuario" />
+                        
                         Estudiantes
                     </label>
                     <br />
                     <label>
-                        <input type="radio" name="r1" class="flat-red">
+                        <input class="flat-red " type="radio" value="Monitor" id="ferfil_usuario" name="ferfil_usuario" />                       
+                        Monitores
+                    </label>
+                    <br />
+
+                    <label>
+                        <input class="flat-red " type="radio" value="Docente" id="ferfil_usuario" name="ferfil_usuario" />
                         Docentes
                     </label>
+                 
+                </div>
+                @Html.ValidationMessageFor(model => model.ferfil_usuario, null, new { @class = "label label-danger" })
+            </div>
+
+            <div class="form-group col-sm-4">
+                @Html.LabelFor(model => model.fecha_inicio)
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                  
+                    @Html.TextBoxFor(model => model.fecha_inicio, new { @class = "form-control datepicker " })
+                    @Html.ValidationMessageFor(model => model.fecha_inicio, null, new { @class = "label label-danger"})
 
                 </div>
             </div>
 
             <div class="form-group col-sm-4">
-                <label>Fecha Inicio:</label>
+                @Html.LabelFor(model => model.fecha_fin)
                 <div class="input-group date">
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input class="form-control datepicker" data-val="true" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="yyyy-mm-dd" type="text" value="">
+                    @Html.TextBoxFor(model => model.fecha_fin, new { @class = "form-control datepicker " })
+                    @Html.ValidationMessageFor(model => model.fecha_fin, null, new { @class = "label label-danger" })
 
                 </div>
             </div>
-
-            <div class="form-group col-sm-4">
-                <label>Fecha Fin:</label>
-                <div class="input-group date">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <input class="form-control datepicker" data-val="true" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="yyyy-mm-dd" type="text" value="">
-
-                </div>
-            </div>
-        </div>
-        <div class="box-body panelBorder">
+      
             <!-- segundo despligue -->
-            <div >
-
+            <div class="col-sm-12">
+                <br />
+                <h4>Seleccione las prentas que se deben responder en el test</h4>
 
                 <table class="table tablaPaginacion table-responsive table-hover">
-                    <thead>
-                        <tr>
-                            <th>PREGUNTAS</th>
-                            <th>SELECCIONAR</th>
 
-                        </tr>
-                    </thead>
                     <tbody>
-                        <tr>
-                            <td>what do you going?</td>
-                            <td>
-                                <label>
-                                    <input type="checkbox" name="c1" class="flat-red">
-                                </label>
-                            </td>
+                        @foreach (var pregunta in preguntas)
+                        {
+                            <tr>
+                                <td style="width:20px">
+                                    <input type="checkbox" name="id_preguntas" value="@pregunta.id" class="flat-red">
+                                </td>
+                                <td>@pregunta.Pregunata </td>
 
-
-                        </tr>
+                            </tr>
+                        }
                     </tbody>
                 </table>
 
-                <a href="#" class="btn btn-success"><i class="fa fa-floppy-o"></i>  Enviar </a>
+                <button type="submit" id="enviar" class="btn btn-success"><i class="fa fa-floppy-o"></i>  Enviar </button>
 
 
             </div>
 
         </div>
-    
-</div>
+
     </div>
+</div>
+}
 <script>
     $(function () {
         //iCheck for checkbox and radio inputs
@@ -101,6 +108,58 @@
             radioClass: 'iradio_flat-green'
         });
         configurar_daterangepicker("datepicker");
+        $("#fecha_inicio").val("");
+        $("#fecha_fin").val("");
+
+        $.validator.unobtrusive.parse("#fDatos_nuevo_test");// se activan las validaciones del formulario
+
+        $("#fDatos_nuevo_test").submit(function (e) {
+            e.preventDefault();
+            if ($("#fDatos_nuevo_test").valid()) {
+                var datos = $("#fDatos_nuevo_test").serializeArray();
+                var btn = $("#enviar");
+                btn.val("Guardando...");
+                btn.prop("disabled", true);
+                $.ajax({
+                    data: datos,
+                    url: $("#fDatos_nuevo_test").attr('action'),
+                    dataType: "json",
+                    type: 'post',
+                    beforeSend: function () { },
+                    success: function (response) {
+
+                        // se activa el boton enviar
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+
+                        var mensaje = "";
+                        var clase = "";
+                        if (response["RESPUESTA"] == "OK") {
+                            $("#listar").load("/Test/Listar");
+                            mensaje = "<strong>¡Exito!</strong> Test registrado con exito.";
+                            clase = "alert-success";
+
+                        } else if (response["RESPUESTA"] == "ERROR") {
+                            mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                            clase = "alert-danger";
+                        }
+                        else if (response["RESPUESTA"] == "LOGIN") {
+                            mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
+                            clase = " alert-danger";
+
+                            location.href = "/";
+                        }
+                        //alert_mensajes() esta en helper.js
+                        $("#alert_1").html(alert_mensajes(mensaje, clase));
+
+                    }, error: function (error) {
+                        alert("Error");
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                    }
+                });
+            }
+        });
     });
    
 

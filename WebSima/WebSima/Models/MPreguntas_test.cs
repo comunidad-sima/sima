@@ -66,5 +66,27 @@ namespace WebSima.Models
             }
             return guardado;
         }
+        /// <summary>
+        /// Consulta las preguntas registradas para la creacion de los test
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="eliminado"></param>
+        /// <returns></returns>
+        public List<MPreguntas_test> getPreguntas_test(bd_simaEntitie db, int eliminado=0)
+        {
+            List<MPreguntas_test> preguntas = null;
+
+            preguntas = (from p in db.preguntas_test
+                        where (p.eliminado == 0)
+                        select new MPreguntas_test
+                        {
+                            eliminado = p.eliminado,
+                            id = p.id,
+                            Pregunata = p.Pregunata,
+                            pregunta_test_responder = p.pregunta_test_responder,
+                            tipo = p.tipo
+                        }).ToList();
+            return preguntas;
+        }
     }
 }

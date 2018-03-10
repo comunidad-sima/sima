@@ -131,8 +131,8 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="fecha_fin" Type="datetime" Nullable="false" />
-    <Property Name="fecha_inicio" Type="datetime" Nullable="false" />
+    <Property Name="fecha_fin" Type="date" Nullable="false" />
+    <Property Name="fecha_inicio" Type="date" Nullable="false" />
     <Property Name="ferfil_usuario" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="eliminado" Type="tinyint" Nullable="false" />
     <Property Name="estado_cierre" Type="tinyint" Nullable="false" />

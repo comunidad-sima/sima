@@ -215,6 +215,7 @@
       <DependentUpon>Model_sima.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\MPreguntas_test.cs" />
+    <Compile Include="Models\MTest.cs" />
     <Compile Include="Models\MUsuario.cs" />
     <Compile Include="Models\Notas.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
