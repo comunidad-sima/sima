@@ -47,6 +47,12 @@ namespace WebSima.Controllers
         {
             return View("add_pregunta");
         }
+
+            public ActionResult Responder_test()
+            {
+                return View ("Responder_test");
+            }
+
         public ActionResult Create()
         {
             return View();
