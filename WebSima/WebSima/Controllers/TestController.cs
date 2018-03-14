@@ -160,6 +160,17 @@ namespace WebSima.Controllers
         {
             return View("add_pregunta");
         }
+
+            public ActionResult Responder_test()
+            {
+                //String periodo = MConfiguracionApp.getPeridoActual(db);
+
+                MTest mtest = (new MTest().getTestPorId(db, 3));
+
+                ViewBag.tests = mtest;
+                return View ("Responder_test");
+            }
+
         public ActionResult Create()
         {
             return View();
