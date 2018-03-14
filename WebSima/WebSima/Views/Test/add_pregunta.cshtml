@@ -1,24 +1,104 @@
-﻿@{
+﻿@model WebSima.Models.MPreguntas_test
+
+@{
     Layout = null;
 }
 <div class="row">
+    
+@using (Html.BeginForm("add_pregunta", "Test", FormMethod.Post, new { id="fPregunta_test", @class = "" }))
+            {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
     <div class="col-sm-12 ">
-
-        <div>
-            <label>Pregunta Test</label>
-            <textarea class="form-control " rows="3" placeholder="Pregunta Test..." style="resize: none;">
-
-            </textarea>
-            
+        <div id="alert_1">
+            @*espacio para los mensajer de de respuesta de las consultas*@
         </div>
-        
+        <div>
+            @Html.LabelFor(model => model.Pregunata)
+            @Html.TextAreaFor(model => model.Pregunata, new { @class = "form-control ", TextMode = "multiline", placeholder = "Ingrese el enunciado de la pregunta...", rows = "5" })
+            @Html.ValidationMessageFor(model => model.Pregunata, null, new { @class = "label label-danger"})
+           
+            
+        </div>       
 
     </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">           
+                    <!-- radio -->
+            <div class="form-group">
+                <label>Abierta: </label>
+                <label class="radio-inline" title="Las preguntas abiertas con las que se respondes con un texto, ejemplo: Que aspecto debe mejorar el monitor?">
+                    <input type="radio" name="tipo" id="abierta" value="Abierta" class="flat-red" required="">
+                </label>
+                <label >Cerrada: </label>
+                <label class="radio-inline" title="Las pregunta cerradas con las que se responde con un numero, ejemplo: el monitor muestra dominio del tema?
+1, 2,3,4,5,6,7,8,9,10">
+                    <input type="radio" name="tipo" value="Cerrada" class="flat-red" checked="">
+                </label>
+            </div>
+        </div>
     <div class="col-sm-12 ">
         @*<input type="submit" class="btn btn-success " />*@
-        <button class="btn btn btn-success"><i class="fa fa-plus"></i>Agregar Pregunta </button>
+        <button class="btn btn btn-success" id="enviar"><i class="fa fa-plus"></i>Agregar Pregunta </button>
+        <input type="reset"  class="btn" value="Nueva" />
     </div>
 
-
+            }
 
 </div>
+
+<script>
+    $(document).ready(function () {
+              
+
+        $.validator.unobtrusive.parse("#fPregunta_test");// se activan las validaciones del formulario
+
+        $("#fPregunta_test").submit(function (e) {
+
+            e.preventDefault();
+            if ($("#fPregunta_test").valid()) {
+                var datos = $("#fPregunta_test").serializeArray();
+                var btn = $("#enviar");
+                btn.val("Guardando...");
+                btn.prop("disabled", true);
+                $.ajax({
+                    data: datos,
+                    url: $("#fPregunta_test").attr('action'),
+                    dataType: "json",
+                    type: 'post',
+                    beforeSend: function () { },
+                    success: function (response) {
+
+                        // se activa el boton enviar
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+
+                        var mensaje = "";
+                        var clase = "";
+                        if (response["RESPUESTA"] == "OK") {
+                            $("#listar").load("/Test/Listar");
+                            mensaje = "<strong>¡Exito!</strong> Pregunta registrada con exito.";
+                            clase = "alert-success";
+
+                        } else if (response["RESPUESTA"] == "ERROR") {
+                            mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                            clase = "alert-danger";
+                        }
+                        else if (response["RESPUESTA"] == "LOGIN") {
+                            mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
+                            clase = " alert-danger";
+
+                            location.href = "/";
+                        }
+                        //alert_mensajes() esta en helper.js
+                        $("#alert_1").html(alert_mensajes(mensaje, clase));
+
+                    }, error: function (error) {
+                        alert("Error");
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                    }
+                });
+            }
+        });
+    });
+ </script>

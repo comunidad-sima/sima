@@ -35,7 +35,7 @@ namespace WebSima.Models
         public String guardar(capacitaciones capacitacion, bd_simaEntitie db){
             String resultado = null;
             try{
-                capacitacion.periodo = "2017-2";
+                capacitacion.periodo = MConfiguracionApp.getPeridoActual(db);
                 db.capacitaciones.Add(capacitacion);
                 db.SaveChanges();
                 return "Capacitación guardada.";

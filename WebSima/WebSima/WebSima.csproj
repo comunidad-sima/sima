@@ -214,12 +214,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model_sima.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\MPreguntas_test.cs" />
+    <Compile Include="Models\MTest.cs" />
     <Compile Include="Models\MUsuario.cs" />
     <Compile Include="Models\Notas.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\preguntas_test.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\pregunta_test_responder.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\respuestas.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Respusta.cs" />
     <Compile Include="clases\Sesion.cs" />
+    <Compile Include="Models\Test.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\usuarios.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
