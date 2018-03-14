@@ -160,14 +160,97 @@ namespace WebSima.Controllers
         {
             return View("add_pregunta");
         }
+            public JsonResult Guardar_respuesta()
+            {
+                Respusta respuesta = new Respusta();
+                bool error = false;
+                List<respuestas> respuestas=new List<respuestas>();
+                List<MPreguntas_test> preguntas = null;
+                MTest test = new MTest();
+                //  se consultas las pregunta asignadas al test 
+                preguntas = (test).getPreguntas_test(db, Convert.ToInt32(sesion.getId_test_responder()));
+                if (preguntas.Count() == Request.Form.Count)
+                {
+                    foreach (MPreguntas_test mpreguta in preguntas)
+                    {
+                        // se consulta id de la relacion de las preguntas con el test
+                        pregunta_test_responder pre_responder = test.getPregunta_test_responder(db,
+                          Convert.ToInt32(sesion.getId_test_responder()), mpreguta.id);
+                        String observacion = null;
+                        int punto = 0;
+                        if (mpreguta.tipo.Equals("Abierta"))
+                        {
+                            //los nombre de los inpus es el  id de la pregunta 
+                            observacion = Request.Form["" + mpreguta.id];
+                            if(observacion.Count()<=3){
+                                respuesta.RESPUESTA = "ERROR";
+                                respuesta.MENSAJE = "Las preguntas abiertas deben tener minimo tres caracteres en la respuesta.";
+                                error = true;
+                            }
+                        }
+
+                        else if (mpreguta.tipo.Equals("Cerrada"))
+                        {
+                            punto = Convert.ToInt32(Request.Form["" + mpreguta.id]);
+                            if (punto < 1 || punto > 10)
+                            {
+                                error = true;
+                                respuesta.RESPUESTA = "ERROR";
+                                respuesta.MENSAJE = "Error en la respuesta de '" + mpreguta.Pregunata + "'.";
+                            }
+
+                        }
+
+                        respuestas.Add(new respuestas
+                        {
+                            id_persona = sesion.getIdUsuario(),
+                            observacion = observacion,
+                            punto = punto,
+                            id_preguntas_test_respustas = pre_responder.id,
+
+
+                        });
+                       
+
+                    }
+                    if (!error)
+                    {
+                        bool respusta_ = test.guardar_respuestas_test(db, respuestas);
+                        if (!respusta_)
+                        {
+                            respuesta.RESPUESTA = "ERROR";
+                            respuesta.MENSAJE = "Error al guardar.";
+                        }
+                        else
+                        {
+                            respuesta.RESPUESTA = "OK";
+                            respuesta.MENSAJE = "Su respuesta fue guardada con exito. Gracias por participar.";
+                        }
+                    }
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Responda todas las preguntas antes de guardar.";
+                }
+               
+                return Json(respuesta);
+            }
+        
 
             public ActionResult Responder_test()
             {
                 //String periodo = MConfiguracionApp.getPeridoActual(db);
 
-                MTest mtest = (new MTest().getTestPorId(db, 3));
-
-                ViewBag.tests = mtest;
+                MTest mtest = (new MTest().getTestPorId(db, 4));
+                sesion.setId_test_responder(4);
+                List<MPreguntas_test> preguntas = null;
+                if (mtest != null)
+                {
+                    preguntas = mtest.getPreguntas_test(db, mtest.id);
+                }
+                ViewBag.test = mtest;
+                ViewBag.preguntas = preguntas;
                 return View ("Responder_test");
             }
 

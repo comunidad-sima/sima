@@ -72,6 +72,33 @@ namespace WebSima.Models
             }
             return guardado;
         }
+        public bool guardar_respuestas_test(bd_simaEntitie db,  List<respuestas> respuestas)
+        {
+            bool guardado = true;
+            try
+            {
+                using (var transaccion = new TransactionScope())
+                {
+                    using (var contestTransaccion = new bd_simaEntitie())
+                    {
+                                              
+                        
+                        foreach (respuestas respuesta in respuestas)
+                        {
+                            db.respuestas.Add(respuesta);
+                        }
+                        db.SaveChanges();
+                        transaccion.Complete();
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                guardado = false;
+            }
+            return guardado;
+        }
         /// <summary>
         /// Consulta los test en un periodo
         /// </summary>
@@ -131,6 +158,46 @@ namespace WebSima.Models
 
             return Mtest;
 
+        
+        }
+        /// <summary>
+        /// se consulta id de la relacion entre la preguntas y el rest 
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id_test"></param>
+        /// <returns></returns>
+        public pregunta_test_responder getPregunta_test_responder(bd_simaEntitie db, int id_test, int id_pregunta)
+        {
+            pregunta_test_responder preguntas = null;
+
+            preguntas = (from pre in db.pregunta_test_responder
+                        
+                         where(pre.id_test==id_test && pre.id_pregunta_test==id_pregunta)
+                         
+                         select  pre).First();
+  
+            return preguntas;
+        }
+
+        public List<MPreguntas_test> getPreguntas_test(bd_simaEntitie db, int id_test)
+        {
+            List<MPreguntas_test> preguntas = null;
+
+            preguntas = (from t in db.Test
+                         join pr in db.pregunta_test_responder on t.id equals pr.id_test
+                         join p in db.preguntas_test on pr.id_pregunta_test equals p.id
+                         where (t.id == id_test)
+                         orderby (p.tipo) descending
+                         select new MPreguntas_test
+                         {
+                             eliminado = p.eliminado,
+                             id = p.id,
+                             Pregunata = p.Pregunata,
+                             tipo = p.tipo,
+                             pregunta_test_responder = p.pregunta_test_responder
+                         }).ToList();
+
+            return preguntas;
         }
     }
 }

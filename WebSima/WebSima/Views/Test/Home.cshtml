@@ -2,6 +2,25 @@
     ViewBag.Title = "Home";
 }
 
+<style>
+    .titleP .titleF {
+        visibility: hidden;
+        width: 100%;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+    }
+
+    .titleP:hover .titleF {
+        visibility: visible;
+    }
+</style>
+
 <div class="box box-body">
 
     <center>
@@ -28,9 +47,15 @@
 
 <script>
     $(document).ready(function () {
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
         // se carga el formulario de nuevo registro
         $("#registro").load("/Test/add_pregunta");
         // se garga la tabla de registros
         $("#listar").load("/Test/Listar");
+
     });
 </script>

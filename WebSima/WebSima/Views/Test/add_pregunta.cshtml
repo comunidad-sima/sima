@@ -25,15 +25,17 @@
     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">           
                     <!-- radio -->
             <div class="form-group">
-                <label>Abierta: </label>
-                <label class="radio-inline" title="Las preguntas abiertas con las que se respondes con un texto, ejemplo: Que aspecto debe mejorar el monitor?">
+                @*<label class="fa fa-info-circle" title=""> </label>*@
+                <label class="fa fa-info-circle titleP"> <label class="titleF"> Las preguntas abiertas con las que se respondes con un texto, ejemplo: Que aspecto debe mejorar el monitor?</label> </label>
+                 <label>Abierta: </label>
                     <input type="radio" name="tipo" id="abierta" value="Abierta" class="flat-red" required="">
-                </label>
-                <label >Cerrada: </label>
-                <label class="radio-inline" title="Las pregunta cerradas con las que se responde con un numero, ejemplo: el monitor muestra dominio del tema?
-1, 2,3,4,5,6,7,8,9,10">
-                    <input type="radio" name="tipo" value="Cerrada" class="flat-red" checked="">
-                </label>
+                
+                @*<span class="fa fa-info-circle" title=""></span>*@
+                <label class="fa fa-info-circle titleP"> <label class="titleF"> Las pregunta cerradas con las que se responde con un numero, ejemplo: el monitor muestra dominio del tema?
+1, 2,3,4,5,6,7,8,9,10.</label> </label>
+                 <label >Cerrada: </label>
+                    <input type="radio" name="tipo" value="Cerrada " class="flat-red" checked="">
+                
             </div>
         </div>
     <div class="col-sm-12 ">
@@ -48,6 +50,11 @@
 
 <script>
     $(document).ready(function () {
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
               
 
         $.validator.unobtrusive.parse("#fPregunta_test");// se activan las validaciones del formulario
@@ -58,6 +65,7 @@
             if ($("#fPregunta_test").valid()) {
                 var datos = $("#fPregunta_test").serializeArray();
                 var btn = $("#enviar");
+
                 btn.val("Guardando...");
                 btn.prop("disabled", true);
                 $.ajax({
