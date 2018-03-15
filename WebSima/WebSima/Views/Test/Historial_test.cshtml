@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "Historial ";
+    List<SelectListItem> periodos = ViewBag.periodos;
+}
+
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Historia Test</li>
+        <li class="breadcrumb-item active">Test</li>
+
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-success">
+
+            <div class="box-body ">
+
+                <!-- /input-group -->
+               
+                <!-- /input-group -->
+                <div class="box-header with-border panelBorder">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-header">
+                                <h4 class="box-title"><strong>Tests abiertos </strong></h4>                               
+                            </div>
+                            <!-- /.box-header -->
+                            <div id="test_abiertos">
+
+                            </div>
+                            
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group panelBorder">
+                    <h4 class="margin"><strong> Tests culminados </strong></h4>
+                    <div class="input-group input-group-sm col-sm-4">
+
+                        <select class="form-control" id="periodo">
+
+                            <option value="">Selecciones período </option>
+                            @if (periodos != null)
+                            {
+                                foreach (var e in periodos)
+                                {
+                                    <option value="@e.Value">
+                                        @e.Text
+                                    </option>
+                                }
+                            }
+                        </select>
+
+                        <span class="input-group-btn">
+                            <button type="button" id="buscar_test" class="btn btn-success btn-flat">Consultar</button>
+                        </span>
+                    </div>
+                    <br />
+                    <div id="listar_culminados"></div>
+                   
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#buscar_test").click(function () {
+          
+            $("#listar_culminados").load("/Test/Listar_test/?periodo=" + $("#periodo").val());// cuando se cuosulta las capacitaciones de un periodo
+        });
+        
+    $("#test_abiertos").load("/Test/Listar_test/?periodo=-1");
+    $("#listar_culminados").load("/Test/Listar_test");
+    
+});
+</script>

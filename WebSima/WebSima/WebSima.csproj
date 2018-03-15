@@ -7550,6 +7550,12 @@
   <ItemGroup>
     <Content Include="Views\Test\Responder_test.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Historial_test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Listar_test.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -15,14 +15,40 @@ namespace WebSima.Controllers
         //
         // GET: /Test/
 
-        public ActionResult Index()
-        {
-            return View();
-        }
+       
         public ActionResult Home()
         {
-            return View();
+            if (sesion.esAdministrador(db))
+            {
+                return View();
+            }
+            return Redirect("~/Inicio/Login");
         }
+
+        public ActionResult Listar_test(String periodo ="")
+        {
+            if (sesion.esAdministrador(db))
+            {
+               
+
+                List<MTest> tests = new List<MTest>();
+                if (periodo.Equals("-1"))
+                    tests = (new MTest().getTest_abiertos(db, 0, 0));
+                else
+                {
+                    if (periodo.Equals(""))
+                        periodo = MConfiguracionApp.getPeridoActual(db);
+                    tests = (new MTest().getTestPeriodo(db, periodo, 1, 0));
+                }
+               
+                return View("Listar_test", tests);
+            }
+            return null;
+        }
+        /// <summary>
+        /// Lista las preguntas que estan registrdas en la db
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Listar()
         {
             if (sesion.esAdministrador(db))
@@ -32,6 +58,7 @@ namespace WebSima.Controllers
             }
             return null;
         }
+        // formulario pregunta
         public ActionResult add_pregunta()
         {
             if (sesion.esAdministrador(db))
@@ -43,6 +70,7 @@ namespace WebSima.Controllers
                 return Redirect("~/Inicio/Login");
             }
         }
+        // agrega las preguntas de un test
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult add_pregunta(MPreguntas_test Mpregunta)
@@ -82,6 +110,10 @@ namespace WebSima.Controllers
             }
             return Json(respuesta);
         }
+        /// <summary>
+        /// crear formulario crear test
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Crear()
         {
             if (sesion.esAdministrador(db))
@@ -167,6 +199,22 @@ namespace WebSima.Controllers
                 return Redirect("~/Inicio/Login");
             }
         }
+        public ActionResult Historial_test()
+        {
+
+            if (sesion.esAdministrador(db))
+            {
+                List<SelectListItem> periodos = (db.cursos.Select(c => new SelectListItem
+                {
+                    Value = c.periodo,
+                    Text = c.periodo
+                }).Distinct()).ToList();
+                ViewBag.periodos = periodos;
+                return View("Historial_test");
+            }
+            return Redirect("~/Inicio/Login");
+
+        }
             public JsonResult Guardar_respuesta()
             {
                 Respusta respuesta = new Respusta();
@@ -175,7 +223,7 @@ namespace WebSima.Controllers
                 List<MPreguntas_test> preguntas = null;
                 MTest test = new MTest();
                 //  se consultas las pregunta asignadas al test 
-                preguntas = (test).getPreguntas_test(db, Convert.ToInt32(sesion.getId_test_responder()));
+                preguntas = (test).getPreguntas_test_a_resonder(db, Convert.ToInt32(sesion.getId_test_responder()));
                 if (preguntas.Count() == Request.Form.Count)
                 {
                     foreach (MPreguntas_test mpreguta in preguntas)
@@ -187,7 +235,7 @@ namespace WebSima.Controllers
                         int punto = 0;
                         if (mpreguta.tipo.Equals("Abierta"))
                         {
-                            //los nombre de los inpus es el  id de la pregunta 
+                            //los nombre de los inputs es el  id de la pregunta 
                             observacion = Request.Form["" + mpreguta.id];
                             if(observacion.Count()<=3){
                                 respuesta.RESPUESTA = "ERROR";
@@ -253,11 +301,11 @@ namespace WebSima.Controllers
                 {
                     MTest mtest = (new MTest().getTestPorId(db, 4));
                     sesion.setId_test_responder(4);
-                    sesion.setIdCurso_test(100);
+                    sesion.setIdCurso_test(101);
                     List<MPreguntas_test> preguntas = null;
                     if (mtest != null)
                     {
-                        preguntas = mtest.getPreguntas_test(db, mtest.id);
+                        preguntas = mtest.getPreguntas_test_a_resonder(db, mtest.id);
                     }
                     ViewBag.test = mtest;
                     ViewBag.preguntas = preguntas;
@@ -269,34 +317,11 @@ namespace WebSima.Controllers
                 }
             }
 
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //
-        // POST: /Test/Create
-
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+              
 
         
 
-        
-
-        //
+        //Elimina una pregunta de un test 
         // POST: /Test/Delete/5
         [HttpPost]
         public JsonResult Delete(int id)

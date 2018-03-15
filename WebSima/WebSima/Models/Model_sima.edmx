@@ -129,7 +129,7 @@
           <Property Name="id_preguntas_test_respustas" Type="int" Nullable="false" />
           <Property Name="id_persona" Type="varchar" MaxLength="12" Nullable="false" />
           <Property Name="punto" Type="int" Nullable="false" />
-          <Property Name="observacion" Type="nchar" MaxLength="180" Nullable="false" />
+          <Property Name="observacion" Type="nchar" MaxLength="180" />
           <Property Name="id_curso" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Test">
@@ -291,7 +291,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_respuestas_cursos">
+        <Association Name="FK_respuestas_cursos1">
           <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
           <End Role="respuestas" Type="Self.respuestas" Multiplicity="*" />
           <ReferentialConstraint>
@@ -386,7 +386,7 @@
             <End Role="Test" EntitySet="Test" />
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
           </AssociationSet>
-          <AssociationSet Name="FK_respuestas_cursos" Association="Self.FK_respuestas_cursos">
+          <AssociationSet Name="FK_respuestas_cursos1" Association="Self.FK_respuestas_cursos1">
             <End Role="cursos" EntitySet="cursos" />
             <End Role="respuestas" EntitySet="respuestas" />
           </AssociationSet>
@@ -407,11 +407,15 @@
           <EntitySet Name="calificaciones_periodo" EntityType="bd_simaModel.calificaciones_periodo" />
           <EntitySet Name="capacitaciones" EntityType="bd_simaModel.capacitaciones" />
           <EntitySet Name="clases_sima" EntityType="bd_simaModel.clases_sima" />
+          <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
           <EntitySet Name="cursos" EntityType="bd_simaModel.cursos" />
           <EntitySet Name="estudiantes_asistentes" EntityType="bd_simaModel.estudiantes_asistentes" />
           <EntitySet Name="grupos_acargo" EntityType="bd_simaModel.grupos_acargo" />
           <EntitySet Name="materias" EntityType="bd_simaModel.materias" />
           <EntitySet Name="Notas" EntityType="bd_simaModel.Notas" />
+          <EntitySet Name="pregunta_test_responder" EntityType="bd_simaModel.pregunta_test_responder" />
+          <EntitySet Name="preguntas_test" EntityType="bd_simaModel.preguntas_test" />
+          <EntitySet Name="Test" EntityType="bd_simaModel.Test" />
           <EntitySet Name="usuarios" EntityType="bd_simaModel.usuarios" />
           <AssociationSet Name="FK_calificaciones_periodo_materias" Association="bd_simaModel.FK_calificaciones_periodo_materias">
             <End Role="materias" EntitySet="materias" />
@@ -449,14 +453,10 @@
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="grupos_acargo" EntitySet="grupos_acargo" />
           </AssociationSet>
-          <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
-          <EntitySet Name="pregunta_test_responder" EntityType="bd_simaModel.pregunta_test_responder" />
-          <EntitySet Name="preguntas_test" EntityType="bd_simaModel.preguntas_test" />
           <AssociationSet Name="FK_pregunta_test_responder_preguntas_test" Association="bd_simaModel.FK_pregunta_test_responder_preguntas_test">
             <End Role="preguntas_test" EntitySet="preguntas_test" />
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
           </AssociationSet>
-          <EntitySet Name="Test" EntityType="bd_simaModel.Test" />
           <AssociationSet Name="FK_pregunta_test_responder_Test" Association="bd_simaModel.FK_pregunta_test_responder_Test">
             <End Role="Test" EntitySet="Test" />
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
@@ -466,7 +466,7 @@
             <End Role="Test" EntitySet="Test" />
           </AssociationSet>
           <EntitySet Name="respuestas" EntityType="bd_simaModel.respuestas" />
-          <AssociationSet Name="FK_respuestas_cursos" Association="bd_simaModel.FK_respuestas_cursos">
+          <AssociationSet Name="FK_respuestas_cursos1" Association="bd_simaModel.FK_respuestas_cursos1">
             <End Role="cursos" EntitySet="cursos" />
             <End Role="respuestas" EntitySet="respuestas" />
           </AssociationSet>
@@ -474,22 +474,22 @@
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
             <End Role="respuestas" EntitySet="respuestas" />
           </AssociationSet>
-          </EntityContainer>
+        </EntityContainer>
         <EntityType Name="calificaciones_periodo">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id_docente" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="corte" Nullable="false" Type="Int32" />
-          <Property Name="periodo" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="fecha_registro" Nullable="false" Precision="3" Type="DateTime" />
-          <Property Name="asignatura" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="grupo" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" Type="String" />
-          <Property Name="programa" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" Type="String" />
-          <Property Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="id_docente" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="corte" Type="Int32" Nullable="false" />
+          <Property Name="periodo" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="asignatura" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
+          <Property Name="grupo" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="programa" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="materias" Relationship="bd_simaModel.FK_calificaciones_periodo_materias" FromRole="calificaciones_periodo" ToRole="materias" />
           <NavigationProperty Name="Notas" Relationship="bd_simaModel.FK_Notas_calificaciones_periodo" FromRole="calificaciones_periodo" ToRole="Notas" />
-          </EntityType>
+        </EntityType>
         <EntityType Name="capacitaciones">
           <Key>
             <PropertyRef Name="id" />
@@ -519,6 +519,14 @@
           <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_clases_sima_usuarios" FromRole="clases_sima" ToRole="usuarios" />
           <NavigationProperty Name="estudiantes_asistentes" Relationship="bd_simaModel.FK_estudiantes_asistentes_clases_sima" FromRole="clases_sima" ToRole="estudiantes_asistentes" />
         </EntityType>
+        <EntityType Name="configuracion_app">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="periodo_actual" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="contrasena_defecto_usuario" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="cursos">
           <Key>
             <PropertyRef Name="id" />
@@ -533,7 +541,7 @@
           <NavigationProperty Name="clases_sima" Relationship="bd_simaModel.FK_clases_sima_cursos" FromRole="cursos" ToRole="clases_sima" />
           <NavigationProperty Name="materias" Relationship="bd_simaModel.FK_cursos_materias" FromRole="cursos" ToRole="materias" />
           <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_cursos_usuarios" FromRole="cursos" ToRole="usuarios" />
-          <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_cursos" FromRole="cursos" ToRole="respuestas" />
+          <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_cursos1" FromRole="cursos" ToRole="respuestas" />
         </EntityType>
         <EntityType Name="estudiantes_asistentes">
           <Key>
@@ -581,6 +589,42 @@
           <Property Name="id_estudiante" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="calificaciones_periodo" Relationship="bd_simaModel.FK_Notas_calificaciones_periodo" FromRole="Notas" ToRole="calificaciones_periodo" />
+        </EntityType>
+        <EntityType Name="pregunta_test_responder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id_test" Type="Int32" Nullable="false" />
+          <Property Name="id_pregunta_test" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="preguntas_test" Relationship="bd_simaModel.FK_pregunta_test_responder_preguntas_test" FromRole="pregunta_test_responder" ToRole="preguntas_test" />
+          <NavigationProperty Name="Test" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="pregunta_test_responder" ToRole="Test" />
+          <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="pregunta_test_responder" ToRole="respuestas" />
+        </EntityType>
+        <EntityType Name="preguntas_test">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pregunata" Type="String" Nullable="false" MaxLength="700" FixedLength="false" Unicode="false" />
+          <Property Name="eliminado" Type="Byte" Nullable="false" />
+          <Property Name="tipo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_pregunta_test_responder_preguntas_test" FromRole="preguntas_test" ToRole="pregunta_test_responder" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_fin" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ferfil_usuario" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="eliminado" Type="Byte" Nullable="false" />
+          <Property Name="estado_cierre" Type="Byte" Nullable="false" />
+          <Property Name="id_usuario_creado" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="periodo" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="Test" ToRole="pregunta_test_responder" />
+          <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_Test_usuarios" FromRole="Test" ToRole="usuarios" />
         </EntityType>
         <EntityType Name="usuarios">
           <Key>
@@ -708,35 +752,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="configuracion_app">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="periodo_actual" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="contrasena_defecto_usuario" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="pregunta_test_responder">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id_test" Type="Int32" Nullable="false" />
-          <Property Name="id_pregunta_test" Type="Int32" Nullable="false" />
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="preguntas_test" Relationship="bd_simaModel.FK_pregunta_test_responder_preguntas_test" FromRole="pregunta_test_responder" ToRole="preguntas_test" />
-          <NavigationProperty Name="Test" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="pregunta_test_responder" ToRole="Test" />
-          <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="pregunta_test_responder" ToRole="respuestas" />
-        </EntityType>
-        <EntityType Name="preguntas_test">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Pregunata" Type="String" Nullable="false" MaxLength="700" FixedLength="false" Unicode="false" />
-          <Property Name="eliminado" Type="Byte" Nullable="false" />
-          <Property Name="tipo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_pregunta_test_responder_preguntas_test" FromRole="preguntas_test" ToRole="pregunta_test_responder" />
-        </EntityType>
         <Association Name="FK_pregunta_test_responder_preguntas_test">
           <End Type="bd_simaModel.preguntas_test" Role="preguntas_test" Multiplicity="1" />
           <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="*" />
@@ -749,21 +764,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Test">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fecha_fin" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="ferfil_usuario" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="eliminado" Type="Byte" Nullable="false" />
-          <Property Name="estado_cierre" Type="Byte" Nullable="false" />
-          <Property Name="id_usuario_creado" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="periodo" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="Test" ToRole="pregunta_test_responder" />
-          <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_Test_usuarios" FromRole="Test" ToRole="usuarios" />
-        </EntityType>
         <Association Name="FK_pregunta_test_responder_Test">
           <End Type="bd_simaModel.Test" Role="Test" Multiplicity="1" />
           <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="*" />
@@ -796,12 +796,12 @@
           <Property Name="id_preguntas_test_respustas" Type="Int32" Nullable="false" />
           <Property Name="id_persona" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
           <Property Name="punto" Type="Int32" Nullable="false" />
-          <Property Name="observacion" Type="String" Nullable="false" MaxLength="180" FixedLength="true" Unicode="true" />
+          <Property Name="observacion" Type="String" MaxLength="180" FixedLength="true" Unicode="true" />
           <Property Name="id_curso" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="cursos" Relationship="bd_simaModel.FK_respuestas_cursos" FromRole="respuestas" ToRole="cursos" />
+          <NavigationProperty Name="cursos" Relationship="bd_simaModel.FK_respuestas_cursos1" FromRole="respuestas" ToRole="cursos" />
           <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="respuestas" ToRole="pregunta_test_responder" />
         </EntityType>
-        <Association Name="FK_respuestas_cursos">
+        <Association Name="FK_respuestas_cursos1">
           <End Type="bd_simaModel.cursos" Role="cursos" Multiplicity="1" />
           <End Type="bd_simaModel.respuestas" Role="respuestas" Multiplicity="*" />
           <ReferentialConstraint>
@@ -873,6 +873,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="configuracion_app">
+            <EntityTypeMapping TypeName="bd_simaModel.configuracion_app">
+              <MappingFragment StoreEntitySet="configuracion_app">
+                <ScalarProperty Name="contrasena_defecto_usuario" ColumnName="contrasena_defecto_usuario" />
+                <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="cursos">
             <EntityTypeMapping TypeName="bd_simaModel.cursos">
               <MappingFragment StoreEntitySet="cursos">
@@ -924,30 +933,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="usuarios">
-            <EntityTypeMapping TypeName="bd_simaModel.usuarios">
-              <MappingFragment StoreEntitySet="usuarios">
-                <ScalarProperty Name="eliminado" ColumnName="eliminado" />
-                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
-                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
-                <ScalarProperty Name="celular" ColumnName="celular" />
-                <ScalarProperty Name="correo" ColumnName="correo" />
-                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="configuracion_app">
-            <EntityTypeMapping TypeName="bd_simaModel.configuracion_app">
-              <MappingFragment StoreEntitySet="configuracion_app">
-                <ScalarProperty Name="contrasena_defecto_usuario" ColumnName="contrasena_defecto_usuario" />
-                <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="pregunta_test_responder">
             <EntityTypeMapping TypeName="bd_simaModel.pregunta_test_responder">
               <MappingFragment StoreEntitySet="pregunta_test_responder">
@@ -977,6 +962,21 @@
                 <ScalarProperty Name="ferfil_usuario" ColumnName="ferfil_usuario" />
                 <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
                 <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="bd_simaModel.usuarios">
+              <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="eliminado" ColumnName="eliminado" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="celular" ColumnName="celular" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

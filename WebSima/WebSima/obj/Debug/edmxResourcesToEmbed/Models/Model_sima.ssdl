@@ -124,7 +124,7 @@
     <Property Name="id_preguntas_test_respustas" Type="int" Nullable="false" />
     <Property Name="id_persona" Type="varchar" MaxLength="12" Nullable="false" />
     <Property Name="punto" Type="int" Nullable="false" />
-    <Property Name="observacion" Type="nchar" MaxLength="180" Nullable="false" />
+    <Property Name="observacion" Type="nchar" MaxLength="180" />
     <Property Name="id_curso" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Test">
@@ -286,7 +286,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_respuestas_cursos">
+  <Association Name="FK_respuestas_cursos1">
     <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
     <End Role="respuestas" Type="Self.respuestas" Multiplicity="*" />
     <ReferentialConstraint>
@@ -381,7 +381,7 @@
       <End Role="Test" EntitySet="Test" />
       <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
     </AssociationSet>
-    <AssociationSet Name="FK_respuestas_cursos" Association="Self.FK_respuestas_cursos">
+    <AssociationSet Name="FK_respuestas_cursos1" Association="Self.FK_respuestas_cursos1">
       <End Role="cursos" EntitySet="cursos" />
       <End Role="respuestas" EntitySet="respuestas" />
     </AssociationSet>
