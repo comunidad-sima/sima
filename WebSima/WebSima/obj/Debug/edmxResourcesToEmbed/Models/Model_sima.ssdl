@@ -124,7 +124,8 @@
     <Property Name="id_preguntas_test_respustas" Type="int" Nullable="false" />
     <Property Name="id_persona" Type="varchar" MaxLength="12" Nullable="false" />
     <Property Name="punto" Type="int" Nullable="false" />
-    <Property Name="observacion" Type="nchar" MaxLength="150" />
+    <Property Name="observacion" Type="nchar" MaxLength="180" Nullable="false" />
+    <Property Name="id_curso" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Test">
     <Key>
@@ -285,6 +286,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_respuestas_cursos">
+    <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+    <End Role="respuestas" Type="Self.respuestas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cursos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="respuestas">
+        <PropertyRef Name="id_curso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_respuestas_pregunta_test_responder">
     <End Role="pregunta_test_responder" Type="Self.pregunta_test_responder" Multiplicity="1" />
     <End Role="respuestas" Type="Self.respuestas" Multiplicity="*" />
@@ -367,6 +380,10 @@
     <AssociationSet Name="FK_pregunta_test_responder_Test" Association="Self.FK_pregunta_test_responder_Test">
       <End Role="Test" EntitySet="Test" />
       <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_respuestas_cursos" Association="Self.FK_respuestas_cursos">
+      <End Role="cursos" EntitySet="cursos" />
+      <End Role="respuestas" EntitySet="respuestas" />
     </AssociationSet>
     <AssociationSet Name="FK_respuestas_pregunta_test_responder" Association="Self.FK_respuestas_pregunta_test_responder">
       <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />

@@ -155,10 +155,17 @@ namespace WebSima.Controllers
         //
         // GET: /Test/Create
 
-       
-            public ActionResult crear_pregunta()
+
+        public ActionResult crear_pregunta()
         {
-            return View("add_pregunta");
+            if (sesion.esAdministrador(db))
+            {
+                return View("add_pregunta");
+            }
+            else
+            {
+                return Redirect("~/Inicio/Login");
+            }
         }
             public JsonResult Guardar_respuesta()
             {
@@ -207,6 +214,7 @@ namespace WebSima.Controllers
                             observacion = observacion,
                             punto = punto,
                             id_preguntas_test_respustas = pre_responder.id,
+                            id_curso=sesion.getIdCurso_test()
 
 
                         });
@@ -236,46 +244,53 @@ namespace WebSima.Controllers
                
                 return Json(respuesta);
             }
-        
+
 
             public ActionResult Responder_test()
             {
                 //String periodo = MConfiguracionApp.getPeridoActual(db);
-
-                MTest mtest = (new MTest().getTestPorId(db, 4));
-                sesion.setId_test_responder(4);
-                List<MPreguntas_test> preguntas = null;
-                if (mtest != null)
+                if (sesion.esAdministrador(db))
                 {
-                    preguntas = mtest.getPreguntas_test(db, mtest.id);
+                    MTest mtest = (new MTest().getTestPorId(db, 4));
+                    sesion.setId_test_responder(4);
+                    sesion.setIdCurso_test(100);
+                    List<MPreguntas_test> preguntas = null;
+                    if (mtest != null)
+                    {
+                        preguntas = mtest.getPreguntas_test(db, mtest.id);
+                    }
+                    ViewBag.test = mtest;
+                    ViewBag.preguntas = preguntas;
+                    return View("Responder_test");
                 }
-                ViewBag.test = mtest;
-                ViewBag.preguntas = preguntas;
-                return View ("Responder_test");
+                else
+                {
+                    return Redirect("~/Inicio/Login");
+                }
             }
 
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
 
         //
         // POST: /Test/Create
 
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
+        //[HttpPost]
+        //public ActionResult Create(FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         
 

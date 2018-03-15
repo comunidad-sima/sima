@@ -137,16 +137,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="respuestas">
-      <EntityTypeMapping TypeName="bd_simaModel.respuestas">
-        <MappingFragment StoreEntitySet="respuestas">
-          <ScalarProperty Name="observacion" ColumnName="observacion" />
-          <ScalarProperty Name="punto" ColumnName="punto" />
-          <ScalarProperty Name="id_persona" ColumnName="id_persona" />
-          <ScalarProperty Name="id_preguntas_test_respustas" ColumnName="id_preguntas_test_respustas" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Test">
       <EntityTypeMapping TypeName="bd_simaModel.Test">
         <MappingFragment StoreEntitySet="Test">
@@ -158,6 +148,17 @@
           <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
           <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
           <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="respuestas">
+      <EntityTypeMapping TypeName="bd_simaModel.respuestas">
+        <MappingFragment StoreEntitySet="respuestas">
+          <ScalarProperty Name="id_curso" ColumnName="id_curso" />
+          <ScalarProperty Name="observacion" ColumnName="observacion" />
+          <ScalarProperty Name="punto" ColumnName="punto" />
+          <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+          <ScalarProperty Name="id_preguntas_test_respustas" ColumnName="id_preguntas_test_respustas" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -24,7 +24,7 @@ namespace WebSima.Models
         public int id { get; set; }
     
         public virtual preguntas_test preguntas_test { get; set; }
-        public virtual ICollection<respuestas> respuestas { get; set; }
         public virtual Test Test { get; set; }
+        public virtual ICollection<respuestas> respuestas { get; set; }
     }
 }

@@ -51,6 +51,20 @@ namespace WebSima.Models
             this.sesion = Convert.ToString(HttpContext.Current.Session["Materia"]);
             return sesion;
         }
+        
+        public void setIdCurso_test(int dato)
+        {
+            HttpContext.Current.Session["IdCurso_test"] = dato;
+
+        }
+        /// <summary>
+        /// devuelve el id del curso que se esta evaluando 
+        /// </summary>
+        /// <returns></returns>
+        public int getIdCurso_test()
+        {           
+            return Convert.ToInt32(HttpContext.Current.Session["IdCurso_test"]);
+        }
 
         public void setMateriaReporteAsistencia(String dato)
         {

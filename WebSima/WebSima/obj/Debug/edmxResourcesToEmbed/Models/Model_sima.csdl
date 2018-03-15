@@ -49,14 +49,9 @@
     <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
     <EntitySet Name="pregunta_test_responder" EntityType="bd_simaModel.pregunta_test_responder" />
     <EntitySet Name="preguntas_test" EntityType="bd_simaModel.preguntas_test" />
-    <EntitySet Name="respuestas" EntityType="bd_simaModel.respuestas" />
     <AssociationSet Name="FK_pregunta_test_responder_preguntas_test" Association="bd_simaModel.FK_pregunta_test_responder_preguntas_test">
       <End Role="preguntas_test" EntitySet="preguntas_test" />
       <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
-    </AssociationSet>
-    <AssociationSet Name="FK_respuestas_pregunta_test_responder" Association="bd_simaModel.FK_respuestas_pregunta_test_responder">
-      <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
-      <End Role="respuestas" EntitySet="respuestas" />
     </AssociationSet>
     <EntitySet Name="Test" EntityType="bd_simaModel.Test" />
     <AssociationSet Name="FK_pregunta_test_responder_Test" Association="bd_simaModel.FK_pregunta_test_responder_Test">
@@ -66,6 +61,15 @@
     <AssociationSet Name="FK_Test_usuarios" Association="bd_simaModel.FK_Test_usuarios">
       <End Role="usuarios" EntitySet="usuarios" />
       <End Role="Test" EntitySet="Test" />
+    </AssociationSet>
+    <EntitySet Name="respuestas" EntityType="bd_simaModel.respuestas" />
+    <AssociationSet Name="FK_respuestas_cursos" Association="bd_simaModel.FK_respuestas_cursos">
+      <End Role="cursos" EntitySet="cursos" />
+      <End Role="respuestas" EntitySet="respuestas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_respuestas_pregunta_test_responder" Association="bd_simaModel.FK_respuestas_pregunta_test_responder">
+      <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
+      <End Role="respuestas" EntitySet="respuestas" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="calificaciones_periodo">
@@ -126,6 +130,7 @@
     <NavigationProperty Name="clases_sima" Relationship="bd_simaModel.FK_clases_sima_cursos" FromRole="cursos" ToRole="clases_sima" />
     <NavigationProperty Name="materias" Relationship="bd_simaModel.FK_cursos_materias" FromRole="cursos" ToRole="materias" />
     <NavigationProperty Name="usuarios" Relationship="bd_simaModel.FK_cursos_usuarios" FromRole="cursos" ToRole="usuarios" />
+    <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_cursos" FromRole="cursos" ToRole="respuestas" />
   </EntityType>
   <EntityType Name="estudiantes_asistentes">
     <Key>
@@ -316,8 +321,8 @@
     <Property Name="id_pregunta_test" Type="Int32" Nullable="false" />
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <NavigationProperty Name="preguntas_test" Relationship="bd_simaModel.FK_pregunta_test_responder_preguntas_test" FromRole="pregunta_test_responder" ToRole="preguntas_test" />
-    <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="pregunta_test_responder" ToRole="respuestas" />
     <NavigationProperty Name="Test" Relationship="bd_simaModel.FK_pregunta_test_responder_Test" FromRole="pregunta_test_responder" ToRole="Test" />
+    <NavigationProperty Name="respuestas" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="pregunta_test_responder" ToRole="respuestas" />
   </EntityType>
   <EntityType Name="preguntas_test">
     <Key>
@@ -329,17 +334,6 @@
     <Property Name="tipo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_pregunta_test_responder_preguntas_test" FromRole="preguntas_test" ToRole="pregunta_test_responder" />
   </EntityType>
-  <EntityType Name="respuestas">
-    <Key>
-      <PropertyRef Name="id_preguntas_test_respustas" />
-      <PropertyRef Name="id_persona" />
-    </Key>
-    <Property Name="id_preguntas_test_respustas" Type="Int32" Nullable="false" />
-    <Property Name="id_persona" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-    <Property Name="punto" Type="Int32" Nullable="false" />
-    <Property Name="observacion" Type="String" MaxLength="150" FixedLength="true" Unicode="true" />
-    <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="respuestas" ToRole="pregunta_test_responder" />
-  </EntityType>
   <Association Name="FK_pregunta_test_responder_preguntas_test">
     <End Type="bd_simaModel.preguntas_test" Role="preguntas_test" Multiplicity="1" />
     <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="*" />
@@ -349,18 +343,6 @@
       </Principal>
       <Dependent Role="pregunta_test_responder">
         <PropertyRef Name="id_pregunta_test" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_respuestas_pregunta_test_responder">
-    <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="1" />
-    <End Type="bd_simaModel.respuestas" Role="respuestas" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="pregunta_test_responder">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="respuestas">
-        <PropertyRef Name="id_preguntas_test_respustas" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -400,6 +382,43 @@
       </Principal>
       <Dependent Role="Test">
         <PropertyRef Name="id_usuario_creado" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="respuestas">
+    <Key>
+      <PropertyRef Name="id_preguntas_test_respustas" />
+      <PropertyRef Name="id_persona" />
+    </Key>
+    <Property Name="id_preguntas_test_respustas" Type="Int32" Nullable="false" />
+    <Property Name="id_persona" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="punto" Type="Int32" Nullable="false" />
+    <Property Name="observacion" Type="String" Nullable="false" MaxLength="180" FixedLength="true" Unicode="true" />
+    <Property Name="id_curso" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="cursos" Relationship="bd_simaModel.FK_respuestas_cursos" FromRole="respuestas" ToRole="cursos" />
+    <NavigationProperty Name="pregunta_test_responder" Relationship="bd_simaModel.FK_respuestas_pregunta_test_responder" FromRole="respuestas" ToRole="pregunta_test_responder" />
+  </EntityType>
+  <Association Name="FK_respuestas_cursos">
+    <End Type="bd_simaModel.cursos" Role="cursos" Multiplicity="1" />
+    <End Type="bd_simaModel.respuestas" Role="respuestas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cursos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="respuestas">
+        <PropertyRef Name="id_curso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_respuestas_pregunta_test_responder">
+    <End Type="bd_simaModel.pregunta_test_responder" Role="pregunta_test_responder" Multiplicity="1" />
+    <End Type="bd_simaModel.respuestas" Role="respuestas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pregunta_test_responder">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="respuestas">
+        <PropertyRef Name="id_preguntas_test_respustas" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -26,12 +26,13 @@
         <EntityTypeShape EntityType="bd_simaModel.configuracion_app" Width="1.5" PointX="7.375" PointY="0.75" />
         <EntityTypeShape EntityType="bd_simaModel.pregunta_test_responder" Width="1.5" PointX="13.125" PointY="4.625" />
         <EntityTypeShape EntityType="bd_simaModel.preguntas_test" Width="1.5" PointX="10.875" PointY="0.75" />
-        <EntityTypeShape EntityType="bd_simaModel.respuestas" Width="1.5" PointX="15.375" PointY="4.75" />
         <AssociationConnector Association="bd_simaModel.FK_pregunta_test_responder_preguntas_test" />
-        <AssociationConnector Association="bd_simaModel.FK_respuestas_pregunta_test_responder" />
         <EntityTypeShape EntityType="bd_simaModel.Test" Width="1.5" PointX="7.875" PointY="7.125" />
         <AssociationConnector Association="bd_simaModel.FK_pregunta_test_responder_Test" />
         <AssociationConnector Association="bd_simaModel.FK_Test_usuarios" />
+        <EntityTypeShape EntityType="bd_simaModel.respuestas" Width="1.5" PointX="15.375" PointY="3.875" />
+        <AssociationConnector Association="bd_simaModel.FK_respuestas_cursos" />
+        <AssociationConnector Association="bd_simaModel.FK_respuestas_pregunta_test_responder" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -37,7 +37,7 @@ namespace WebSima.Models
         public DbSet<configuracion_app> configuracion_app { get; set; }
         public DbSet<pregunta_test_responder> pregunta_test_responder { get; set; }
         public DbSet<preguntas_test> preguntas_test { get; set; }
-        public DbSet<respuestas> respuestas { get; set; }
         public DbSet<Test> Test { get; set; }
+        public DbSet<respuestas> respuestas { get; set; }
     }
 }

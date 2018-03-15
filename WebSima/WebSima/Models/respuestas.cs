@@ -18,7 +18,9 @@ namespace WebSima.Models
         public string id_persona { get; set; }
         public int punto { get; set; }
         public string observacion { get; set; }
+        public int id_curso { get; set; }
     
+        public virtual cursos cursos { get; set; }
         public virtual pregunta_test_responder pregunta_test_responder { get; set; }
     }
 }
