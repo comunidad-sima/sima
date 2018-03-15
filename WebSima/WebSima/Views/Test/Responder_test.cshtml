@@ -1,5 +1,8 @@
 ﻿@{
     ViewBag.Title = "Responder_test";
+
+    WebSima.Models.MTest test =  ViewBag.test ;
+    List<WebSima.Models.MPreguntas_test> preguntas = ViewBag.preguntas;
 }
 
 <div>
@@ -16,7 +19,7 @@
             <div class="row">
                     <div class="col-sm-12 col-12  col-lg-12 ">
                         <h3 class=" margin">
-                            Test de aprobación- Monitor
+                            Test de aprobación
                         </h3>
                        
                     </div>
@@ -27,72 +30,89 @@
         <div class="box-body col-sm-12">
             <!-- segundo despligue -->
             <div class=" box-body  panelBorder">
-
+                <div id="alert_1"></div>
+                @using (Html.BeginForm("Guardar_respuesta", "Test", FormMethod.Post, new { id = "frespuesta" }))
+                {
 
                 <div class="box-tools">
-
+                @{
+                    if (preguntas != null) { 
+                   int i=0;
+                    foreach (var pregunta in preguntas)
+                    { 
                     <div class="form-group col-sm-12">
-                        <h4 ><label>Esta usted satisfecho con la asignatura de Actualizacion Tenologica:</label></h4>
+                        <h4 ><label>@(i++)) @pregunta.Pregunata</label></h4>
+
+                       @if (pregunta.tipo.Equals("Cerrada")) { 
                         <div class="input-group col-sm-12">
                             <fieldset>
                                 <label class="text-center">
                                     1 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="1" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     2 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="2" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     3 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="3" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     4 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="4" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     5 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="5" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     6 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="6" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     7 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="7" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     8 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="8" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     9 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="9" class="minimal">
                                 </label>
 
                                 <label class="text-center">
                                     10 <br />
-                                    <input type="radio" name="r1" class="minimal">
+                                    <input type="radio" name="@pregunta.id" value="10" class="minimal">
                                 </label>
                             </fieldset>
 
                         </div>
+                       }
+                       else if (pregunta.tipo.Equals("Abierta"))
+                       {
+                        <textarea  name="@pregunta.id" class="form-control" rows="4" maxlength="180"  placeholder="Ingresa tu respuesta..." required></textarea>
+                       }
+                       
+                       
                         <hr />
                     </div>
-
-
+                }
+                 <input type="submit" class="enviar" id="enviar" />
+                }
+                }
                 </div>
-
+                }
 
                 
             </div>
@@ -108,8 +128,57 @@
             checkboxClass: 'icheckbox_minimal-green',
             radioClass: 'iradio_minimal-green'
         });
+        $("#frespuesta").submit(function (e) {
 
-        
+            e.preventDefault();
+            if ($("#frespuesta").valid()) {
+                var datos = $("#frespuesta").serializeArray();
+                var btn = $("#enviar");
+
+                btn.val("Guardando...");
+                btn.prop("disabled", true);
+                $.ajax({
+                    data: datos,
+                    url: $("#frespuesta").attr('action'),
+                    dataType: "json",
+                    type: 'post',
+                    beforeSend: function () { },
+                    success: function (response) {
+
+                        // se activa el boton enviar
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+
+
+                        var mensaje = "";
+                        var clase = "";
+                        if (response["RESPUESTA"] == "OK") {
+                            $("#listar").load("/Test/Listar");
+                            mensaje = "<strong>¡Exito!</strong> Test registrado con exito.";
+                            clase = "alert-success";
+
+                        } else if (response["RESPUESTA"] == "ERROR") {
+                            mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                            clase = "alert-danger";
+                        }
+                        else if (response["RESPUESTA"] == "LOGIN") {
+                            mensaje = "<strong>¡Error!</strong> Debe iniciar sesión";
+                            clase = " alert-danger";
+
+                            location.href = "/";
+                        }
+                        //alert_mensajes() esta en helper.js
+                        $("#alert_1").html(alert_mensajes(mensaje, clase));
+
+                    }, error: function (error) {
+                        alert("Error");
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                    }
+                });
+            }
+        });
+
     });
 
 </script>

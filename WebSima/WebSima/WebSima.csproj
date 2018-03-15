@@ -215,6 +215,7 @@
       <DependentUpon>Model_sima.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\MPreguntas_test.cs" />
+    <Compile Include="Models\MPreguntas_test_responder.cs" />
     <Compile Include="Models\MTest.cs" />
     <Compile Include="Models\MUsuario.cs" />
     <Compile Include="Models\Notas.cs">
@@ -7548,6 +7549,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Test\Responder_test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Historial_test.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

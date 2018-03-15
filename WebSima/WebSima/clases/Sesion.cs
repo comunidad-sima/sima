@@ -72,6 +72,16 @@ namespace WebSima.Models
             this.sesion = Convert.ToString(HttpContext.Current.Session["perido_reporte_asistencia"]);
             return sesion;
         }
+        public void setId_test_responder(int dato)
+        {
+            HttpContext.Current.Session["Id_test_responder"] = dato;
+
+        }
+        public String getId_test_responder()
+        {
+            this.sesion = Convert.ToString(HttpContext.Current.Session["Id_test_responder"]);
+            return sesion;
+        }
 
 
         public void destruirSesion(){
