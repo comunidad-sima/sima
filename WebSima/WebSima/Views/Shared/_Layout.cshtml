@@ -237,6 +237,8 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MENÚ PRINCIPAL</li>
+
+                  @if (session.getIPerfilUsusrio().Equals("Administrador")) { 
                     <li id="capacitaciones" class="treeview">
                         <a href="#">
                             <i class="fa fa-object-group"></i> <span>Capacitación</span>
@@ -353,7 +355,66 @@
                         </ul>
                     </li>
 
+                    }
+                  else if (session.getIPerfilUsusrio().Equals("Monitor"))
+                  {
+                      <li class="active treeview">
+                        <a href="#">
+                            <i class="fa fa-dashboard"></i> <span>Clase</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                      <ul class="treeview-menu">
 
+                            <li id="listarClase"><a href="~/Clase/Index"><i class="fa fa-circle-o"></i>Listar</a></li>
+                            <li id="nuevaClase"><a href="/Clase/Create"><i class="fa fa-circle-o"></i>Nueva</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-calendar"></i> <span>Horario</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="registrarhorario"><a href="/Horario/registrar_horario"><i class="fa fa-registered"></i>Registrar Horario</a></li>
+
+
+                            <li id="consultarhorario"><a href="/Horario/consultar_horario_monitor"><i class="fa fa-search"></i>Consultar Horario</a></li>
+
+
+                        </ul>
+                    </li>
+
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-cogs"></i> <span>Configurar</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <li id="CongigurarClase"><a href="~/Grupos/Index"><i class="fa fa-group"></i>Grupos</a></li>
+
+
+                        </ul>
+                    </li>
+                  }
+                  else if (session.getIPerfilUsusrio().Equals("Estudiante"))
+                  {
+
+                  }
+                  else if (session.getIPerfilUsusrio().Equals("Docente"))
+                  {
+
+                  }
 
                     <li class="header">LABELS</li>
                     <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
