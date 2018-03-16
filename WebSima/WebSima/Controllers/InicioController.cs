@@ -25,12 +25,37 @@ namespace WebSima.Controllers
         // GET: /Inicio/
         bd_simaEntitie db = new bd_simaEntitie();
         Sesion sesion = new Sesion();
-        public ActionResult MenuAdministrador()
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult Login_test(String id="")
         {
+            Respusta respuesta = new Respusta();
+            if (!id.Equals(""))
+            {
 
-            return View();
+                EstudianteMateria estudiante = ConsumidorAppi.getEstudiantePorID(MConfiguracionApp.getPeridoActual(db), id);
+                if (estudiante == null)
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Usuario no encontrado.";
+                }
+                else
+                {
+                    sesion.setIPerfilUsusrio("Estudiante");
+                    sesion.setIdUsurio(estudiante.num_identificacion);
+                    sesion.setINombreUsuario(estudiante.nom_largo);
+                    respuesta.RESPUESTA = "OK";
+                }
+            }
+            else
+            {
+                respuesta.RESPUESTA = "ERROR";
+                respuesta.MENSAJE = "Identificación no valida.";
+
+            }
+            return Json(respuesta);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(String contrasena, String id)
@@ -105,11 +130,7 @@ namespace WebSima.Controllers
             return View();
         }
 
-        public ActionResult MenuMonitor()
-        {          
-           
-            return View();
-        }
+        
         public ActionResult Salir()
         {
             sesion.destruirSesion();

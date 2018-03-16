@@ -110,6 +110,7 @@ namespace WebSima.Models
         {
             return esUsuarioValido(db, "Administrador");
         }
+        
         private bool esUsuarioValido(bd_simaEntitie db, String perfil)
         {
             bool valido = false;

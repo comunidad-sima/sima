@@ -6826,7 +6826,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Inicio\Index.cshtml" />
     <Content Include="Views\Capacitacion\Details.cshtml" />
     <Content Include="Views\Capacitacion\Create.cshtml" />
     <Content Include="Views\Capacitacion\Listar.cshtml" />
@@ -6856,9 +6855,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Inicio\Login.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Inicio\MenuMonitor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Clase\Registros.cshtml" />
@@ -7465,18 +7461,6 @@
     <Content Include="Views\Grupos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Grupos\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Grupos\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Grupos\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Grupos\Delete.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\informe\home.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -7556,6 +7540,9 @@
     <Content Include="Views\Horario\create_monitor.cshtml" />
     <Content Include="Views\Horario\select_administrador.cshtml" />
     <Content Include="Views\Horario\select_monitor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Tests_responder.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
