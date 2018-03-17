@@ -24,7 +24,14 @@ namespace WebSima.Controllers
             }
             return Redirect("~/Inicio/Login");
         }
-
+        public ActionResult Tests_responder()
+        {
+            if (!sesion.getIdUsuario().Equals("") && sesion.getIPerfilUsusrio().Equals("Estudiante"))
+            {
+                return View();
+            }
+            return Redirect("~/Inicio/Login");
+        }
         public ActionResult Listar_test(String periodo ="")
         {
             if (sesion.esAdministrador(db))

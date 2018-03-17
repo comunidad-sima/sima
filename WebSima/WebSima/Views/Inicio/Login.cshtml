@@ -13,16 +13,31 @@
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link href="~/Content/estilos.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <!-- jQuery 3 -->
+    <script src="/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
 
 </head>
 <body >
 
     <div class="container">
-        <div align="right" style="padding: 5px">
-            <a href="#" data-toggle='modal' data-target='#acercaDe'>
-                Acerca de <img src="~/Content/imagenes/acercade.png" style="width: 30px; height: 30px" alt="Acerca de" />
-            </a>
+        <div class="row">
+            <div class="col-xs-6 col-md-6"   style="padding: 5px">
+                <a href="#" data-toggle='modal' data-target='#modal-test'>
+                    Test <img src="~/Content/imagenes/acercade.png" style="width: 30px; height: 30px" alt="Test" />
+                </a>
+                
+
+            </div>
+            <div class="col-xs-6 col-md-6" align="right" style="padding: 5px">
+                <a href="#" data-toggle='modal' data-target='#acercaDe'>
+                    Acerca de <img src="~/Content/imagenes/acercade.png" style="width: 30px; height: 30px" alt="Acerca de" />
+                </a>
+
+               
+
+            </div>
         </div>
         <div class="row ">
 
@@ -74,12 +89,97 @@
 
     </div>
     
+    <div class="modal fade panelborder  " id="modal-test">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green  ">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title">Inicio sesión</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="panelBorder ">
+                        <div id="alert_1"></div>
+                        @using (Html.BeginForm("Login_test", "Inicio", FormMethod.Post, new { id="ftest" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            <div class="input-group input-group-lg ">
+                                <div class="input-group-addon"><span class=" fa fa-user ">  </span></div>
+                                <input id="id" name="id" type="number" required class="form-control" placeholder="Usuario *">
+                            </div>
+                            <br />
+                            <div class="text-right">
+                                <input id="enviar_test" class="btn btn-success" value="Iniciar sesión" type="submit" />
+                            </div>
 
-
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    
    
+    <script src="/Content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/helper.js"></script>
 
-    @*<script src="~/Scripts/jquery.js"></script>
 
-    <script src="~/Scripts/bootstrap.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            
+
+            $("#ftest").submit(function (e) {
+
+                e.preventDefault();
+                
+                var datos = $("#ftest").serializeArray();
+                    var btn = $("#enviar_test");
+
+                    btn.val("Comprobando...");
+                    btn.prop("disabled", true);
+                    $.ajax({
+                        data: datos,
+                        url: $("#ftest").attr('action'),
+                        dataType: "json",
+                        type: 'post',
+                        beforeSend: function () { },
+                        success: function (response) {
+
+                            
+                            var mensaje = "";
+                            var clase = "";
+                           
+                            if (response["RESPUESTA"] == "OK") {
+                                location.href = "/Test/Tests_responder";
+                                mensaje = "<strong>¡Exito!</strong> Sesión iniciada.<br>En breve será redireccionado.";
+                                clase = "alert-success";
+
+                            } else if (response["RESPUESTA"] == "ERROR") {
+                                mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                                clase = "alert-danger";
+                            }
+                            
+                            //alert_mensajes() esta en helper.js
+                            $("#alert_1").html(alert_mensajes(mensaje, clase));
+                            // se activa el boton enviar
+                            btn.val("Iniciar sesión");
+                            btn.prop("disabled", false);
+
+
+                        }, error: function (error) {
+                            alert("Error");
+                            btn.val("Iniciar sesión");
+                            btn.prop("disabled", false);
+                        }
+                    });
+                
+            });
+        });
+    </script>
+
 </body>
 </html>

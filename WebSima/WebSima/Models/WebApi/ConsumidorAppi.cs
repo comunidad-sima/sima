@@ -54,6 +54,40 @@ namespace WebSima.Models.WebApi
             return estudiantes;
         }
         /// <summary>
+        /// Consulta los datos de un estudiante
+        /// </summary>
+        /// <param name="periodo"></param>
+        /// <param name="id">Identificacón del estudinate</param>
+        /// <returns></returns>
+        
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static EstudianteMateria getEstudiantePorID(String periodo,String id)
+        {
+            //List<EstudianteMateria> estudiantes = getPruebaEstudinates();
+            EstudianteMateria estudiante = null;
+            try
+            {
+                // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
+                periodo = periodo.Replace("-", "");
+                String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetDatosEstudiante";
+                var client = new RestClient(url);
+                var request = preparaRestRequest();
+                // se agregan los parametros de la consulta
+                request.AddParameter("periodo", periodo);
+                request.AddParameter("num_identificacion", id);
+                // se hace y la peticion y se reciben los datos
+                IRestResponse respuetaDatos = client.Execute(request);
+                // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
+                List<EstudianteMateria> dato = JsonConvert.DeserializeObject<List<EstudianteMateria>>(respuetaDatos.Content) as List<EstudianteMateria>;
+                estudiante = dato[0];
+            }
+            catch (Exception)
+            {
+
+            }
+            return estudiante;
+        }
+        /// <summary>
         /// Consulta los datos de un grupo de estudiantes matriculados en una materia en un periodo.
         /// </summary>
         /// <param name="periodo"> perido en el que se desea consultar</param>
