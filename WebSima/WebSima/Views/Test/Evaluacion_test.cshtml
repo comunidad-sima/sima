@@ -1,5 +1,8 @@
 ﻿@{
     ViewBag.Title = "Evaluacion_test";
+    List<WebSima.Models.MPreguntas_test> preguntasAll = ViewBag.preguntasTest;
+    List<String[]> comentariosPregunta= ViewBag.comentarioPreguntas;
+    List<String[]> puntosAll = ViewBag.puntoPreguntas;
 }
 
 <div>
@@ -14,7 +17,7 @@
     <div class="col-sm-12">
         <div class="box box-success">
             <div class="box-header with-border">
-                <h3 class="box-title">Estadistica</h3>
+                <h3 class="box-title">Resultados de Test de satisfacción</h3>
             </div>
 
             <div class="box-body ">
@@ -26,16 +29,17 @@
                         <h4 class="margin"><strong> Asignaturas </strong></h4>
                         <div class="input-group input-group-sm col-sm-4">
 
-                            <select class="form-control" id="augnatura">
+                            <input value="4" />
+                            <select class="form-control" id="augnatura" name="grupo">
 
-                                <option value="">Seleccione Asignatura </option>
+                                <option value="-1">General </option>
 
-                                <option value="mat">
+                                <option value="83">
                                     Matematicas
 
                                 </option>
 
-                                <option value="mat">
+                                <option value="82">
                                     Taller de Len...
 
                                 </option>
@@ -48,11 +52,58 @@
                         </div>
 
                     </div>
-                    <div class="box-body chart-responsive">
-                        <p class="text-center">
-                            <strong>Grafica Version 1.0</strong>
-                        </p>
-                        <div class="chart" id="bar-chart" style="height: 300px;"></div>
+                    <div class="box-body ">
+                        <div class="chart-responsive">
+                            <p class="text-center">
+                                <strong>Test de satisfacción</strong>
+                            </p>
+                            <canvas id="bar-chart-test" width="100%" height=50x"></canvas>
+                            @*  <div class="chart" id="bar-chart-test" style="height: 300px;"></div>*@
+                        </div>
+                        
+                        
+                    </div>
+                    <hr />
+                    <div class="box-body">
+                        <div class="col-sm-12">
+                            <!-- /.col -->
+                          <h4>Detallaes de las preguntas</h4>
+
+                                <ul class="chart-legend clearfix">
+                                    @foreach(var pregunta in preguntasAll){  
+                                    <li><i class="fa fa-circle-o text-green"> @pregunta.id</i>  @pregunta.Pregunata</li>
+                                    
+                                    }
+                                  </ul>
+                            
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <hr />
+                    <div class="box-body">
+                        <div class="col-sm-12">
+                            <h4>Comentarios </h4>
+
+                            <table class="table tablaPaginacion table-responsive table-hover">
+
+                                <tbody>
+                                    @foreach (var coemtario in comentariosPregunta)
+                                    {
+                                        <tr>
+                                            <td style="width:20px">
+                                                 @coemtario[0]
+                                             </td>
+                                            <td>@coemtario[1]</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        
+                        <!-- /.row -->
                     </div>
                     <!-- /.box-body -->
 
@@ -62,57 +113,55 @@
             </div>
 
         </div>
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Cuestionario Preguntas</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <div class="col-sm-12">
-                    <!-- /.col -->
-                    <div class="col-md-4">
-                        <ul class="chart-legend clearfix">
-                            <li><i class="fa fa-circle-o text-green"> 1</i>  Fredys ama la cachama</li>
-                            <li><i class="fa fa-circle-o text-green"> 2</i> Fredy y su seño preferida</li>
-                            <li><i class="fa fa-circle-o text-green"> 3</i> Fredy y su asignatura favorita Act</li>
-                        </ul>
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <!-- /.row -->
-            </div>
-        </div>
+        
     </div>
 </div>
 
 <script>
     $(function () {
-        "use strict";
+
+        var preguntas = [];
+        preguntas.push("")
+        var valorPregunta = [];
+        valorPregunta.push(0)
+
+        @foreach(var punto in puntosAll){
+
+            @:preguntas.push("Pregunta numero: @punto[0]");
+            @:valorPregunta.push(@punto[1]);
+        }
+
+        preguntas.push("")
+      
+        valorPregunta.push(0)
+
+
+
+        var contenedor = document.getElementById('bar-chart-test').getContext('2d');
+        var chart = new Chart(contenedor, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: preguntas,
+                datasets: [{
+                    label: "Puntaje",
+
+                    backgroundColor: 'rgb(255, 102, 0)',
+                    borderColor: 'rgb(255, 102, 0)',
+                    data: valorPregunta,
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+
 
 
         //BAR CHART
-        var bar = new Morris.Bar({
-            element: 'bar-chart',
-            resize: true,
-            data: [
-              { y: '2006', a: 100, b: 90 },
-        { y: '2007', a: 75, b: 65 },
-        { y: '2008', a: 50, b: 40 },
-        { y: '2009', a: 75, b: 65 },
-        { y: '2010', a: 50, b: 40 },
-        { y: '2011', a: 75, b: 65 },
-        { y: '2012', a: 100, b: 90 }
-            ],
-            barColors: ['#00a65a'],
-            xkey: 'y',
-            ykeys: ['a'],
-            labels: ['CPU'],
-            hideHover: 'auto'
-        });
+
+        // generaChartBarra(contenedor, datos, '#00a65a', "Pregunta", "test de satisfaccion")
     });
 </script>

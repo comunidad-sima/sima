@@ -240,11 +240,24 @@ namespace WebSima.Controllers
             }
         }
 
-        public ActionResult Evaluacion_test(int id)
+        public ActionResult Evaluacion_test(int id, int grupo=-1)
         {
-            if (sesion.esAdministrador(db))
+            
+
+
+             if (sesion.esAdministrador(db))
             {
+
+                MTest mtAux = new MTest();
+                // es una lista[idPregunta, puntos]
+                List<String[]> puntosAll = mtAux.getPreguntaPuntosTotal(id);
+                List<String[]> comentarioPregunta = mtAux.getCometariosPreguntasAbiertaTest(id);
+                List<MPreguntas_test> preguntasAll = mtAux.getPreguntas_test(db, id).OrderBy(x => x.id).ToList();
+                ViewBag.preguntasTest = preguntasAll;
+                ViewBag.puntoPreguntas = puntosAll;
+                ViewBag.comentarioPreguntas = comentarioPregunta;
                 return View();
+
             }
             else
             {

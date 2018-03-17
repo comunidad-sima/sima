@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Data.Common;
+using System.Data.EntityClient;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Transactions;
@@ -299,7 +302,7 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="id_usuario"></param>
         /// <param name="periodo_"></param>
-        /// <returns></returns>
+        /// <returns>vector 2 posisiciones. id pregunta, puntaje</returns>
         public int contarTestRespondidoPeriodo(bd_simaEntitie db, String id_usuario,String periodo_)
         {
             //select Distinct(t.id) from Test t , respuestas r , pregunta_test_responder p 
@@ -311,6 +314,125 @@ namespace WebSima.Models
                              && r.id_persona== id_usuario && periodo_== t.periodo)
                              select t).Distinct();
             return respuesta.Count();
+        }
+        /// <summary>
+        /// Se consulta las preguntas de un tes con el puntos obtenediso por los votantes de tipo cerrada
+        /// </summary>
+        /// <param name="id_test"></param>
+        /// <returns></returns>
+        public List<String[]> getPreguntaPuntosTotal(int id_test, int id_curso=-1)
+        {
+            String sql;
+            if(id_curso>0)
+             sql = @"select  p.id_pregunta_test,  SUM(r.punto) from bd_simaEntitie.Test as t, " +
+                "bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
+                "where(t.id=p.id_test and p.id = r.id_preguntas_test_respustas and "+
+                " p.id_pregunta_test =pt.id and t.id= @id_test and r.id_curso= @id_curso and pt.tipo= 'Cerrada' ) " +
+                "GROUP BY  p.id_pregunta_test";
+            else
+                sql = @"select  p.id_pregunta_test,  SUM(r.punto) from bd_simaEntitie.Test as t, " +
+                "bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
+                "where(t.id=p.id_test and p.id = r.id_preguntas_test_respustas and " +
+                " p.id_pregunta_test =pt.id and t.id= @id_test  and pt.tipo= 'Cerrada' ) " +
+                "GROUP BY  p.id_pregunta_test";
+
+            List<String[]> puntos = new List<String[]>();
+            using (EntityConnection conn = new EntityConnection("name=bd_simaEntitie"))
+            {
+                conn.Open();
+
+                using (EntityCommand cmd = new EntityCommand(sql, conn))
+                {
+                    // Create two parameters and add them to 
+                    // the EntityCommand's Parameters collection 
+                    EntityParameter param1 = new EntityParameter();
+                    param1.ParameterName = "id_test";
+                    param1.Value = id_test;
+                    cmd.Parameters.Add(param1); ;
+                    if (id_curso > 0)
+                    {
+                        EntityParameter param2 = new EntityParameter();
+                        param2.ParameterName = "id_curso";
+                        param2.Value = id_curso;
+                        cmd.Parameters.Add(param2); ;
+                    }
+                    
+                    using (DbDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
+                    {
+
+                        while (rdr.Read())
+                        {
+                            String[] dato = new String[2];
+                            dato[0] = "" + rdr.GetInt32(0);
+                            dato[1] = ""+ rdr.GetInt32(1);
+                            puntos.Add(dato);
+
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return puntos.OrderBy(m => m[0]).ToList();
+        
+        }
+        /// <summary>
+        /// Consulta las preguntas de tipo abierta con sus cometarios de un test
+        /// </summary>
+        /// <param name="id_test"></param>
+        /// <returns></returns>
+        public List<String[]> getCometariosPreguntasAbiertaTest(int id_test, int id_curso=-1)
+        {
+            String sql;
+            if(id_curso>0)
+            sql = @"select  p.id_pregunta_test,  r.observacion from bd_simaEntitie.Test as t," +
+                " bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
+                " where(t.id=p.id_test and p.id=r.id_preguntas_test_respustas and "+
+                " p.id_pregunta_test =pt.id and t.id= @id_test  and r.id_curso= @id_curso and pt.tipo='Abierta' ) ";
+            else
+                sql = @"select  p.id_pregunta_test,  r.observacion from bd_simaEntitie.Test as t," +
+               " bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
+               " where(t.id=p.id_test and p.id=r.id_preguntas_test_respustas and " +
+               " p.id_pregunta_test =pt.id and t.id= @id_test  and pt.tipo='Abierta'  ) "; 
+
+            List<String[]> puntos = new List<String[]>();
+            using (EntityConnection conn = new EntityConnection("name=bd_simaEntitie"))
+            {
+                conn.Open();
+
+                using (EntityCommand cmd = new EntityCommand(sql, conn))
+                {
+                    // Create two parameters and add them to 
+                    // the EntityCommand's Parameters collection 
+                    EntityParameter param1 = new EntityParameter();
+                    param1.ParameterName = "id_test";
+                    param1.Value = id_test;
+                    cmd.Parameters.Add(param1); ;
+                    if (id_curso > 0)
+                    {
+                        EntityParameter param2 = new EntityParameter();
+                        param2.ParameterName = "id_curso";
+                        param2.Value = id_curso;
+                        cmd.Parameters.Add(param2); ;
+                    }
+
+
+                    using (DbDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
+                    {
+
+                        while (rdr.Read())
+                        {
+                            String[] dato = new String[2];
+                            dato[0] = "" + rdr.GetInt32(0);
+                            dato[1] = rdr.GetString(1);
+                            puntos.Add(dato);
+
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return puntos.OrderBy(m => m[0]).ToList();
+
         }
     }
 }
