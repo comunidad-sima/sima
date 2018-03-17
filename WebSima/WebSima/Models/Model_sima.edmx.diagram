@@ -33,7 +33,7 @@
         <EntityTypeShape EntityType="bd_simaModel.respuestas" Width="1.5" PointX="7.5" PointY="13.375" />
         <AssociationConnector Association="bd_simaModel.FK_respuestas_cursos1" />
         <AssociationConnector Association="bd_simaModel.FK_respuestas_pregunta_test_responder" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

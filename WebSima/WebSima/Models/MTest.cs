@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Transactions;
 using System.Web;
@@ -18,7 +19,7 @@ namespace WebSima.Models
         [Display(Name = "Fecha de inicio")]
         [Required]
         public System.DateTime fecha_inicio { get; set; }
-        [Display(Name = "¿Quien responde?")]
+        [Display(Name = "¿Quién responde?")]
         [Required]
         public string ferfil_usuario { get; set; }
         [Display(Name = "Eliminado")]        
@@ -265,6 +266,51 @@ namespace WebSima.Models
                          }).ToList();
 
             return preguntas;
+        }
+        /// <summary>
+        /// consulta si el ususrio ya respondio el test de un curso o monitor
+        /// </summary>
+        /// <param name="id_curso"></param>
+        /// <param name="id_test"></param>
+        /// <returns></returns>
+        public  bool isRespondioTest( int id_curso, int id_test )
+        {
+            bd_simaEntitie db = new bd_simaEntitie();
+            Sesion sesion= new Sesion();
+            String id_usuario_ = sesion.getIdUsuario();
+            bool respondio=false;
+        
+            var respuesta= (from t in db.Test
+                         join p in db.pregunta_test_responder on t.id equals p.id_test
+                            join r in db.respuestas on p.id equals r.id_preguntas_test_respustas
+                         where (t.id == id_test && r.id_persona==id_usuario_ && r.id_curso==id_curso)                         
+                         select  r).ToList();
+
+
+            if (respuesta.Count()> 0)
+                respondio = true;
+
+            return respondio;
+       
+        }
+        /// <summary>
+        /// Consulta la cantidad de test que ha respondido un usuario en un periodo
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id_usuario"></param>
+        /// <param name="periodo_"></param>
+        /// <returns></returns>
+        public int contarTestRespondidoPeriodo(bd_simaEntitie db, String id_usuario,String periodo_)
+        {
+            //select Distinct(t.id) from Test t , respuestas r , pregunta_test_responder p 
+ //where ( t.id= p.id_test and p.id = r.id_preguntas_test_respustas and r.id_persona ='1000248961' and t.periodo='2017-2' )
+            var respuesta = (from t in db.Test
+                             join p in db.pregunta_test_responder on t.id equals p.id_test
+                             join r in db.respuestas on p.id equals r.id_preguntas_test_respustas
+                             where (t.id==p.id_test && p.id== r.id_preguntas_test_respustas
+                             && r.id_persona== id_usuario && periodo_== t.periodo)
+                             select t).Distinct();
+            return respuesta.Count();
         }
     }
 }

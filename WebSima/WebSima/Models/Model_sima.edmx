@@ -125,6 +125,7 @@
           <Key>
             <PropertyRef Name="id_preguntas_test_respustas" />
             <PropertyRef Name="id_persona" />
+            <PropertyRef Name="id_curso" />
           </Key>
           <Property Name="id_preguntas_test_respustas" Type="int" Nullable="false" />
           <Property Name="id_persona" Type="varchar" MaxLength="12" Nullable="false" />
@@ -474,7 +475,7 @@
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
             <End Role="respuestas" EntitySet="respuestas" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="calificaciones_periodo">
           <Key>
             <PropertyRef Name="id" />
@@ -792,6 +793,7 @@
           <Key>
             <PropertyRef Name="id_preguntas_test_respustas" />
             <PropertyRef Name="id_persona" />
+            <PropertyRef Name="id_curso" />
           </Key>
           <Property Name="id_preguntas_test_respustas" Type="Int32" Nullable="false" />
           <Property Name="id_persona" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />

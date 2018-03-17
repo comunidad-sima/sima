@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Responder Test";
+    List<WebSima.Models.MCurso> mcursos = ViewBag.mcursos ;
+
+    List<WebSima.Models.MTest> mtests = ViewBag.mtests;
+    String mensaje = ViewBag.mensaje;
+    int cantidadTest = 0;
+    String perfil = ViewBag.perfil;
+    
+}
+
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Test</li>
+
+    </ol>
+</div>
+<div class="row" >
+    <div class="col-md-12">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">Tests disponibles</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body " style="">
+                @if (mensaje != null) { 
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <strong>¡Error!</strong>
+                   @mensaje
+                </div>
+                }
+
+                <div id="noDisponibles" class="panelBorder text-center " style="display: none">
+                    <br />
+                    <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;">😞 No hay Tests disponibles en este momento 😞</font></font>
+                    <br /><br />
+                </div>
+
+                <div class="panelBorder " style="display: none" id="contenido" >
+                    @if (mtests != null)
+                    {
+                        foreach (var test in mtests)
+                        {
+
+                            <div class="box-body table-responsive ">
+                                <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+                                    <tbody>
+                                        @foreach (var curso in mcursos)
+                                        {
+                                            if (!test.isRespondioTest(curso.id, test.id))
+                                            {
+                                                cantidadTest++;
+                                                <tr>
+                                                    <td align="center">
+                                                        @test.id
+                                                    </td>
+                                                    <td>
+                                                        @curso.usuarios.nombre @curso.usuarios.apellidos
+                                                    </td>
+                                                    <td>
+                                                        @curso.nombre_materia
+                                                    </td>
+
+                                                    <td class="text-center" style="width:150px">
+                                                        
+                                                       @if(perfil.Equals("Estudiante")){
+                                                            <a class="btn btn-default fa  fa-arrow-circle-right " href="/Test/Responder_test/?test=@test.id&curso=@curso.id" style="color:red;" title="Responder"> </a>
+                                                       }
+                                                       else if (perfil.Equals("Docente")) { 
+                                                        <a class="btn btn-default fa  fa-arrow-circle-right " href="/Test/Responder_test_docente/?test=@test.id&curso=@curso.id" style="color:red;" title="Responder"> </a>
+                                                    
+                                                       }
+                                                       </td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br /><hr />
+
+                        }
+                    }
+                </div>
+                        <br />
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    
+    
+
+</div>
+<script>
+    var canitidad= @cantidadTest 
+    $(function () {
+        
+
+        if(canitidad==0){
+            $("#contenido").hide();
+            $("#noDisponibles").show();
+        }
+        if (canitidad >0) {
+            $("#contenido").show();
+        }
+        //contenido
+
+    });
+    </script>
+

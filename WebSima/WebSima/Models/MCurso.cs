@@ -40,7 +40,7 @@ namespace WebSima.Models
           public virtual usuarios usuarios { get; set; }
 
         /// <summary>
-        /// Esta funcion consulta los curso de un periodo
+        /// Esta funcion consulta los curso de un periodo y que el nombre inicie con el pramatro materia
         /// </summary>
         /// <param name="db"></param>
         /// <param name="materia"></param>
@@ -72,6 +72,39 @@ namespace WebSima.Models
             }         
 
         }
+        /// <summary>
+        /// Esta funcion consulta los grupos exactos de un perido y una meteria
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="materia"></param>
+        /// <param name="periodo"></param>
+        /// <returns></returns>
+         [MethodImpl(MethodImplOptions.Synchronized)]
+         public static List<MCurso> getCursoMateria(bd_simaEntitie db, String materia, String periodo)
+         {
+             try
+             {
+                 var curos = (from cur in db.cursos
+                              where (cur.nombre_materia == materia && cur.periodo == periodo && cur.eliminado == 0)
+                              select new MCurso
+                              {
+                                  id = cur.id,
+                                  estado = cur.estado,
+                                  fecha_finalizacion = cur.fecha_finalizacion,
+                                  idUsuario = cur.idUsuario,
+                                  nombre_materia = cur.nombre_materia,
+                                  periodo = cur.periodo,
+                                  usuarios = cur.usuarios
+
+                              });
+                 return curos.ToList();
+             }
+             catch (Exception)
+             {
+                 throw new System.InvalidOperationException("Error al cargar los grupos.");
+             }
+
+         }
         /// <summary>
         /// Esta funcion consulta un curso por el id
         /// </summary>

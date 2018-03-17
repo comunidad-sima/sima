@@ -24,7 +24,6 @@ namespace WebSima.Models
         [Required]
         [Display(Name = "Fecha realizada")]
         public System.DateTime fecha_realizada { get; set; }
-
         public virtual cursos cursos { get; set; }
         public virtual usuarios usuarios { get; set; }
         public virtual ICollection<estudiantes_asistentes> estudisntes_asistentes { get; set; }
@@ -134,6 +133,76 @@ namespace WebSima.Models
         {
             return db.Database.SqlQuery<String>("select DISTINCT periodo from clases_sima").ToList();
         }
+        /// <summary>
+        /// Consulta la cantidad de asitencia que tiene un estudiante 
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="periodo"></param>
+        /// <param name="id_estudiante"></param>
+        /// <returns></returns>
+        public int getCantidadClaseAsistidaEstudianteId(bd_simaEntitie db, String periodo , String id_estudiante)
+        {
+            int  cantidadAsistencia  = 0;
+            cantidadAsistencia = (from c in db.clases_sima
+                         join e in db.estudiantes_asistentes on c.id equals e.clase_id                         
+                         where (c.periodo == periodo && e.estudiante_id==id_estudiante)                         
+                         select c ).Count();
+            return cantidadAsistencia;
+        }
+
+        /// <summary>
+        /// Consulta la cantidad de case asistida que tiene un estudinate en un curso
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id_curso"></param>
+        /// <param name="id_estudiante"></param>
+        /// <returns></returns>
+        public int getClaseAsistedaEstudianteEnGrupo(bd_simaEntitie db, int id_curso, String id_estudiante)
+        {
+            int cantidadAsistencia = 0;
+            cantidadAsistencia = (from c in db.clases_sima
+                                  join e in db.estudiantes_asistentes on c.id equals e.clase_id
+                                  where (c.cursos_id==id_curso && e.estudiante_id.Equals(id_estudiante))
+                                  select c).Count();
+            return cantidadAsistencia;
+        }
+        /// <summary>
+        /// Consulta los curso donde el estudiante ha asitido a monitoria, es decir donde tiene una clase registrada 
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="periodo"></param>
+        /// <param name="id_estudiante"></param>
+        /// <returns></returns>
+        public List<MCurso> getCursos_por_clase(bd_simaEntitie db, String periodo, String id_estudiante)
+        {
+            List<MCurso> cursos = null;
+            /// se consultan los cursos donde asistio al mnos una vez a calse
+            List<cursos> cuerso_tem = (from c in db.clases_sima
+                              join cu in db.cursos on c.cursos_id equals cu.id
+                              join e in db.estudiantes_asistentes on c.id equals e.clase_id
+
+                              where (c.periodo == periodo && e.estudiante_id == id_estudiante)
+                              select (cu)).Distinct().ToList();
+            // se convierten a Mcurso
+            cursos = (from cu in cuerso_tem
+                     select new MCurso
+                         {
+                             id = cu.id,
+                             periodo = cu.periodo,
+                             nombre_materia = cu.nombre_materia,
+                             estado = cu.estado,
+                             fecha_finalizacion = cu.fecha_finalizacion,
+                             idUsuario = cu.idUsuario,
+                             eliminado = cu.eliminado,
+                             clases_sima = cu.clases_sima,
+                             materias = cu.materias,
+                             usuarios = cu.usuarios
+
+                         }).ToList();
+            
+            return cursos  ;
+        }
+
        
     }
 }

@@ -33,19 +33,41 @@ namespace WebSima.Controllers
             Respusta respuesta = new Respusta();
             if (!id.Equals(""))
             {
-
-                EstudianteMateria estudiante = ConsumidorAppi.getEstudiantePorID(MConfiguracionApp.getPeridoActual(db), id);
-                if (estudiante == null)
+                List<MTest> mtest_disponibles = (new MTest()).getTest_abiertos(db,0,0);
+                mtest_disponibles = (from mt in mtest_disponibles
+                                    where (mt.ferfil_usuario.Equals("Estudiante"))
+                                    select mt).ToList();
+                if (mtest_disponibles.Count() > 0)
                 {
-                    respuesta.RESPUESTA = "ERROR";
-                    respuesta.MENSAJE = "Usuario no encontrado.";
+                    String periodo = MConfiguracionApp.getPeridoActual(db);
+                    Mclase mclase = new Mclase();
+                    int asistencia = mclase.getCantidadClaseAsistidaEstudianteId(db, periodo, id);
+                    if (asistencia > 0)
+                    {
+                        EstudianteMateria estudiante = ConsumidorAppi.getEstudiantePorID(periodo, id);
+                        if (estudiante == null)
+                        {
+                            respuesta.RESPUESTA = "ERROR";
+                            respuesta.MENSAJE = "Usuario no encontrado.";
+                        }
+                        else
+                        {
+                            sesion.setIPerfilUsusrio("Estudiante");
+                            sesion.setIdUsurio(estudiante.num_identificacion);
+                            sesion.setINombreUsuario(estudiante.nom_largo);
+                            respuesta.RESPUESTA = "OK";
+                        }
+                    }
+                    else
+                    {
+                        respuesta.RESPUESTA = "NO_ASISTE";
+                        respuesta.MENSAJE = "Usted no está apto para realizar el test porque  no ha asistido a monitorias en el periodo actual.";
+                    }
                 }
                 else
                 {
-                    sesion.setIPerfilUsusrio("Estudiante");
-                    sesion.setIdUsurio(estudiante.num_identificacion);
-                    sesion.setINombreUsuario(estudiante.nom_largo);
-                    respuesta.RESPUESTA = "OK";
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "😞 No hay Tests disponibles en este momento 😞.";
                 }
             }
             else
@@ -88,6 +110,10 @@ namespace WebSima.Controllers
                                 ViewBag.mensajeError = "No tiene grupo a cargo.";
                             }
                         }
+                        else if (u.tipo.Equals("Docente"))
+                        {
+                            return Redirect("~/Calificaciones/Home");
+                        }
                         else
                         {
                             ViewBag.mensajeError = "Perfil " + u.tipo + " No existe!!";
@@ -123,6 +149,10 @@ namespace WebSima.Controllers
                 else if (tipo_usuario.Equals("Monitor"))
                 {
                     return Redirect("~/Clase/Index");
+                }
+                else if (tipo_usuario.Equals("Docente"))
+                {
+                    return Redirect("~/Calificaciones/Home");
                 }
                 
             }

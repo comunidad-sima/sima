@@ -96,7 +96,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h3 class="modal-title">Inicio sesión</h3>
+                    <h3 class="modal-title">Inicio de sesión</h3>
                 </div>
                 <div class="modal-body">
                     <div class="panelBorder ">
@@ -154,20 +154,27 @@
                             var clase = "";
                            
                             if (response["RESPUESTA"] == "OK") {
-                                location.href = "/Test/Tests_responder";
-                                mensaje = "<strong>¡Exito!</strong> Sesión iniciada.<br>En breve será redireccionado.";
+                                location.href = "/Test/Tests";
+                                mensaje = "<strong>¡Éxito!</strong> Sesión iniciada.<br>En breve será redireccionado.";
                                 clase = "alert-success";
+                                btn.prop("disabled", true);
 
                             } else if (response["RESPUESTA"] == "ERROR") {
-                                mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                                mensaje =  response["MENSAJE"];
                                 clase = "alert-danger";
+                                btn.prop("disabled", false);
+                            }
+                            else if (response["RESPUESTA"] == "NO_ASISTE") {
+                                mensaje =response["MENSAJE"];
+                                clase = "alert-warning";
+                                btn.prop("disabled", false);
                             }
                             
                             //alert_mensajes() esta en helper.js
                             $("#alert_1").html(alert_mensajes(mensaje, clase));
                             // se activa el boton enviar
                             btn.val("Iniciar sesión");
-                            btn.prop("disabled", false);
+                           
 
 
                         }, error: function (error) {

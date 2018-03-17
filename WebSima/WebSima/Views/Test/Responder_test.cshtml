@@ -33,7 +33,9 @@
                 <div id="alert_1"></div>
                 @using (Html.BeginForm("Guardar_respuesta", "Test", FormMethod.Post, new { id = "frespuesta" }))
                 {
-
+                
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
                 <div class="box-tools">
                 @{
                     if (preguntas != null) { 
@@ -103,18 +105,28 @@
                        {
                         <textarea name="@pregunta.id" class="form-control" rows="4" minlength="3" maxlength="180" placeholder="Ingresa tu respuesta..." required></textarea>
                        }
-                       
+                        
                        
                         <hr />
                     </div>
                 }
-                 <input type="submit" class="enviar" id="enviar" />
+                        if (preguntas.Count() > 0) { 
+                <div class="text-right">
+                    <input type="submit" class="enviar btn btn-success" id="enviar" />
+                </div>
+                }
+                     
                 }
                 }
+
                 </div>
                 }
 
-                
+
+                <div id="regresar" style="display: none">
+                    <a class="btn btn-bt fa  fa-arrow-left mostar" href="/Test/Tests" style="color: red; " title="Regresar" id="regresar"> Regresar</a>
+                </div>
+ 
             </div>
 
         </div>
@@ -154,8 +166,10 @@
                         var clase = "";
                         if (response["RESPUESTA"] == "OK") {
                             $("#listar").load("/Test/Listar");
-                            mensaje = "<strong>¡Exito!</strong> Test registrado con exito.";
+                            mensaje = "<strong>¡Éxito!</strong> Test finalizado.<br/>Gracias por participar.";
                             clase = "alert-success";
+                            $("#frespuesta").hide();
+                            $("#regresar").show();
 
                         } else if (response["RESPUESTA"] == "ERROR") {
                             mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
