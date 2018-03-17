@@ -5,15 +5,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="ce01c4a07d294cdc8ac6e30636de9e9b" Name="Diagram1">
-        <EntityTypeShape EntityType="bd_simaModel.calificaciones_periodo" PointX="0.75" PointY="0.75" Width="1.5" />
-        <EntityTypeShape EntityType="bd_simaModel.capacitaciones" Width="1.5" PointX="2.625" PointY="4.75" />
-        <EntityTypeShape EntityType="bd_simaModel.clases_sima" Width="1.5" PointX="10.125" PointY="7" />
-        <EntityTypeShape EntityType="bd_simaModel.cursos" Width="1.5" PointX="7.875" PointY="3.25" />
-        <EntityTypeShape EntityType="bd_simaModel.estudiantes_asistentes" Width="1.5" PointX="12.375" PointY="7.875" />
-        <EntityTypeShape EntityType="bd_simaModel.grupos_acargo" Width="1.5" PointX="10.875" PointY="3.5" />
-        <EntityTypeShape EntityType="bd_simaModel.materias" Width="1.5" PointX="0.75" PointY="1.375" />
-        <EntityTypeShape EntityType="bd_simaModel.Notas" Width="1.5" PointX="5.25" PointY="1.125" />
-        <EntityTypeShape EntityType="bd_simaModel.usuarios" Width="1.5" PointX="5.625" PointY="4.875" />
+        <EntityTypeShape EntityType="bd_simaModel.calificaciones_periodo" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="bd_simaModel.capacitaciones" Width="1.5" PointX="7.75" PointY="2.375" />
+        <EntityTypeShape EntityType="bd_simaModel.clases_sima" Width="1.5" PointX="6" PointY="8.5" />
+        <EntityTypeShape EntityType="bd_simaModel.configuracion_app" Width="1.5" PointX="8.75" PointY="6.375" />
+        <EntityTypeShape EntityType="bd_simaModel.cursos" Width="1.5" PointX="3" PointY="4.625" />
+        <EntityTypeShape EntityType="bd_simaModel.estudiantes_asistentes" Width="1.5" PointX="8.25" PointY="9.375" />
+        <EntityTypeShape EntityType="bd_simaModel.grupos_acargo" Width="1.5" PointX="3" PointY="9" />
+        <EntityTypeShape EntityType="bd_simaModel.materias" Width="1.5" PointX="0.75" PointY="5.375" />
+        <EntityTypeShape EntityType="bd_simaModel.Notas" Width="1.5" PointX="5.25" PointY="5.125" />
+        <EntityTypeShape EntityType="bd_simaModel.pregunta_test_responder" Width="1.5" PointX="5.25" PointY="20.375" />
+        <EntityTypeShape EntityType="bd_simaModel.preguntas_test" Width="1.5" PointX="3" PointY="16.5" />
+        <EntityTypeShape EntityType="bd_simaModel.Test" Width="1.5" PointX="3" PointY="20" />
+        <EntityTypeShape EntityType="bd_simaModel.usuarios" Width="1.5" PointX="0.75" PointY="8.5" />
         <AssociationConnector Association="bd_simaModel.FK_calificaciones_periodo_materias" />
         <AssociationConnector Association="bd_simaModel.FK_Notas_calificaciones_periodo" />
         <AssociationConnector Association="bd_simaModel.FK_clases_sima_cursos" />
@@ -23,15 +27,12 @@
         <AssociationConnector Association="bd_simaModel.FK_cursos_usuarios" />
         <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_materias" />
         <AssociationConnector Association="bd_simaModel.FK_grupos_acargo_usuarios" />
-        <EntityTypeShape EntityType="bd_simaModel.configuracion_app" Width="1.5" PointX="7.375" PointY="0.75" />
-        <EntityTypeShape EntityType="bd_simaModel.pregunta_test_responder" Width="1.5" PointX="13.125" PointY="4.625" />
-        <EntityTypeShape EntityType="bd_simaModel.preguntas_test" Width="1.5" PointX="10.875" PointY="0.75" />
-        <EntityTypeShape EntityType="bd_simaModel.respuestas" Width="1.5" PointX="15.375" PointY="4.75" />
         <AssociationConnector Association="bd_simaModel.FK_pregunta_test_responder_preguntas_test" />
-        <AssociationConnector Association="bd_simaModel.FK_respuestas_pregunta_test_responder" />
-        <EntityTypeShape EntityType="bd_simaModel.Test" Width="1.5" PointX="7.875" PointY="7.125" />
         <AssociationConnector Association="bd_simaModel.FK_pregunta_test_responder_Test" />
         <AssociationConnector Association="bd_simaModel.FK_Test_usuarios" />
+        <EntityTypeShape EntityType="bd_simaModel.respuestas" Width="1.5" PointX="7.5" PointY="13.375" />
+        <AssociationConnector Association="bd_simaModel.FK_respuestas_cursos1" />
+        <AssociationConnector Association="bd_simaModel.FK_respuestas_pregunta_test_responder" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

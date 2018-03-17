@@ -1,0 +1,46 @@
+﻿
+@model IEnumerable<WebSima.Models.MTest>
+@{
+    Layout = null;
+}
+
+
+<div class="box-body table-responsive no-padding">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.id)</th>
+                <th>@Html.DisplayNameFor(model => model.fecha_inicio)</th>
+                <th>@Html.DisplayNameFor(model => model.fecha_fin)</th>
+                <th>@Html.DisplayNameFor(model => model.ferfil_usuario)</th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model){
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha_inicio).ToString().Substring(0, 10)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha_fin).ToString().Substring(0, 10)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ferfil_usuario)</td>
+                <td>
+                <td class="text-right">
+                    @Html.ActionLink("Ver evaluación", "Evaluacion_test", new { id = item.id }, new { @class = "btn btn-success fa fa-line-chart", title = "Detalle evaluacion", })
+                    @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle", })
+                    @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-pencil-square-o", title = "Editar", })
+                    @Html.ActionLink(" ", "Delete_test", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar ", title = "Eliminar", style = "color:red;" })
+                </td>
+                
+            </tr>
+
+            }
+        </tbody>
+    </table>
+    <!-- /.box-body -->
+</div>

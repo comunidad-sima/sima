@@ -6838,7 +6838,6 @@
   <ItemGroup>
     <Folder Include="App_Start\App_Data\" />
     <Folder Include="Content\themes\" />
-    <Folder Include="Views\Horario\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -6857,9 +6856,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Inicio\Login.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_Layout_monitor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Inicio\MenuMonitor.cshtml" />
@@ -7552,6 +7548,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Test\Historial_test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Listar_test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Horario\create_monitor.cshtml" />
+    <Content Include="Views\Horario\select_administrador.cshtml" />
+    <Content Include="Views\Horario\select_monitor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Evaluacion_test.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

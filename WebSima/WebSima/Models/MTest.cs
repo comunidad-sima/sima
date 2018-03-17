@@ -72,6 +72,12 @@ namespace WebSima.Models
             }
             return guardado;
         }
+        /// <summary>
+        /// guarda las respuesta de un test
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="respuestas"> Lista de objeto </param>
+        /// <returns></returns>
         public bool guardar_respuestas_test(bd_simaEntitie db,  List<respuestas> respuestas)
         {
             bool guardado = true;
@@ -86,6 +92,7 @@ namespace WebSima.Models
                         foreach (respuestas respuesta in respuestas)
                         {
                             db.respuestas.Add(respuesta);
+                            
                         }
                         db.SaveChanges();
                         transaccion.Complete();
@@ -104,8 +111,8 @@ namespace WebSima.Models
         /// </summary>
         /// <param name="db"></param>
         /// <param name="periodo">Perido a consultar </param>
-        /// <param name="estado_cierre"> el estado del test cerrado o abierto (0 o 1)</param>
-        /// <param name="eliminado"> el estado de eliminacion del test eliminado o no (0 o 1)</param>
+        /// <param name="estado_cierre"> el estado del test cerrado o abierto 0 o 1</param>
+        /// <param name="eliminado"> el estado de eliminacion del test eliminado o no ,0 o 1</param>
         /// <returns></returns>
         public List<MTest> getTestPeriodo(bd_simaEntitie db, string periodo, int estado_cierre=0, int eliminado =0){
             List<MTest> test = null;
@@ -161,6 +168,34 @@ namespace WebSima.Models
         
         }
         /// <summary>
+        /// Consulta los test que no estan cerrados
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="estado_cierre"> el estado del test cerrado o abierto (0 o 1)</param>
+        /// <param name="eliminado"> el estado de eliminacion del test eliminado o no (0 o 1)</param>
+        /// <returns></returns>
+        public List<MTest> getTest_abiertos(bd_simaEntitie db, int estado_cierre, int eliminado )
+        {
+            List<MTest> test = null;
+
+            test = (from p in db.Test
+                    where (p.eliminado == eliminado && p.estado_cierre == estado_cierre)
+                    select new MTest
+                    {
+                        id = p.id,
+                        eliminado = p.eliminado,
+                        estado_cierre = p.estado_cierre,
+                        fecha_fin = p.fecha_fin,
+                        fecha_inicio = p.fecha_inicio,
+                        ferfil_usuario = p.ferfil_usuario,
+                        id_usuario_creado = p.id_usuario_creado,
+                        periodo = p.periodo,
+                        pregunta_test_responder = p.pregunta_test_responder,
+                        usuarios = p.usuarios
+                    }).ToList();
+            return test;
+        }
+        /// <summary>
         /// se consulta id de la relacion entre la preguntas y el rest 
         /// </summary>
         /// <param name="db"></param>
@@ -178,7 +213,39 @@ namespace WebSima.Models
   
             return preguntas;
         }
+        /// <summary>
+        /// Se consulta las preguntas de un test segun el estado  no esten eliminado(0) 
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id_test"></param>
+        /// <returns></returns>
+        public List<MPreguntas_test> getPreguntas_test_a_resonder(bd_simaEntitie db, int id_test)
+        {
+            List<MPreguntas_test> preguntas = null;
 
+            preguntas = (from t in db.Test
+                         join pr in db.pregunta_test_responder on t.id equals pr.id_test
+                         join p in db.preguntas_test on pr.id_pregunta_test equals p.id
+                         where (t.id == id_test && p.eliminado==0)
+                         orderby (p.tipo) descending
+                         select new MPreguntas_test
+                         {
+                             eliminado = p.eliminado,
+                             id = p.id,
+                             Pregunata = p.Pregunata,
+                             tipo = p.tipo,
+                             pregunta_test_responder = p.pregunta_test_responder
+                         }).ToList();
+
+            return preguntas;
+        }
+
+        /// <summary>
+        /// Consulta todas las preguntas de un test, si la pregunta esta eliminada tambien se mostrará 
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id_test"></param>
+        /// <returns></returns>
         public List<MPreguntas_test> getPreguntas_test(bd_simaEntitie db, int id_test)
         {
             List<MPreguntas_test> preguntas = null;
@@ -186,7 +253,7 @@ namespace WebSima.Models
             preguntas = (from t in db.Test
                          join pr in db.pregunta_test_responder on t.id equals pr.id_test
                          join p in db.preguntas_test on pr.id_pregunta_test equals p.id
-                         where (t.id == id_test)
+                         where (t.id == id_test )
                          orderby (p.tipo) descending
                          select new MPreguntas_test
                          {

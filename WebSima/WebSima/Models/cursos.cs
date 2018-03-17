@@ -17,6 +17,7 @@ namespace WebSima.Models
         public cursos()
         {
             this.clases_sima = new HashSet<clases_sima>();
+            this.respuestas = new HashSet<respuestas>();
         }
     
         public int id { get; set; }
@@ -30,5 +31,6 @@ namespace WebSima.Models
         public virtual ICollection<clases_sima> clases_sima { get; set; }
         public virtual materias materias { get; set; }
         public virtual usuarios usuarios { get; set; }
+        public virtual ICollection<respuestas> respuestas { get; set; }
     }
 }

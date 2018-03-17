@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout_monitor.cshtml";
     //List<String> materiasMonitor = ViewBag.materiasMonitor;
     List<List<WebSima.Models.WebApi.AsignaturaGrupo>> datos = ViewBag.datos;
     List<WebSima.Models.grupos_acargo> grupos_acargo = ViewBag.grupos_acargo;
@@ -54,7 +53,7 @@
                                                            where (s.nom_unidad == programa)
 
                                                            select s).ToList().Select(oo => oo.num_grupo).Distinct().ToList().OrderBy(x => x).ToList();
-                                    <div class="panelBorder col-sm-6">
+                                    <div class="panelBorder col-sm-12 margin-bottom">
                                         <h4 class=""><strong> @programa</strong></h4>
                                         @*muestra los grupos a cargos*@
                                         @foreach (var grupo in grupos)

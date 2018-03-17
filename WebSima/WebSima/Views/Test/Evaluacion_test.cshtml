@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Evaluacion_test";
+}
+
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Historia Test</li>
+        <li class="breadcrumb-item ">Test</li>
+        <li class="breadcrumb-item active">Evaluacion</li>
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">Estadistica</h3>
+            </div>
+
+            <div class="box-body ">
+
+                <!-- /input-group -->
+
+                <div class="panelBorder">
+                    <div class="box-header with-border">
+                        <h4 class="margin"><strong> Asignaturas </strong></h4>
+                        <div class="input-group input-group-sm col-sm-4">
+
+                            <select class="form-control" id="augnatura">
+
+                                <option value="">Seleccione Asignatura </option>
+
+                                <option value="mat">
+                                    Matematicas
+
+                                </option>
+
+                                <option value="mat">
+                                    Taller de Len...
+
+                                </option>
+
+                            </select>
+
+                            <span class="input-group-btn">
+                                <button type="button" id="buscar_test" class="btn btn-success btn-flat">Consultar</button>
+                            </span>
+                        </div>
+
+                    </div>
+                    <div class="box-body chart-responsive">
+                        <p class="text-center">
+                            <strong>Grafica Version 1.0</strong>
+                        </p>
+                        <div class="chart" id="bar-chart" style="height: 300px;"></div>
+                    </div>
+                    <!-- /.box-body -->
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Cuestionario Preguntas</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-sm-12">
+                    <!-- /.col -->
+                    <div class="col-md-4">
+                        <ul class="chart-legend clearfix">
+                            <li><i class="fa fa-circle-o text-green"> 1</i>  Fredys ama la cachama</li>
+                            <li><i class="fa fa-circle-o text-green"> 2</i> Fredy y su seño preferida</li>
+                            <li><i class="fa fa-circle-o text-green"> 3</i> Fredy y su asignatura favorita Act</li>
+                        </ul>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        "use strict";
+
+
+        //BAR CHART
+        var bar = new Morris.Bar({
+            element: 'bar-chart',
+            resize: true,
+            data: [
+              { y: '2006', a: 100, b: 90 },
+        { y: '2007', a: 75, b: 65 },
+        { y: '2008', a: 50, b: 40 },
+        { y: '2009', a: 75, b: 65 },
+        { y: '2010', a: 50, b: 40 },
+        { y: '2011', a: 75, b: 65 },
+        { y: '2012', a: 100, b: 90 }
+            ],
+            barColors: ['#00a65a'],
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['CPU'],
+            hideHover: 'auto'
+        });
+    });
+</script>

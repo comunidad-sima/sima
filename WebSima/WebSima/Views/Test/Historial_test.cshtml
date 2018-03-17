@@ -1,5 +1,6 @@
 ﻿@{
-    ViewBag.Title = "Historial_test";
+    ViewBag.Title = "Historial ";
+    List<SelectListItem> periodos = ViewBag.periodos;
 }
 
 <div>
@@ -17,62 +18,72 @@
             <div class="box-body ">
 
                 <!-- /input-group -->
-                <div class="form-group panelBorder">
-                    <h3 class="margin">Estado <code>Test</code></h3>
-                    <div class="input-group input-group-sm col-sm-4">
-
-                        <select class="form-control">
-                            <option selected="selected">Abiertos</option>
-                            <option>Cerrado</option>
-                        </select>
-
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-success btn-flat">Consultar</button>
-                        </span>
-                    </div>
-                </div>
                 <!-- /input-group -->
                 <div class="box-header with-border panelBorder">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="box-header">
-                                <h3 class="box-title">Opcional- para colocar Test abierto o Cerrado</h3>
-
-                                <div class=" pull-right">
-                                    <button type="button" class="btn btn-success"><i class="fa fa-search"></i> Ver Evaluación</button>
-                                </div>
+                                <h4 class="box-title"><strong>Tests abiertos </strong></h4>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body table-responsive no-padding">
-                                <table class="table table-hover">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>User</th>
-                                        <th>Date</th>
-                                        <th>Reason</th>
-                                    </tr>
-                                    <tr>
-                                        <td>183304343434</td>
-                                        <td>John Doe</td>
-                                        <td>11-7-2014</td>
-                                        <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                                    </tr>
-                                    <tr>
-                                        <td>219030430434</td>
-                                        <td>Alexander Pierce</td>
-                                        <td>11-7-2014</td>
-                                        <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                                    </tr>
+                            <div id="test_abiertos">
 
-                                </table>
-                                <!-- /.box-body -->
                             </div>
+
                             <!-- /.box -->
                         </div>
                     </div>
+                </div>
+                <br />
+                <div class="form-group panelBorder">
+                    <h4 class="margin"><strong> Tests culminados </strong></h4>
+                    <div class="input-group input-group-sm col-sm-4">
+
+                        <select class="form-control" id="periodo">
+
+                            <option value="">Selecciones período </option>
+                            @if (periodos != null)
+                            {
+                                foreach (var e in periodos)
+                                {
+                                    <option value="@e.Value">
+                                        @e.Text
+                                    </option>
+                                }
+                            }
+                        </select>
+
+                        <span class="input-group-btn">
+                            <button type="button" id="buscar_test" class="btn btn-success btn-flat">Consultar</button>
+                        </span>
+                    </div>
+                    <br />
+                    <div id="listar_culminados"></div>
+
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#buscar_test").click(function () {
+
+            $("#listar_culminados").load("/Test/Listar_test/?periodo=" + $("#periodo").val());// cuando se cuosulta las capacitaciones de un periodo
+        });
+
+        $("#test_abiertos").load("/Test/Listar_test/?periodo=-1");
+        $("#listar_culminados").load("/Test/Listar_test");
+
+
+    });
+
+
+</script>

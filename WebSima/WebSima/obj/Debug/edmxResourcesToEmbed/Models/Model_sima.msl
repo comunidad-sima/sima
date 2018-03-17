@@ -43,6 +43,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="configuracion_app">
+      <EntityTypeMapping TypeName="bd_simaModel.configuracion_app">
+        <MappingFragment StoreEntitySet="configuracion_app">
+          <ScalarProperty Name="contrasena_defecto_usuario" ColumnName="contrasena_defecto_usuario" />
+          <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="cursos">
       <EntityTypeMapping TypeName="bd_simaModel.cursos">
         <MappingFragment StoreEntitySet="cursos">
@@ -94,30 +103,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="usuarios">
-      <EntityTypeMapping TypeName="bd_simaModel.usuarios">
-        <MappingFragment StoreEntitySet="usuarios">
-          <ScalarProperty Name="eliminado" ColumnName="eliminado" />
-          <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
-          <ScalarProperty Name="contrasena" ColumnName="contrasena" />
-          <ScalarProperty Name="tipo" ColumnName="tipo" />
-          <ScalarProperty Name="celular" ColumnName="celular" />
-          <ScalarProperty Name="correo" ColumnName="correo" />
-          <ScalarProperty Name="apellidos" ColumnName="apellidos" />
-          <ScalarProperty Name="nombre" ColumnName="nombre" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="configuracion_app">
-      <EntityTypeMapping TypeName="bd_simaModel.configuracion_app">
-        <MappingFragment StoreEntitySet="configuracion_app">
-          <ScalarProperty Name="contrasena_defecto_usuario" ColumnName="contrasena_defecto_usuario" />
-          <ScalarProperty Name="periodo_actual" ColumnName="periodo_actual" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="pregunta_test_responder">
       <EntityTypeMapping TypeName="bd_simaModel.pregunta_test_responder">
         <MappingFragment StoreEntitySet="pregunta_test_responder">
@@ -137,16 +122,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="respuestas">
-      <EntityTypeMapping TypeName="bd_simaModel.respuestas">
-        <MappingFragment StoreEntitySet="respuestas">
-          <ScalarProperty Name="observacion" ColumnName="observacion" />
-          <ScalarProperty Name="punto" ColumnName="punto" />
-          <ScalarProperty Name="id_persona" ColumnName="id_persona" />
-          <ScalarProperty Name="id_preguntas_test_respustas" ColumnName="id_preguntas_test_respustas" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Test">
       <EntityTypeMapping TypeName="bd_simaModel.Test">
         <MappingFragment StoreEntitySet="Test">
@@ -158,6 +133,32 @@
           <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
           <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
           <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="usuarios">
+      <EntityTypeMapping TypeName="bd_simaModel.usuarios">
+        <MappingFragment StoreEntitySet="usuarios">
+          <ScalarProperty Name="eliminado" ColumnName="eliminado" />
+          <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+          <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="celular" ColumnName="celular" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="respuestas">
+      <EntityTypeMapping TypeName="bd_simaModel.respuestas">
+        <MappingFragment StoreEntitySet="respuestas">
+          <ScalarProperty Name="id_curso" ColumnName="id_curso" />
+          <ScalarProperty Name="observacion" ColumnName="observacion" />
+          <ScalarProperty Name="punto" ColumnName="punto" />
+          <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+          <ScalarProperty Name="id_preguntas_test_respustas" ColumnName="id_preguntas_test_respustas" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
