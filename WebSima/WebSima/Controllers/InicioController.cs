@@ -33,9 +33,10 @@ namespace WebSima.Controllers
             Respusta respuesta = new Respusta();
             if (!id.Equals(""))
             {
+                Rutina.Rutinas();
                 List<MTest> mtest_disponibles = (new MTest()).getTest_abiertos(db,0,0);
                 mtest_disponibles = (from mt in mtest_disponibles
-                                    where (mt.ferfil_usuario.Equals("Estudiante"))
+                                     where (DateTime.Compare(DateTime.Now, mt.fecha_inicio) >= 0 && mt.ferfil_usuario.Equals("Estudiante"))
                                     select mt).ToList();
                 if (mtest_disponibles.Count() > 0)
                 {
@@ -84,6 +85,7 @@ namespace WebSima.Controllers
         {
             try
             {
+                Rutina.Rutinas();
                 usuarios u = db.usuarios.Find(id);
                 //String co = Seguridad.Encriptar("Cecar123");
                 if (u != null)
@@ -139,8 +141,10 @@ namespace WebSima.Controllers
         }
         public ActionResult Login()
         {
+           
             if (!sesion.getIdUsuario().Equals(""))
             {
+                Rutina.Rutinas();
                 String tipo_usuario = sesion.getIPerfilUsusrio();
                 if (tipo_usuario.Equals("Administrador"))
                 {

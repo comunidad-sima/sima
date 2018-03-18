@@ -1,0 +1,111 @@
+﻿@model WebSima.Models.MPreguntas_test
+
+@{
+    Layout = null;
+}
+<div class="panelBorder">
+    <div id="alert_2"></div>
+    <div class=" row ">
+        @using (Html.BeginForm("Edit_Pregunta", "Test", FormMethod.Post, new { id = "f_edit_pregunta", @class = "" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="col-sm-12 ">
+                <div id="alert_1">
+                    @*espacio para los mensajer de de respuesta de las consultas*@
+                </div>
+                <div>
+                    @Html.LabelFor(model => model.Pregunata)
+                    @Html.TextAreaFor(model => model.Pregunata, new { @class = "form-control ", TextMode = "multiline", placeholder = "Ingrese el enunciado de la pregunta...", rows = "5" })
+                    @Html.ValidationMessageFor(model => model.Pregunata, null, new { @class = "label label-danger" })
+
+
+                </div>
+
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="form-group">
+                    <label class="fa fa-info-circle titleP"> <label class="titleF"> Las preguntas abiertas son las que se respondes con un texto, ejemplo:¿ Que aspecto debe mejorar el monitor?
+                        <br /><br />  Las pregunta cerradas son las que se responde con un numero entre 1 y 10, ejemplo: ¿Él monitor muestra dominio del tema?
+                            10.</label> </label>
+                    <label>Pregunta de tipo : @Model.tipo</label>
+                    <input name="tipo" type="hidden" value="@Model.tipo"/>
+                    
+                    
+
+                </div>
+            </div>
+            <div class="col-sm-12 text-right ">
+                @*<input type="submit" class="btn btn-success " />*@
+                <button class="btn btn btn-success" id="enviar_editar"><i class="fa fa-save"></i>Guardar</button>
+
+            </div>
+
+        }
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+
+
+        $.validator.unobtrusive.parse("#f_edit_pregunta");// se activan las validaciones del formulario
+
+        $("#f_edit_pregunta").submit(function (e) {
+
+            e.preventDefault();
+            if ($("#f_edit_pregunta").valid()) {
+                var datos = $("#f_edit_pregunta").serializeArray();
+                var btn = $("#enviar_editar");
+
+                btn.val("Guardando...");
+                btn.prop("disabled", true);
+                $.ajax({
+                    data: datos,
+                    url: $("#f_edit_pregunta").attr('action'),
+                    dataType: "json",
+                    type: 'post',
+                    beforeSend: function () { },
+                    success: function (response) {
+
+                        // se activa el boton enviar
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+
+                        var mensaje = "";
+                        var clase = "";
+                        if (response["RESPUESTA"] == "OK") {
+                           // location.href = "/Test/Home"
+                            mensaje = "<strong>¡Exito!</strong> Pregunta actualizada con exito.";
+                            clase = "alert-success";
+                           
+
+                        } else if (response["RESPUESTA"] == "ERROR") {
+                            mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
+                            clase = "alert-danger";
+                        }
+                        else if (response["RESPUESTA"] == "LOGIN") {
+                            mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
+                            clase = " alert-danger";
+
+                            location.href = "/";
+                        }
+                        //alert_mensajes() esta en helper.js
+                        $("#alert_2").html(alert_mensajes(mensaje, clase));
+
+                    }, error: function (error) {
+                        alert("Error");
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                    }
+                });
+            }
+        });
+    });
+</script>

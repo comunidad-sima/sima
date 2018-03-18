@@ -32,9 +32,9 @@
                 <td>
                 <td class="text-right">
                     @Html.ActionLink("Ver evaluación", "Evaluacion_test", new { id = item.id }, new { @class = "btn btn-success fa fa-line-chart", title = "Detalle evaluacion", })
-                    @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle", })
-                    @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-pencil-square-o", title = "Editar", })
-                    @Html.ActionLink(" ", "Delete_test", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar ", title = "Eliminar", style = "color:red;" })
+                    @Html.ActionLink(" ", "Detalles", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle", })
+                    @Html.ActionLink(" ", "Edit_test", new { id = item.id }, new { @class = "btn btn-default fa fa-pencil-square-o edit_test", title = "Editar", })
+                    @Html.ActionLink(" ", "Delete_test", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar-1 ", title = "Eliminar", style = "color:red;" })
                 </td>
                 
             </tr>
@@ -44,3 +44,78 @@
     </table>
     <!-- /.box-body -->
 </div>
+<div class="modal fade panelborder  " id="modal-test">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-green">
+                <button type="button" id="close_pregunta" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Editar test</h3>
+            </div>
+            <div class="modal-body" id="modat_test">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    $(document).ready(function () {
+
+
+        // cuando se se da click en el link detalles
+        $('.edit_test').click(function (event) {
+            // se cancela el elevento para que no redireccione
+            event.preventDefault();
+            // se obtiene la url
+            var href = $(this).attr('href');
+            // se carga el contenido del modal
+            $('#modat_test').load(href, function () {
+                // se muestra el modal
+                $('#modal-test').modal({ show: true });
+            });
+        });
+        // 
+
+    $(".eliminar-1").click(function (e) {
+        e.preventDefault();
+        // se obtiene el href  de <a> que apunta a la ruta elininar del registro
+        var url = $(this).attr('href');
+        
+        $.confirm({
+            title: 'Eliminar!',
+            content: "¿Desea eliminar el test?",
+            buttons: {
+                ACEPTAR: function () {
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        beforeSend: function () { },
+                        success: function (response) {
+
+                            if (response["RESPUESTA"] == "OK") {
+                                location.href = "/Test/Historial_test";
+                            } else if (response["RESPUESTA"] == "ERROR") {
+                                
+                                $.alert(response["MENSAJE"], "Error");
+                            }
+                            else if (response["RESPUESTA"] == "LOGIN") {
+                                location.href = "/";
+                            }
+
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                            $.alert("Error  al realizar la cosnulta", "Error");
+                        }
+                    });
+                },
+                CANCELAR: function () {
+
+                },
+            }
+        });
+    });
+    });
+</script>

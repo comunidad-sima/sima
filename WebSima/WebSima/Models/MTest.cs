@@ -36,6 +36,7 @@ namespace WebSima.Models
 
         public virtual ICollection<pregunta_test_responder> pregunta_test_responder { get; set; }
         public virtual usuarios usuarios { get; set; }
+
         /// <summary>
         /// Registra un nuevo test en la bd
         /// </summary>
@@ -43,7 +44,7 @@ namespace WebSima.Models
         /// <param name="test"> obj con los datos del test </param>
         /// <param name="id_preguntas">yds de las preguntas asignadas al test</param>
         /// <returns></returns>
-        public bool guardar_Test(bd_simaEntitie db, Test test, int[] id_preguntas)
+        public bool guardar_Test(bd_simaEntitie db, Test test, int[] id_preguntas, int id_test_actualizar=-1)
         {
             bool guardado = true;
             try
@@ -52,17 +53,24 @@ namespace WebSima.Models
                 {
                     using (var contestTransaccion = new bd_simaEntitie())
                     {
-                        db.Test.Add(test);
-                        db.SaveChanges();
-                        pregunta_test_responder pregunta ;
-                        foreach(int id in id_preguntas){
-                            pregunta = new pregunta_test_responder{
-                                id_pregunta_test=id,
-                                id_test=test.id
-                                 
-                            };
-                            db.pregunta_test_responder.Add(pregunta);
-                                                       
+                        if (id_test_actualizar==-1)
+                        {
+                            db.Test.Add(test);
+                            db.SaveChanges();
+                            add_pregunta_test(db, id_preguntas, test.id);
+                        }
+                        else
+                        {
+                            List<pregunta_test_responder> preguntas = (from pre in db.pregunta_test_responder
+                                                                       where (pre.id_test == id_test_actualizar)
+                                                                       select pre).ToList();
+                            foreach (var pregunta in preguntas)
+                            {
+                                db.pregunta_test_responder.Remove(pregunta);
+                            }
+                            add_pregunta_test(db, id_preguntas, id_test_actualizar);
+                            
+                            
                         }
                        db.SaveChanges();
                        transaccion.Complete();
@@ -75,6 +83,27 @@ namespace WebSima.Models
                 guardado = false;
             }
             return guardado;
+        }
+        /// <summary>
+        /// agrega las preguntas de un test
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="id_preguntas"></param>
+        /// <param name="id_test"></param>
+        private void add_pregunta_test(bd_simaEntitie db,int[] id_preguntas, int id_test)
+        {
+            pregunta_test_responder pregunta;
+            foreach (int id in id_preguntas)
+            {
+                pregunta = new pregunta_test_responder
+                {
+                    id_pregunta_test = id,
+                    id_test = id_test
+
+                };
+                db.pregunta_test_responder.Add(pregunta);
+
+            }
         }
         /// <summary>
         /// guarda las respuesta de un test
@@ -423,7 +452,14 @@ namespace WebSima.Models
                         {
                             String[] dato = new String[2];
                             dato[0] = "" + rdr.GetInt32(0);
-                            dato[1] = rdr.GetString(1);
+                            try
+                            {
+                                dato[1] = rdr.GetString(1);
+                            }
+                            catch (Exception)
+                            {
+                                dato[1] = "";
+                            }
                             puntos.Add(dato);
 
                         }
@@ -484,7 +520,30 @@ namespace WebSima.Models
             return cantidad;
 
         }
+        public bool actualizar_test(bd_simaEntitie db, MTest test)
+        {
+            bool actualizado = false;
+            try
+            {
+                Test test_ = db.Test.Find(test.id);
+                test_.eliminado = 0;
+                test_.estado_cierre = 0;
+                test_.fecha_fin = test.fecha_fin;
+                test_.fecha_inicio = test.fecha_inicio;
+                test_.periodo = MConfiguracionApp.getPeridoActual(db);
+                test_.ferfil_usuario = test.ferfil_usuario;
+                test_.id = test.id;
+                db.Entry(test_).State = EntityState.Modified;
+                db.SaveChanges();
+                actualizado = true;
+            }
+            catch (Exception)
+            {
 
+            }
+            return actualizado;
+
+        }
 
     }
 }

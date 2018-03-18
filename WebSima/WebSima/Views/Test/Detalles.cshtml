@@ -1,0 +1,91 @@
+﻿@model WebSima.Models.MTest
+
+@{
+    ViewBag.Title = "Detalles";
+    List<WebSima.Models.MPreguntas_test> preguntas_test =   ViewBag.preguntas ;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">Detalles</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="panelBorder">
+                    <dl class="row">
+                        <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Número:</dt>
+                        <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.id</dd>
+
+                        <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Creado por:</dt>
+                        <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.usuarios.nombre @Model.usuarios.apellidos</dd>
+
+                        <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Quienes responde:</dt>
+                        <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.ferfil_usuario</dd>
+
+                        <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Fecha de inicio:</dt>
+                        <dd class="col-12 col-sm-6 col-md-7 col-lg-9"><p>@Model.fecha_inicio.ToString().Substring(0, 10)</p></dd>
+
+                        <dt class="col-12 col-sm-6 col-md-5 col-lg-3">fecha de finalización:</dt>
+                        <dd class="col-12 col-sm-6 col-md-7 col-lg-9"><p>@Model.fecha_fin.ToString().Substring(0, 10)</p></dd>
+
+                        <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Estado:</dt>
+                        <dd class="col-12 col-sm-6 col-md-7 col-lg-9">
+                            @if (Model.estado_cierre == 1)
+                            {
+                                @("Finalizado")
+                            }
+                            else
+                            {
+                                @("En curso")
+                            }
+                    </dd>
+
+                </dl>
+                <h4>Preguntas del test</h4>
+                <div class="box-body table-responsive ">
+                    <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    Códogo
+
+                                </th>
+                                <th >
+                                    enunciado de las preguntas
+                                </th>
+                                
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var pregunta in preguntas_test)
+                            {
+                                <tr>
+                                    <td class="text-center" style="width:25px">
+
+                                        @pregunta.id
+                                    </td>
+                                    <td >@pregunta.Pregunata </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>

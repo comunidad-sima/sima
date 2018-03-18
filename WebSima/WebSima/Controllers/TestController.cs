@@ -15,7 +15,22 @@ namespace WebSima.Controllers
         //
         // GET: /Test/
 
+        public ActionResult Detalles(int id)
+        {
+            if (sesion.esAdministrador(db))
+            {
+                MTest mtAuxiliar =new MTest();
+                MTest mtest = (mtAuxiliar.getTestPorId(db, id));
+                if (mtest == null)
+                    return Historial_test();
 
+                List<MPreguntas_test> preguntas_test = mtAuxiliar.getPreguntas_test(db,id);
+                ViewBag.preguntas=preguntas_test;
+                return View(mtest);
+
+            }
+            return Redirect("~/Inicio/Login");
+        }
         public ActionResult Home()
         {
             if (sesion.esAdministrador(db))
@@ -24,10 +39,44 @@ namespace WebSima.Controllers
             }
             return Redirect("~/Inicio/Login");
         }
+
+        public JsonResult Delete_test(int id)
+        {
+
+            Respusta respuesta = new Respusta();
+            if (sesion.esAdministrador(db))
+            {
+                Test test = db.Test.Find(id);
+                if (test != null)
+                {
+                    //if (cursos.clases_sima.Count() == 0)
+                    //{
+                    //db.cursos.Remove(cursos);
+                    test.eliminado = 1;
+                    test.estado_cierre = 1;
+                    db.Entry(test).State = EntityState.Modified;
+                    db.SaveChanges();
+                    respuesta.RESPUESTA = "OK";
+
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Test no exite.";
+                }
+            }
+            else
+            {
+                respuesta.RESPUESTA = "LOGIN";
+            }
+            return Json(respuesta);
+
+        }
         public ActionResult Tests(String mensaje = null)
         {
-            if (!sesion.getIdUsuario().Equals("") && (sesion.getIPerfilUsusrio().Equals("Estudiante")
-                || sesion.getIPerfilUsusrio().Equals("Docente")))
+            if (!sesion.getIdUsuario().Equals("") && 
+               (sesion.getIPerfilUsusrio().Equals("Estudiante")
+               || sesion.getIPerfilUsusrio().Equals("Docente")))
             {
                 Mclase mclase = new Mclase();
                 List<MCurso> mcursos=null;  
@@ -46,11 +95,12 @@ namespace WebSima.Controllers
                        mcursos = mcursos.Union(MCurso.getCursoMateria(db, item, periodo)).ToList();
                     }
                 }
-
+                // DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss-ff")
+                DateTime fechaHoya = DateTime.Now;
                 List<MTest> mtests = new MTest().getTest_abiertos(db, 0, 0);
                 // se consultan solo los test de los monitores 
                 mtests = (from c in mtests
-                          where (c.periodo == periodo && c.eliminado == 0 && c.ferfil_usuario == sesion.getIPerfilUsusrio())
+                          where (DateTime.Compare(DateTime.Now, c.fecha_inicio)>=0 && c.periodo == periodo && c.eliminado == 0 && c.ferfil_usuario == sesion.getIPerfilUsusrio())
                           select c).ToList();
                 // 1 se consultas la materias docentes 
                 // 2 se consultas los grupos q tienen de cada materia 
@@ -92,7 +142,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                 MPreguntas_test pre = new MPreguntas_test();
-                return View(pre.getCapacitacionesPeriodo(db, 0));
+                return View(pre.getPreguntas(db, 0));
             }
             return null;
         }
@@ -216,14 +266,7 @@ namespace WebSima.Controllers
             }
             return Json(respuesta);
         }
-        //
-        // GET: /Test/Details/5
-
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
+        
         //
         // GET: /Test/Create
 
@@ -233,6 +276,25 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                 return View("add_pregunta");
+            }
+            else
+            {
+                return Redirect("~/Inicio/Login");
+            }
+        }
+
+        public ActionResult Edit_test(int id)
+        {
+            if (sesion.esAdministrador(db))
+            {
+                MTest mtstAux = new MTest();
+                 List<MPreguntas_test> preguntas = (new MPreguntas_test()).getPreguntas_test(db, 0);
+                ViewBag.preguntas = preguntas;
+                MTest mtst = (mtstAux.getTestPorId(db, id));
+               List<MPreguntas_test> preguntaTest= mtstAux.getPreguntas_test(db, id);
+               ViewBag.preguntas = preguntas;
+               ViewBag.preguntaTest = preguntaTest;
+                return View(mtst);
             }
             else
             {
@@ -251,12 +313,9 @@ namespace WebSima.Controllers
                     cursos c = db.cursos.Find(grupo);
                     if (sesion.getIPerfilUsusrio().Equals("Monitor"))
                     {
-
-
                         c = (from c2 in db.cursos where (c2.id == grupo) select c2).First();
-
                     }
-                    String titleBar = "General ";
+                    String titleBar = " - GENERAL";
                     if (grupo > 0)
                         titleBar = " - " + c.usuarios.nombre + " " + c.usuarios.apellidos + " - " + c.nombre_materia;
                     MTest mtAux = new MTest();
@@ -414,16 +473,23 @@ namespace WebSima.Controllers
                             if (!respondio)
                             {
                                 MTest mtest = (mtestAux.getTestPorId(db, id_test));
-                                sesion.setId_test_responder(id_test);
-                                sesion.setIdCurso_test(id_curso);
-                                List<MPreguntas_test> preguntas = null;
-                                if (mtest != null)
+                                if (DateTime.Compare(DateTime.Now, mtest.fecha_inicio) >= 0)
                                 {
-                                    preguntas = mtest.getPreguntas_test_a_resonder(db, mtest.id);
+                                    sesion.setId_test_responder(id_test);
+                                    sesion.setIdCurso_test(id_curso);
+                                    List<MPreguntas_test> preguntas = null;
+                                    if (mtest != null)
+                                    {
+                                        preguntas = mtest.getPreguntas_test_a_resonder(db, mtest.id);
+                                    }
+                                    ViewBag.test = mtest;
+                                    ViewBag.preguntas = preguntas;
+                                    return View("Responder_test");
                                 }
-                                ViewBag.test = mtest;
-                                ViewBag.preguntas = preguntas;
-                                return View("Responder_test");
+                                else
+                                {
+                                    mensaje = "Test no está disponible.";
+                                }
                             }
                             else
                             {
@@ -475,17 +541,25 @@ namespace WebSima.Controllers
                             bool respondio = mtestAux.isRespondioTest(id_curso, id_test);
                             if (!respondio)
                             {
+                                //DateTime.Compare(DateTime.Now, c.fecha_inicio)>=0 &&
                                 MTest mtest = (mtestAux.getTestPorId(db, id_test));
-                                sesion.setId_test_responder(id_test);
-                                sesion.setIdCurso_test(id_curso);
-                                List<MPreguntas_test> preguntas = null;
-                                if (mtest != null)
+                                if (DateTime.Compare(DateTime.Now, mtest.fecha_inicio) >= 0)
                                 {
-                                    preguntas = mtest.getPreguntas_test_a_resonder(db, mtest.id);
+                                    sesion.setId_test_responder(id_test);
+                                    sesion.setIdCurso_test(id_curso);
+                                    List<MPreguntas_test> preguntas = null;
+                                    if (mtest != null)
+                                    {
+                                        preguntas = mtest.getPreguntas_test_a_resonder(db, mtest.id);
+                                    }
+                                    ViewBag.test = mtest;
+                                    ViewBag.preguntas = preguntas;
+                                    return View("Responder_test");
                                 }
-                                ViewBag.test = mtest;
-                                ViewBag.preguntas = preguntas;
-                                return View("Responder_test");
+                                else
+                                {
+                                    mensaje = "Test no esta disponible.";
+                                }
                             }
                             else
                             {
@@ -515,9 +589,6 @@ namespace WebSima.Controllers
                 return Redirect("~/Inicio/Login");
             }
         }
-
-
-
 
 
         //Elimina una pregunta de un test 
@@ -560,7 +631,7 @@ namespace WebSima.Controllers
 
                 tests = tests.Union((new MTest().getTest_abiertos(db, 0, 0))).ToList();
                 tests = tests.Union((new MTest().getTest_abiertos(db, 1, 0))).ToList();
-                tests = (from t in tests where (t.periodo == MConfiguracionApp.getPeridoActual(db)) select t).ToList();
+                tests = (from t in tests where (DateTime.Compare(DateTime.Now, t.fecha_inicio) >= 0 && t.periodo == MConfiguracionApp.getPeridoActual(db)) select t).ToList();
 
 
 
@@ -568,6 +639,108 @@ namespace WebSima.Controllers
                 return View(tests);
             }
             else return Redirect("~/Inicio/Login");
+        }
+
+        public ActionResult Edit_Pregunta(int id)
+        {
+            if (sesion.esAdministrador(db))
+            {
+                MPreguntas_test pregunta = (new MPreguntas_test()).getPreguntaId(db, id);
+                if (pregunta == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(pregunta);
+            }
+            else
+            {
+                return Redirect("~/Inicio/Login");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult Edit_Pregunta(MPreguntas_test pregunta)
+        {
+            Respusta respuesta = new Respusta();
+            if (sesion.esAdministrador(db))
+            {
+               
+                if (ModelState.IsValid)
+                {
+                   bool actualizado= new MPreguntas_test().actualizar_pregunta(db, pregunta);
+                   if (!actualizado)
+                   {
+                       respuesta.RESPUESTA = "ERROR";
+                       respuesta.MENSAJE = "Error en la actualización.";
+                   }
+                   else
+                   {
+                       respuesta.RESPUESTA = "OK";
+                       respuesta.MENSAJE = "Pregunta actualizada";
+                   }
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Datos incorrectos.";
+                }
+            }
+            else
+            {
+                respuesta.RESPUESTA = "LOGIN";
+            }
+            return Json(respuesta);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult Edit_test(MTest Mtest, int[] id_preguntas = null)
+        {
+            Respusta respuesta = new Respusta();
+            if (id_preguntas == null)
+            {
+                respuesta.RESPUESTA = "ERROR";
+                respuesta.MENSAJE = "Debe seleccionar al menos 1 pregunta.";
+            }
+            else if (sesion.esAdministrador(db))
+            {
+                if (ModelState.IsValid)
+                {
+                    
+                    
+
+
+                    bool respuesta_guardado = Mtest.actualizar_test(db, Mtest);
+                    if (respuesta_guardado)
+                    {
+                        respuesta.RESPUESTA = "OK";
+                        respuesta.MENSAJE = "Test actualizado correctamente.";
+                        bool pregunta_save = Mtest.guardar_Test(db, null, id_preguntas, Mtest.id);
+                        if (!pregunta_save)
+                        {
+                            respuesta.RESPUESTA = "NO_PREGUNTA";
+                            respuesta.MENSAJE = "Los datos principales del test se actualizaron.<br>"+
+                            "Las preguntas no fueron editadas porque los ususrios comezarón a responder el test.";
+                        }
+                    }
+                    else
+                    {
+                        respuesta.RESPUESTA = "ERROR";
+                        respuesta.MENSAJE = "Error al actualizar al Test.";
+
+                    }
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = "Los datos ingresados son incorrecotos.";
+                }
+            }
+            else
+            {
+                respuesta.RESPUESTA = "LOGIN";
+            }
+            return Json(respuesta);
         }
         protected override void Dispose(bool disposing)
         {

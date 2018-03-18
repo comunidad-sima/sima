@@ -5,6 +5,7 @@
 }
 
 <div class="row">
+    <div class="text-right col-sm-12"><i title="Refrescar preguntas" id="refrescar"class="fa fa-refresh"></i></div>
     <div class="box-body table-responsive ">
         <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
             <thead>
@@ -47,7 +48,7 @@
                             <td class="text-center" style="width:150px">
 
 
-
+                                @Html.ActionLink(" ", "Edit_Pregunta", new { id = item.id }, new { @class = "btn btn-default fa  fa-pencil-square-o editar_pregunta", title = "Editar" })
                                 @Html.ActionLink(" ", "Delete", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar", title = "Eliminar", style = "color:red;" })
 
 
@@ -61,9 +62,41 @@
     </div>
 </div>
 
+<div class="modal fade panelborder  " id="modal-pregunta">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-green">
+                <button type="button" id="close_pregunta" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Editar pregunta</h3>
+            </div>
+            <div class="modal-body" id="modat_pregunta">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<
+
 <script>
     $(document).ready(function () {
-       
+        $('#refrescar').click(function (event) {
+            $("#listar").load("/Test/Listar");
+        });
+        // cuando se se da click en el link detalles
+        $('.editar_pregunta').click(function (event) {
+            // se cancela el elevento para que no redireccione
+            event.preventDefault();
+            // se obtiene la url
+            var href = $(this).attr('href');
+            // se carga el contenido del modal
+            $('#modat_pregunta').load(href, function () {
+                // se muestra el modal
+                $('#modal-pregunta').modal({ show: true });
+            });
+        });
         // se configura la tabla, esta funcion está en helper.js
         configurar_dataTable("tablaPaginacion");
 
@@ -109,4 +142,24 @@
 
         });
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>

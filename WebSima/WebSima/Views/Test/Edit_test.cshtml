@@ -1,41 +1,41 @@
 ﻿@model WebSima.Models.MTest
 
 @{
-    ViewBag.Title = "Crear_test";
-    List<WebSima.Models.MPreguntas_test> preguntas =   ViewBag.preguntas;
+    ViewBag.Title = "Editar";
+    List<WebSima.Models.MPreguntas_test> preguntas = ViewBag.preguntas;
+    List<WebSima.Models.MPreguntas_test> preguntaTest = ViewBag.preguntaTest;
+    Layout = null;
 }
 
-<div>
-    <ol class="breadcrumb " style="background-color: #ffffff">
-        <li class="breadcrumb-item ">Crear Test</li>
-        <li class="breadcrumb-item active">Test</li>
 
-    </ol>
-</div>
-@using (Html.BeginForm("Crear", "Test", FormMethod.Post, new {  id="fDatos_nuevo_test" }))
-            {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-<div class="box box-success">
-    <div class="box-header with-border">
-        <div class="box-header with-border panelBorder ">
-            <div id="alert_1"></div>
+    @using (Html.BeginForm("Edit_test", "Test", FormMethod.Post, new { id = "f_edit_test" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+    <div class="box-header with-border panelBorder ">
+        <div class="row">
+
+            <div class=" col-sm-12">
+                <div id="alert_2"></div>
+            </div>
             <div class="form-group col-sm-4">
                 <h4><label>Quien responde?</label></h4>
                 <div class="input-group date">
                     <label>
                         <input class="flat-red " type="radio" value="Estudiante" id="ferfil_usuario" checked name="ferfil_usuario" />
-                        
+
                         Estudiantes
                     </label>
-                    
                     <br />
 
+
                     <label>
-                        <input class="flat-red " type="radio" value="Docente" id="ferfil_usuario" name="ferfil_usuario" />
+                        <input @if (Model.ferfil_usuario.Equals("Docente")) { @("checked")      }
+                               class="flat-red " type="radio" value="Docente" id="ferfil_usuario" name="ferfil_usuario" />
                         Docentes
                     </label>
-                 
+
                 </div>
                 @Html.ValidationMessageFor(model => model.ferfil_usuario, null, new { @class = "label label-danger" })
             </div>
@@ -46,9 +46,9 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                  
-                    @Html.TextBoxFor(model => model.fecha_inicio, new { @class = "form-control datepicker " })
-                    @Html.ValidationMessageFor(model => model.fecha_inicio, null, new { @class = "label label-danger"})
+
+                    @Html.TextBoxFor(model => model.fecha_inicio, "{0:yyyy-MM-dd}", new { maxlength = 10, @class = "form-control datepicker " })
+                    @Html.ValidationMessageFor(model => model.fecha_inicio, null, new { @class = "label label-danger" })
 
                 </div>
             </div>
@@ -59,66 +59,82 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    @Html.TextBoxFor(model => model.fecha_fin, new { @class = "form-control datepicker " })
+                    @Html.TextBoxFor(model => model.fecha_fin, "{0:yyyy-MM-dd}", new { maxlength = 10, @class = "form-control datepicker " })
                     @Html.ValidationMessageFor(model => model.fecha_fin, null, new { @class = "label label-danger" })
 
                 </div>
             </div>
-      
+
             <!-- segundo despligue -->
             <div class="col-sm-12">
                 <br />
                 <h4>Seleccione las prentas que se deben responder en el test</h4>
-
-                <table class="table tablaPaginacion table-responsive table-hover">
-
-                    <tbody>
-                        @foreach (var pregunta in preguntas)
-                        {
+                <div class="table-responsive">
+                    <table class=" tablaPaginacion table  table-responsive table-hover">
+                        <thead>
                             <tr>
-                                <td style="width:20px">
-                                    <input type="checkbox" name="id_preguntas" value="@pregunta.id" class="flat-red">
-                                </td>
-                                <td>@pregunta.Pregunata </td>
+                                <th>
+
+                                </th>
+
+                                <th>
+                                    Enunciado de la pregunta
+                                </th>
+
 
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var pregunta in preguntas)
+                            {
+                                int tienePregunta = (from pre in preguntaTest where (pre.id == pregunta.id) select pre).Count();
+                                <tr>
+                                    <td style="width:20px">
+                                        <input @if (tienePregunta > 0) { @("checked")         }
+                                               type="checkbox" name="id_preguntas" value="@pregunta.id" class="flat-red">
+                                    </td>
+                                    <td>@pregunta.Pregunata </td>
 
-                <button type="submit" id="enviar" class="btn btn-success"><i class="fa fa-floppy-o"></i>  Enviar </button>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-right">
+                    <button type="submit" id="enviar" class="btn btn-success"><i class="fa fa-floppy-o"></i>  Enviar </button>
 
-
+                </div>
             </div>
 
         </div>
-
     </div>
-</div>
-}
+
+    }
+
+
 <script>
     $(function () {
+        
         //iCheck for checkbox and radio inputs
         $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
         });
         configurar_daterangepicker("datepicker");
-        $("#fecha_inicio").val("");
-        $("#fecha_fin").val("");
+
 
         $.validator.unobtrusive.parse("#fDatos_nuevo_test");// se activan las validaciones del formulario
 
-        $("#fDatos_nuevo_test").submit(function (e) {
+        $("#f_edit_test").submit(function (e) {
             e.preventDefault();
-            if ($("#fDatos_nuevo_test").valid()) {
-                var datos = $("#fDatos_nuevo_test").serializeArray();
+            if ($("#f_edit_test").valid()) {
+                var datos = $("#f_edit_test").serializeArray();
                 var btn = $("#enviar");
                 btn.val("Guardando...");
                 btn.prop("disabled", true);
                 $.ajax({
                     data: datos,
-                    url: $("#fDatos_nuevo_test").attr('action'),
+                    url: $("#f_edit_test").attr('action'),
                     dataType: "json",
                     type: 'post',
                     beforeSend: function () { },
@@ -132,12 +148,16 @@
                         var clase = "";
                         if (response["RESPUESTA"] == "OK") {
                             $("#listar").load("/Test/Listar");
-                            mensaje = "<strong>¡Exito!</strong> Test registrado con exito.";
+                            mensaje = "<strong>¡Exito!</strong> Test actualizado con exito.";
                             clase = "alert-success";
 
                         } else if (response["RESPUESTA"] == "ERROR") {
                             mensaje = "<strong>¡Error!</strong> " + response["MENSAJE"];
                             clase = "alert-danger";
+                        }
+                        else if (response["RESPUESTA"] == "NO_PREGUNTA") {
+                            mensaje = response["MENSAJE"];
+                            clase = "alert-warning";
                         }
                         else if (response["RESPUESTA"] == "LOGIN") {
                             mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
@@ -146,7 +166,7 @@
                             location.href = "/";
                         }
                         //alert_mensajes() esta en helper.js
-                        $("#alert_1").html(alert_mensajes(mensaje, clase));
+                        $("#alert_2").html(alert_mensajes(mensaje, clase));
 
                     }, error: function (error) {
                         alert("Error");
@@ -156,9 +176,8 @@
                 });
             }
         });
+      //  configurar_dataTable("tablaPaginacion");
     });
-   
+
 
 </script>
-
-

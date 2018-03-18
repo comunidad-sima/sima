@@ -52,7 +52,7 @@ namespace WebSima.Models
               try
               {
                   var curos = (from cur in db.cursos
-                               where (cur.periodo == periodo && cur.eliminado == 0 && cur.estado==0 && cur.idUsuario==id_monitor)
+                               where (cur.periodo == periodo && cur.eliminado == 0 && cur.estado==1 && cur.idUsuario==id_monitor)
                                select new MCurso
                                {
                                    id = cur.id,

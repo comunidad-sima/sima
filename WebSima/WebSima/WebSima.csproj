@@ -152,6 +152,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="clases\Archivo.cs" />
     <Compile Include="clases\Excel_informe.cs" />
+    <Compile Include="clases\Rutina.cs" />
     <Compile Include="clases\Seguridad.cs" />
     <Compile Include="Controllers\CalificacionesController.cs" />
     <Compile Include="Controllers\CapacitacionController.cs" />
@@ -5550,6 +5551,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Test\Test_monitor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Edit_Pregunta.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Detalles.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Test\Edit_test.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
