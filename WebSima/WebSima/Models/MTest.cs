@@ -434,5 +434,57 @@ namespace WebSima.Models
             return puntos.OrderBy(m => m[0]).ToList();
 
         }
+        /// <summary>
+        /// Cuenta la cantidad de susrios que han realizado un test
+        /// </summary>
+        /// <param name="id_test"></param>
+        /// <param name="id_curso"></param>
+        /// <returns></returns>
+        public int ContarCantidaUasuarioRespondenTest(int id_test, int id_curso = -1)
+        {
+            String sql;
+            // si id curso es negagativo  se consulta en general, si es diferente de 0 se filtra por el curso
+            if (id_curso > 0)
+                sql = @"select  DISTINCT(r.id_persona) from bd_simaEntitie.Test as t, bd_simaEntitie.pregunta_test_responder as p, " +
+                    "bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt  where(t.id=p.id_test and " +
+                    "p.id=r.id_preguntas_test_respustas and p.id_pregunta_test =pt.id and t.id= @id_test  and r.id_curso= @id_curso )";
+           
+            else
+                sql = @"select  DISTINCT(r.id_persona) from bd_simaEntitie.Test as t, bd_simaEntitie.pregunta_test_responder as p, " +
+                    "bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt  where(t.id=p.id_test and " +
+                    "p.id=r.id_preguntas_test_respustas and p.id_pregunta_test =pt.id and t.id= @id_test)";
+
+            int cantidad = 0;
+            using (EntityConnection conn = new EntityConnection("name=bd_simaEntitie"))
+            {
+                conn.Open();
+                using (EntityCommand cmd = new EntityCommand(sql, conn))
+                {
+                    // Create two parameters and add them to 
+                    // the EntityCommand's Parameters collection 
+                    EntityParameter param1 = new EntityParameter();
+                    param1.ParameterName = "id_test";
+                    param1.Value = id_test;
+                    cmd.Parameters.Add(param1); ;
+                    if (id_curso > 0)
+                    {
+                        EntityParameter param2 = new EntityParameter();
+                        param2.ParameterName = "id_curso";
+                        param2.Value = id_curso;
+                        cmd.Parameters.Add(param2); ;
+                    }
+                    using (DbDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
+                    {                       
+                        while (rdr.Read())
+                         cantidad++;
+                    }
+                }
+                conn.Close();
+            }
+            return cantidad;
+
+        }
+
+
     }
 }

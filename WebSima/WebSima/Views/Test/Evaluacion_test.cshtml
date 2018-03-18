@@ -3,6 +3,14 @@
     List<WebSima.Models.MPreguntas_test> preguntasAll = ViewBag.preguntasTest;
     List<String[]> comentariosPregunta= ViewBag.comentarioPreguntas;
     List<String[]> puntosAll = ViewBag.puntoPreguntas;
+    int id_test = ViewBag.id;
+    String perfil = ViewBag.perfil;
+    int cantidad = ViewBag.cantidad;
+    String titulo =ViewBag.titleBar ;
+
+
+    List<WebSima.Models.MCurso> mcursos =  ViewBag.curos;
+    int id_curso= ViewBag.id_curso ;
 }
 
 <div>
@@ -25,57 +33,64 @@
                 <!-- /input-group -->
 
                 <div class="panelBorder">
-                    <div class="box-header with-border">
-                        <h4 class="margin"><strong> Asignaturas </strong></h4>
-                        <div class="input-group input-group-sm col-sm-4">
+                    @if (perfil.Equals("Administrador"))
+                    {
+                        using (Html.BeginForm("Evaluacion_test", "Test", FormMethod.Get, new { id = "fPregunta_test", @class = "" }))
+                        {
+                            <div class="box-header with-border">
+                                <h4 class="margin"><strong> Asignaturas </strong></h4>
+                                <div class="input-group input-group-sm col-sm-4">
 
-                            <input value="4" />
-                            <select class="form-control" id="augnatura" name="grupo">
+                                    <input name="id" type="hidden" value="@id_test" />
+                                    <select  class="form-control select2" id="signatura" name="grupo">
 
-                                <option value="-1">General </option>
+                                        <option value="-1">General </option>
+                                        @foreach (var curso in mcursos)
+                                        {
+                                            <option value="@curso.id"
+                                                    @if (curso.id == id_curso) {  @("selected")  }>
+                                                @curso.nombre_materia - @curso.usuarios.nombre @curso.usuarios.apellidos
+                                            </option>
 
-                                <option value="83">
-                                    Matematicas
 
-                                </option>
+                                        }
+                                    </select>
 
-                                <option value="82">
-                                    Taller de Len...
+                                    <span class="input-group-btn">
+                                        <button type="submit" id="buscar_test" class="btn btn-success btn-flat">Consultar</button>
+                                    </span>
 
-                                </option>
+                                </div>
 
-                            </select>
+                            </div>
 
-                            <span class="input-group-btn">
-                                <button type="button" id="buscar_test" class="btn btn-success btn-flat">Consultar</button>
-                            </span>
-                        </div>
-
-                    </div>
+                        }
+                    }
                     <div class="box-body ">
                         <div class="chart-responsive">
                             <p class="text-center">
-                                <strong>Test de satisfacción</strong>
+                                <strong>TEST DE SATIFACCIÓ @titulo</strong>
                             </p>
                             <canvas id="bar-chart-test" width="100%" height=50x"></canvas>
                             @*  <div class="chart" id="bar-chart-test" style="height: 300px;"></div>*@
                         </div>
-                        
-                        
+                        <h4>Peresonas que han realizado el test: @cantidad</h4>
+
                     </div>
                     <hr />
                     <div class="box-body">
                         <div class="col-sm-12">
                             <!-- /.col -->
-                          <h4>Detallaes de las preguntas</h4>
+                            <h4>Detallaes de las preguntas</h4>
 
-                                <ul class="chart-legend clearfix">
-                                    @foreach(var pregunta in preguntasAll){  
+                            <ul class="chart-legend clearfix">
+                                @foreach (var pregunta in preguntasAll)
+                                {
                                     <li><i class="fa fa-circle-o text-green"> @pregunta.id</i>  @pregunta.Pregunata</li>
-                                    
-                                    }
-                                  </ul>
-                            
+
+                                }
+                            </ul>
+
                         </div>
                         <!-- /.row -->
                     </div>
@@ -91,8 +106,8 @@
                                     {
                                         <tr>
                                             <td style="width:20px">
-                                                 @coemtario[0]
-                                             </td>
+                                                @coemtario[0]
+                                            </td>
                                             <td>@coemtario[1]</td>
 
                                         </tr>
@@ -102,7 +117,7 @@
 
 
                         </div>
-                        
+
                         <!-- /.row -->
                     </div>
                     <!-- /.box-body -->
@@ -113,27 +128,24 @@
             </div>
 
         </div>
-        
+
     </div>
 </div>
 
 <script>
     $(function () {
-
+        $('.select2').select2();
         var preguntas = [];
-        preguntas.push("")
         var valorPregunta = [];
-        valorPregunta.push(0)
 
         @foreach(var punto in puntosAll){
 
-            @:preguntas.push("Pregunta numero: @punto[0]");
-            @:valorPregunta.push(@punto[1]);
+            @:preguntas.push("Pregunta número: @punto[0]");
+            @:valorPregunta.push(@(((Convert.ToDecimal(punto[1]) / cantidad)+"").Replace(",",".")))
         }
 
-        preguntas.push("")
-      
-        valorPregunta.push(0)
+        preguntas.push("");      
+        valorPregunta.push(0);
 
 
 
@@ -164,4 +176,4 @@
 
         // generaChartBarra(contenedor, datos, '#00a65a', "Pregunta", "test de satisfaccion")
     });
-</script>
+    </script>

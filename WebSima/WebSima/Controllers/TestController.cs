@@ -242,24 +242,50 @@ namespace WebSima.Controllers
 
         public ActionResult Evaluacion_test(int id, int grupo=-1)
         {
-            
 
-
-             if (sesion.esAdministrador(db))
+            try
             {
 
-                MTest mtAux = new MTest();
-                // es una lista[idPregunta, puntos]
-                List<String[]> puntosAll = mtAux.getPreguntaPuntosTotal(id);
-                List<String[]> comentarioPregunta = mtAux.getCometariosPreguntasAbiertaTest(id);
-                List<MPreguntas_test> preguntasAll = mtAux.getPreguntas_test(db, id).OrderBy(x => x.id).ToList();
-                ViewBag.preguntasTest = preguntasAll;
-                ViewBag.puntoPreguntas = puntosAll;
-                ViewBag.comentarioPreguntas = comentarioPregunta;
-                return View();
+                if (sesion.getIPerfilUsusrio().Equals("Administrador") || sesion.esMonitor(db))
+                {
+                    cursos c = db.cursos.Find(grupo);
+                    if (sesion.getIPerfilUsusrio().Equals("Monitor"))
+                    {
 
+
+                        c = (from c2 in db.cursos where (c2.id == grupo) select c2).First();
+
+                    }
+                    String titleBar = "General ";
+                    if (grupo > 0)
+                        titleBar = " - " + c.usuarios.nombre + " " + c.usuarios.apellidos + " - " + c.nombre_materia;
+                    MTest mtAux = new MTest();
+                    // es una lista[idPregunta, puntos]
+                    List<String[]> puntosAll = mtAux.getPreguntaPuntosTotal(id, grupo);
+                    List<String[]> comentarioPregunta = mtAux.getCometariosPreguntasAbiertaTest(id, grupo);
+                    List<MPreguntas_test> preguntasAll = mtAux.getPreguntas_test(db, id).OrderBy(x => x.id).ToList();
+                    int cantidad = mtAux.ContarCantidaUasuarioRespondenTest(id, grupo);
+                    Test test = db.Test.Find(id);
+                    List<MCurso> mcursos = MCurso.getCursos(db, "", test.periodo);
+                    ViewBag.preguntasTest = preguntasAll;
+                    ViewBag.puntoPreguntas = puntosAll;
+                    ViewBag.comentarioPreguntas = comentarioPregunta;
+                    ViewBag.id = id;
+                    ViewBag.perfil = sesion.getIPerfilUsusrio();
+                    ViewBag.cantidad = cantidad;
+                    ViewBag.curos = mcursos;
+                    ViewBag.id_curso = grupo;
+
+                    ViewBag.titleBar = titleBar;
+                    return View();
+
+                }
+                else
+                {
+                    return Redirect("~/Inicio/Login");
+                }
             }
-            else
+            catch (Exception)
             {
                 return Redirect("~/Inicio/Login");
             }
@@ -377,7 +403,7 @@ namespace WebSima.Controllers
                     MTest mtestAux = new MTest();
                     MTest testResponder = mtestAux.getTestPorId(db, id_test);
 
-                    // se verifica q el perfil se el correcto y que el teste no este cerrado
+                    // se verifica q el perfil es el correcto y que el teste no este cerrado
                     if (testResponder.ferfil_usuario.Equals(sesion.getIPerfilUsusrio()) &&
                         testResponder.estado_cierre == 0 && testResponder.eliminado == 0 &&
                         testResponder.periodo.Equals(peridio))
@@ -524,6 +550,24 @@ namespace WebSima.Controllers
                 respuesta.RESPUESTA = "LOGIN";
             }
             return Json(respuesta);
+        }
+        public ActionResult Test_monitor()
+        {
+            if (sesion.esMonitor(db))
+            {
+                List<MTest> tests = new List<MTest>();
+                List<MCurso> cursos = MCurso.getCursoAcargoActivos(db, MConfiguracionApp.getPeridoActual(db), sesion.getIdUsuario());
+
+                tests = tests.Union((new MTest().getTest_abiertos(db, 0, 0))).ToList();
+                tests = tests.Union((new MTest().getTest_abiertos(db, 1, 0))).ToList();
+                tests = (from t in tests where (t.periodo == MConfiguracionApp.getPeridoActual(db)) select t).ToList();
+
+
+
+                ViewBag.cursos = cursos;
+                return View(tests);
+            }
+            else return Redirect("~/Inicio/Login");
         }
         protected override void Dispose(bool disposing)
         {

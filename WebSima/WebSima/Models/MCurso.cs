@@ -40,6 +40,39 @@ namespace WebSima.Models
           public virtual usuarios usuarios { get; set; }
 
         /// <summary>
+        /// Consulta los curso acargo de un monitor q esten activos
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="periodo"></param>
+        /// <param name="id_monitor"></param>
+        /// <returns></returns>
+          [MethodImpl(MethodImplOptions.Synchronized)]
+          public static List<MCurso> getCursoAcargoActivos(bd_simaEntitie db,  String periodo, String  id_monitor)
+          {
+              try
+              {
+                  var curos = (from cur in db.cursos
+                               where (cur.periodo == periodo && cur.eliminado == 0 && cur.estado==0 && cur.idUsuario==id_monitor)
+                               select new MCurso
+                               {
+                                   id = cur.id,
+                                   estado = cur.estado,
+                                   fecha_finalizacion = cur.fecha_finalizacion,
+                                   idUsuario = cur.idUsuario,
+                                   nombre_materia = cur.nombre_materia,
+                                   periodo = cur.periodo,
+                                   usuarios = cur.usuarios
+
+                               });
+                  return curos.ToList();
+              }
+              catch (Exception)
+              {
+                  throw new System.InvalidOperationException("Error al cargar los grupos.");
+              }
+
+          }
+        /// <summary>
         /// Esta funcion consulta los curso de un periodo y que el nombre inicie con el pramatro materia
         /// </summary>
         /// <param name="db"></param>
