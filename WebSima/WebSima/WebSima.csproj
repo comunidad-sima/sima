@@ -4975,6 +4975,8 @@
     <Content Include="Content\dist\js\demo.js" />
     <Content Include="Content\dist\js\pages\dashboard.js" />
     <Content Include="Content\dist\js\pages\dashboard2.js" />
+    <Content Include="Content\handsontable\dist\jquery.handsontable.full.css" />
+    <Content Include="Content\handsontable\dist\jquery.handsontable.full.js" />
     <Content Include="Content\jquery-confirm.min.css" />
     <Content Include="Content\plugins\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="Content\plugins\bootstrap-slider\slider.css" />
