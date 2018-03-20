@@ -16,11 +16,11 @@ namespace WebSima.Models
         /// </summary>
         /// <param name="materia"> materia a consultar las asistencia</param>
         /// <returns>retorna un liasta con la cantidad de asistencia y la id del estudiante</returns>
-        public List<String[]> consultarAsistencia(String materia)
+        public List<String[]> consultarAsistencia(String materia,String periodo)
         {
             String sql = @"SELECT COUNT(e.estudiante_id) as cantidad ,e.estudiante_id" +
                " FROM bd_simaEntitie.cursos as c, bd_simaEntitie.clases_sima as cl, bd_simaEntitie.estudiantes_asistentes as e WHERE " +
-               "c.id=cl.cursos_id and cl.id=e.clase_id and " +
+               "c.id=cl.cursos_id and cl.id=e.clase_id and  c.periodo =@periodo and  " +
                "c.nombre_materia= @materia GROUP BY e.estudiante_id";
 
             List<String[]> datos = new List<String[]>();
@@ -35,7 +35,12 @@ namespace WebSima.Models
                     EntityParameter param1 = new EntityParameter();
                     param1.ParameterName = "materia";
                     param1.Value = materia;
-                    cmd.Parameters.Add(param1);                   ;
+                    cmd.Parameters.Add(param1);
+
+                    EntityParameter param2 = new EntityParameter();
+                    param2.ParameterName = "periodo";
+                    param2.Value = periodo;
+                    cmd.Parameters.Add(param2); ;
                     using (DbDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
                     {                 
                         

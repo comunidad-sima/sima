@@ -272,6 +272,41 @@ namespace WebSima.Models.WebApi
              }
              return horarios;
          }
+        /// <summary>
+        /// Consulta las notas de los estudiantes en una materia
+        /// </summary>
+        /// <param name="periodo"></param>
+        /// <param name="materia"></param>
+        /// <returns></returns>
+         public static List<ComportamientoNotaEstudiente> getNotaEstudianteMateria(String periodo, String materia, List<String> idEstudiantes)
+         {
+             List<ComportamientoNotaEstudiente> notas = null;
+             try
+             {
+                 // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
+                 periodo = periodo.Replace("-", "");
+                 String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetComportamientoNotas";
+                 var client = new RestClient(url);
+                 var request = preparaRestRequest();
+                 // se agregan los parametros de la consulta
+                 request.AddParameter("periodo", periodo);
+                 request.AddParameter("nom_materia", materia);
+                 foreach (var id in idEstudiantes)
+                 {
+                     request.AddParameter("num_identificacion", id);
+                 }
+                 // se hace y la peticion y se reciben los datos
+                 IRestResponse respuetaDatos = client.Execute(request);
+                 // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
+                 notas = JsonConvert.DeserializeObject<List<ComportamientoNotaEstudiente>>(respuetaDatos.Content) as List<ComportamientoNotaEstudiente>;
+             }
+             catch (Exception)
+             {
+
+             }
+             return notas;
+         }
+
         
     }
     

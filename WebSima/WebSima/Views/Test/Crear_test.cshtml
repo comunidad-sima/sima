@@ -21,7 +21,9 @@
         <div class="box-header with-border panelBorder ">
             <div id="alert_1"></div>
             <div class="form-group col-sm-4">
-                <h4><label>Quien responde?</label></h4>
+                <h4>
+                    @Html.LabelFor(model => model.ferfil_usuario)
+               </h4>
                 <div class="input-group date">
                     <label>
                         <input class="flat-red " type="radio" value="Estudiante" id="ferfil_usuario" checked name="ferfil_usuario" />
@@ -68,14 +70,25 @@
             <!-- segundo despligue -->
             <div class="col-sm-12">
                 <br />
-                <h4>Seleccione las prentas que se deben responder en el test</h4>
+                <h3>Seleccione las preguntas que se deben responder en el test</h3>
 
                 <table class="table tablaPaginacion table-responsive table-hover">
 
                     <tbody>
-                        @foreach (var pregunta in preguntas)
+                        @foreach (var pregunta in preguntas.OrderByDescending(x=>x.tipo))
                         {
                             <tr>
+                                <td style="width:20px">
+                                @if (pregunta.tipo.Equals("Abierta")) { 
+                                 <i class="fa  fa-unlock" title="Esta pregunta es abierta"></i>
+                                }
+                                else if (pregunta.tipo.Equals("Cerrada"))
+                                {
+                                    <i class="fa   fa-unlock-alt" title="Esta pregunta es cerrada"></i>
+                                }
+                                </td>
+                                
+
                                 <td style="width:20px">
                                     <input type="checkbox" name="id_preguntas" value="@pregunta.id" class="flat-red">
                                 </td>

@@ -110,7 +110,36 @@ namespace WebSima.Models
         {
             return esUsuarioValido(db, "Administrador");
         }
-        
+        public bool esDocente(bd_simaEntitie db)
+        {
+            return esUsuarioValido(db, "Docente");
+        }
+        public bool esEstudiante()
+        {
+            return(getIPerfilUsusrio().Equals("Estudiante"));
+        }
+
+        public bool esAdministradorOrMonitor(bd_simaEntitie db)
+        {
+            bool valido = false;
+            String idUsuario = getIdUsuario();
+            if (!idUsuario.Equals(""))
+            {
+                usuarios u = db.usuarios.Find(idUsuario);
+                if (u != null)
+                {
+                    if (u.tipo.Equals("Administrador") || u.tipo.Equals("Monitor"))
+                    {
+                        valido = true;
+                    }
+                }
+            }
+            if (!valido)
+            {
+                destruirSesion();
+            }
+            return valido;
+        }
 
         private bool esUsuarioValido(bd_simaEntitie db, String perfil)
         {

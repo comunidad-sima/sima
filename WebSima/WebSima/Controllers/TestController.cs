@@ -308,10 +308,10 @@ namespace WebSima.Controllers
             try
             {
 
-                if (sesion.getIPerfilUsusrio().Equals("Administrador") || sesion.esMonitor(db))
+                if (sesion.esAdministradorOrMonitor(db))
                 {
                     cursos c = db.cursos.Find(grupo);
-                    if (sesion.getIPerfilUsusrio().Equals("Monitor"))
+                    if (sesion.esEstudiante())
                     {
                         c = (from c2 in db.cursos where (c2.id == grupo) select c2).First();
                     }
@@ -451,7 +451,7 @@ namespace WebSima.Controllers
         {
             /// falta por verificar q el docente tiene esa signatura a partir del curso
             String mensaje = null;
-            if (sesion.getIPerfilUsusrio().Equals("Docente"))
+            if (sesion.esDocente(db))
             {
                 try
                 {
@@ -518,7 +518,7 @@ namespace WebSima.Controllers
         public ActionResult Responder_test(String test = "", String curso = "")
         {
             String mensaje = null;
-            if (sesion.getIPerfilUsusrio().Equals("Estudiante"))
+            if (sesion.esEstudiante())
             {
                 try
                 {

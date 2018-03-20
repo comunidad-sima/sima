@@ -2,11 +2,14 @@
     ViewBag.Title = "Reporte de asistencia";
     SelectList materias = ViewBag.materias;
     List<String[]> asistencia = ViewBag.asistencia;
-    List<WebSima.Models.WebApi.EstudianteMateria> datos_estudiante = ViewBag.datos_estudiante;
+    
+    List<WebSima.Models.WebApi.ComportamientoNotaEstudiente> datos_estudiante = ViewBag.datos_estudiante;
     String asignatura = ViewBag.asignatura;
     List<String> periodos = ViewBag.periodos;
     String seleted = "selected";
     String peridoSeleccionado = ViewBag.peridoSeleccionado;
+    System.Globalization.NumberFormatInfo provider = new System.Globalization.NumberFormatInfo();
+
     }
 
 <div>
@@ -80,22 +83,26 @@
                                         <th></th>
                                         <th>IDENTIFICACÓN</th>
                                         <th>NOMBRE COMPLETO</th>
-                                        <th>PROGRAMA</th>
+                                        <th>PROGRAMA</th>                                       
+                                        <th>NOTA-1</th>
+                                        <th>NOTA-2</th>
+                                        <th>DEFINITIVA</th>
+                                        
                                         <th>ASISTENCIA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @{
                                         int i = 1;
-
+                                        if (asistencia != null) { 
                                         foreach (String[] item in asistencia)
                                         {
-                                            var estudiante = datos_estudiante.Where(e => e.num_identificacion.Equals(item[1])).Select(e => new { e.nom_largo, e.nom_prog_matricula_estudiante }).Distinct().ToArray();
+                                            var estudiante = (from e in datos_estudiante where(e.num_identificacion.Equals(item[1])) select(e)).ToList();
                                             // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
                                             <tr>
                                                 <td>@(i++)</td>
                                                 <td>@item[1]</td>
-                                                <td>
+                                                <td >
                                                     @if (estudiante.Count() > 0)
                                                     {
                                                         @estudiante[0].nom_largo;
@@ -105,6 +112,7 @@
                                                         String mesanje = "Nombre no identificado";
                                                         @mesanje;
                                                     }
+
 
                                                 </td>
 
@@ -120,9 +128,63 @@
                                                         @mesanje;
                                                     }
                                                 </td>
-                                                <td>@item[0]</td>
+                                                <td class="text-center">
+                                                    @if (estudiante.Count() > 0)
+                                                    {
+
+                                                        @(Double.Parse(estudiante[0].nota, provider).ToString("#.##"));
+                                                    }
+                                                    else
+                                                    {
+                                                         <div class="text-red">0,0</div>
+                                                    }
+
+
+                                                </td>
+                                                <td class ="text-center">
+                                                    @if (estudiante.Count() > 0)
+                                                    {
+                                                        @(Double.Parse(estudiante[1].nota, provider).ToString("#.##"));
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="text-red">0,0</div>
+                                                    }
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    @if (estudiante.Count() > 0)
+                                                    {
+
+                                                        provider.NumberDecimalSeparator = ".";
+                                                        double nota1 = Double.Parse(estudiante[0].nota, provider) * (0.4);
+                                                        double nota2 = Double.Parse(estudiante[1].nota, provider) * (0.6);
+                                                        double notaFin = nota1 + nota2;
+                                                        if (Math.Round(notaFin, 1) <3)
+                                                        { 
+                                                        <div class="text-red">@(Math.Round(notaFin, 1))</div>
+                                                            }
+                                                        else
+                                                        {
+                                                            @(Math.Round(notaFin, 1));
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="text-red">0,0</div>
+                                                       
+                                                    
+                                                    }
+
+
+                                                </td>
+
+                                                <td class="text-center">@item[0]</td>
                                             </tr>
                                         }
+                                    }
                                     }
                                 </tbody>
                             </table>

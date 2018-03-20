@@ -24,9 +24,9 @@ namespace WebSima.Models.WebApi
         public String nom_unidad { get; set; }
         public String programa_matricula_estudiante { get; set; }
         public String nom_prog_matricula_estudiante { get; set; }
-        public int num_nota { get; set; }
-        public int pes_nota { get; set; }
-        public float nota { get; set; }
+        public String num_nota { get; set; }
+        public String pes_nota { get; set; }
+        public String nota { get; set; }
     }
 
 }

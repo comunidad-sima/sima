@@ -51,20 +51,20 @@ namespace WebSima.Controllers
         public ActionResult Reporte_asistencia(String periodo="-",String materia = "Seleccione asignatura")
         {
             if (periodo.Equals("-"))
-                periodo  = MConfiguracionApp.getPeridoActual(db);;
+                periodo  = MConfiguracionApp.getPeridoActual(db);
             List<String> idEstudiantes = new List<string>();
-            List<EstudianteMateria> datos_2 = new List<EstudianteMateria>();
+            List<ComportamientoNotaEstudiente> datos_2 = new List<ComportamientoNotaEstudiente>();
             MInforme info = new MInforme();
              List<String[]> datos= new List<string[]>();
              if (!materia.Equals("Seleccione asignatura"))
              {
-                 datos = info.consultarAsistencia(materia);
+                 datos = info.consultarAsistencia(materia,periodo);
 
                  if (datos.Count() > 0)
                  {
                      // seleccionamaos todas las id de los estudiantes 
                      idEstudiantes = datos.Select(m => m[1]).ToList();
-                     datos_2 = ConsumidorAppi.getDatosEstudiantesMateria(periodo, materia, idEstudiantes);
+                     datos_2 = ConsumidorAppi.getNotaEstudianteMateria(periodo, materia, idEstudiantes);
                  }
              }
             ViewBag.periodos = Mclase.getPeriodosRegistradosDeClase(db);
