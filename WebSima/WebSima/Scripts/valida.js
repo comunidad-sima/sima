@@ -7,8 +7,8 @@ function validaTamano( inputFile) {
 	var valido = true;
 	var input = document.getElementById(inputFile);
 	var file = input.files[0];
-	if (file.size > 4000000) {
-		alert("El archivo que desea subir supera el tamaño maximo(4Mb).");
+	if (file.size > 10000000) {
+		alert("El archivo que desea subir supera el tamaño maximo(Mb).");
 		valido = false;
 	} else if (input.files[0].name.length > 140) {
 		alert("El archivo que desea subir tiene el nombre muy grande:\n" + input.files[0].name);
