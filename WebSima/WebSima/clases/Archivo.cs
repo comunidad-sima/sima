@@ -93,7 +93,7 @@ namespace WebSima.clases
         private static bool extensionValida(String extension)
         {
             bool exten = false;
-            String[] extensiones = new string[] { ".jpg", ".jpeg", ".pdf", ".png", ".doc", ".JPG", ".JPGE", ".PDF", ".PNG", ".DOC" };
+            String[] extensiones = new string[] { ".jpg", ".jpeg", ".pdf", ".png", ".doc", ".JPG", ".JPGE", ".PDF", ".PNG", ".DOC", ".ZIP", ".7Z", ".RAR", ".zip", ".7z", ".rar" };
             foreach(String e in extensiones){
                 if (e.Equals(extension))
                 {
