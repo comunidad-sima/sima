@@ -153,6 +153,7 @@
     <Compile Include="clases\Archivo.cs" />
     <Compile Include="clases\Direccion.cs" />
     <Compile Include="clases\Excel_informe.cs" />
+    <Compile Include="clases\HelperAlerta.cs" />
     <Compile Include="clases\Rutina.cs" />
     <Compile Include="clases\Seguridad.cs" />
     <Compile Include="Controllers\CalificacionesController.cs" />
@@ -170,6 +171,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\PerfilHelper.cs" />
+    <Compile Include="Models\Alertas.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\calificaciones_periodo.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
@@ -179,6 +183,7 @@
     <Compile Include="Models\clases_sima.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MAlerta.cs" />
     <Compile Include="Models\MCalificaciones_periodo.cs" />
     <Compile Include="Models\MConfiguracionApp.cs" />
     <Compile Include="Models\configuracion_app.cs">
@@ -5564,6 +5569,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Test\Edit_test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calificaciones\Grupos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calificaciones\Home.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

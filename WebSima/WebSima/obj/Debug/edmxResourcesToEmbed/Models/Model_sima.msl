@@ -162,5 +162,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Alertas">
+      <EntityTypeMapping TypeName="bd_simaModel.Alertas">
+        <MappingFragment StoreEntitySet="Alertas">
+          <ScalarProperty Name="titulo" ColumnName="titulo" />
+          <ScalarProperty Name="perfil_ver" ColumnName="perfil_ver" />
+          <ScalarProperty Name="creador" ColumnName="creador" />
+          <ScalarProperty Name="fecha_creada" ColumnName="fecha_creada" />
+          <ScalarProperty Name="tipo_alerta" ColumnName="tipo_alerta" />
+          <ScalarProperty Name="mensaje" ColumnName="mensaje" />
+          <ScalarProperty Name="eliminada" ColumnName="eliminada" />
+          <ScalarProperty Name="vista" ColumnName="vista" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

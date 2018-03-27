@@ -33,6 +33,7 @@
         <EntityTypeShape EntityType="bd_simaModel.Notas" Width="1.5" PointX="5.25" PointY="1.125" />
         <AssociationConnector Association="bd_simaModel.FK_calificaciones_periodo_materias" />
         <AssociationConnector Association="bd_simaModel.FK_Notas_calificaciones_periodo" />
+        <EntityTypeShape EntityType="bd_simaModel.Alertas" Width="1.5" PointX="10.375" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

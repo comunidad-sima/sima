@@ -29,6 +29,63 @@ namespace WebSima.Models
 
        }
         /// <summary>
+        /// consulta el programa a registrar nota
+        /// </summary>
+        /// <returns></returns>
+       public String getPrgrama_notas()
+       {
+           this.sesion = Convert.ToString(HttpContext.Current.Session["programa_nota"]);
+           return sesion;
+       }
+
+       /// <summary>
+       /// edita el nombre del programa para el registro de notas
+       /// </summary>
+       /// <param name="dato"></param>
+       public void setIPrograma_notas(String dato)
+       {
+           HttpContext.Current.Session["programa_nota"] = dato;
+
+       }
+       /// <summary>
+       /// consulta el grupo a registrar nota
+       /// </summary>
+       /// <returns></returns>
+       public String getGrupo_nota()
+       {
+           this.sesion = Convert.ToString(HttpContext.Current.Session["grupo_nota"]);
+           return sesion;
+       }
+
+       /// <summary>
+       /// edita el grupo para el registro de notas
+       /// </summary>
+       /// <param name="dato"></param>
+       public void setGrupo_nota(String dato)
+       {
+           HttpContext.Current.Session["grupo_nota"] = dato;
+
+       }
+       /// <summary>
+       /// edita la materia para registar las notas por el docente
+       /// </summary>
+       /// <param name="dato"></param>
+       public void setMateria_nota(String dato)
+       {
+           HttpContext.Current.Session["Materia_nota"] = dato;
+
+       }
+       /// <summary>
+       /// consulta la mataria seleccionada para el registro de notas por el docente
+       /// </summary>
+       /// <returns></returns>
+       public String getMateria_nota()
+       {
+           this.sesion = Convert.ToString(HttpContext.Current.Session["Materia_nota"]);
+           return sesion;
+       }
+
+        /// <summary>
         /// consulta el id del usuario que esta loguiado 
         /// </summary>
         /// <returns></returns>

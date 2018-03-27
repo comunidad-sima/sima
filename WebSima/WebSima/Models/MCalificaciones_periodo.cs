@@ -28,9 +28,9 @@ namespace WebSima.Models
         {
             Sesion sesison = new Sesion();
             String guardado = "OK";
-            String asignatura = "MATEMATICA BASICA";
-            String programa = "INGENIERIA DE SISTEMAS";
-            String grupo = "1";
+            String asignatura = sesison.getMateria_nota();
+            String programa = sesison.getPrgrama_notas();
+            String grupo = sesison.getGrupo_nota();
             String id_docente = sesison.getIdUsuario();
             try
             {
@@ -91,6 +91,18 @@ namespace WebSima.Models
                         }
                         if (guardado.Equals("OK"))
                         {
+                            MAlerta alerta = new MAlerta
+                            {
+                                creador = "SIMA",
+                                eliminada = 0,
+                                fecha_creada = DateTime.Now,                                
+                                mensaje = "Actualización de calificaciones del estudiante ",
+                                perfil_ver = "Administrador",
+                                tipo_alerta = "Notas",
+                                titulo = "CALIFICACIONES "+asignatura,
+                                vista = 0
+                            };
+                            alerta.crearAlerta(db, alerta);
                             transaccion.Complete();
                         }
                     }

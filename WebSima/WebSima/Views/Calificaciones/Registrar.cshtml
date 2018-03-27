@@ -97,7 +97,8 @@
                         var clase = "";
                         if (response["RESPUESTA"] == "OK") {                           
                             mensaje = response["MENSAJE"];
-                            clase = "alert-success";                           
+                            clase = "alert-success";
+                            location.href = "/Calificaciones/Registrar";
 
                         } else if (response["RESPUESTA"] == "ERROR") {
                             mensaje = response["MENSAJE"];

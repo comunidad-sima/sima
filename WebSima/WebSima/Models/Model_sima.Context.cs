@@ -39,5 +39,6 @@ namespace WebSima.Models
         public DbSet<respuestas> respuestas { get; set; }
         public DbSet<calificaciones_periodo> calificaciones_periodo { get; set; }
         public DbSet<Notas> Notas { get; set; }
+        public DbSet<Alertas> Alertas { get; set; }
     }
 }

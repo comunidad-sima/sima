@@ -5,6 +5,20 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="bd_simaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alertas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vista" Type="tinyint" Nullable="false" />
+          <Property Name="eliminada" Type="tinyint" Nullable="false" />
+          <Property Name="mensaje" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="tipo_alerta" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fecha_creada" Type="datetime" Nullable="false" />
+          <Property Name="creador" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="perfil_ver" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="titulo" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="calificaciones_periodo">
           <Key>
             <PropertyRef Name="id" />
@@ -329,6 +343,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="bd_simaModelStoreContainer">
+          <EntitySet Name="Alertas" EntityType="Self.Alertas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="calificaciones_periodo" EntityType="Self.calificaciones_periodo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="clases_sima" EntityType="Self.clases_sima" Schema="dbo" store:Type="Tables" />
@@ -475,6 +490,7 @@
             <End Role="calificaciones_periodo" EntitySet="calificaciones_periodo" />
             <End Role="Notas" EntitySet="Notas" />
           </AssociationSet>
+          <EntitySet Name="Alertas" EntityType="bd_simaModel.Alertas" />
           </EntityContainer>
         <EntityType Name="capacitaciones">
           <Key>
@@ -827,6 +843,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Alertas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vista" Type="Byte" Nullable="false" />
+          <Property Name="eliminada" Type="Byte" Nullable="false" />
+          <Property Name="mensaje" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="tipo_alerta" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_creada" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="creador" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="perfil_ver" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="titulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -991,6 +1021,21 @@
                 <ScalarProperty Name="tipo" ColumnName="tipo" />
                 <ScalarProperty Name="id_calificaciones_periodo" ColumnName="id_calificaciones_periodo" />
                 <ScalarProperty Name="valor" ColumnName="valor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Alertas">
+            <EntityTypeMapping TypeName="bd_simaModel.Alertas">
+              <MappingFragment StoreEntitySet="Alertas">
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="perfil_ver" ColumnName="perfil_ver" />
+                <ScalarProperty Name="creador" ColumnName="creador" />
+                <ScalarProperty Name="fecha_creada" ColumnName="fecha_creada" />
+                <ScalarProperty Name="tipo_alerta" ColumnName="tipo_alerta" />
+                <ScalarProperty Name="mensaje" ColumnName="mensaje" />
+                <ScalarProperty Name="eliminada" ColumnName="eliminada" />
+                <ScalarProperty Name="vista" ColumnName="vista" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

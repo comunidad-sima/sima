@@ -17,7 +17,7 @@ namespace WebSima.clases
             return result;
         }
 
-        /// Esta función desencripta la cadena que le envíamos en el parámentro de entrada.
+        /// Esta función desencripta la cadena que se envia en el parámentro de entrada.
         public static string DesEncriptar(String _cadenaAdesencriptar)
         {
             string result = string.Empty;

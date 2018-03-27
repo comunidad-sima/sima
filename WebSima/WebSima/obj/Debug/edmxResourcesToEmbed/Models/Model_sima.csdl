@@ -71,6 +71,7 @@
       <End Role="calificaciones_periodo" EntitySet="calificaciones_periodo" />
       <End Role="Notas" EntitySet="Notas" />
     </AssociationSet>
+    <EntitySet Name="Alertas" EntityType="bd_simaModel.Alertas" />
   </EntityContainer>
   <EntityType Name="capacitaciones">
     <Key>
@@ -423,4 +424,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="Alertas">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="vista" Type="Byte" Nullable="false" />
+    <Property Name="eliminada" Type="Byte" Nullable="false" />
+    <Property Name="mensaje" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="tipo_alerta" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="fecha_creada" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="creador" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="perfil_ver" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="titulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

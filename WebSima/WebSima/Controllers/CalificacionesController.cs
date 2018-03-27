@@ -10,28 +10,55 @@ namespace WebSima.Controllers
     public class CalificacionesController : Controller
     {
         private bd_simaEntitie db = new bd_simaEntitie();
+        Sesion sesion = new Sesion();
         //
         // GET: /Asistencia/
 
-        public ActionResult home()
+        public ActionResult Home()
         {
-            return View();
+            if (sesion.esDocente(db))
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("~/Inicio/Login");
+            }
         }
-
-        //
-        // GET: /Asistencia/Details/5
-
-        public ActionResult Details(int id)
+        public ActionResult Grupos()
         {
-            return View();
+            if (sesion.esDocente(db))
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("~/Inicio/Login");
+            }
         }
-
         //
         // GET: /Asistencia/Create
 
-        public ActionResult Registrar()
+        public ActionResult Registrar(String id)
         {
-            return View();
+            try
+            {
+                String[] datos = id.Split('|');
+                sesion.setIPrograma_notas(datos[0]);
+                sesion.setMateria_nota(datos[1]);
+                sesion.setGrupo_nota(datos[2]);
+                if (sesion.esDocente(db))
+                {
+                    return View();
+                }
+                else
+                {
+                    return Redirect("~/Inicio/Login");
+                }
+            }catch(Exception){
+                return View("Grupos");
+                //return Redirect("~/Calificaciones/Grupos");
+            }
         }
 
         //
@@ -65,14 +92,7 @@ namespace WebSima.Controllers
             return Json(respuesta);
         }
 
-        //
-        // GET: /Asistencia/Edit/5
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
+       
         //
         // POST: /Asistencia/Edit/5
 
