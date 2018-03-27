@@ -10,7 +10,7 @@
     <Property Name="fecha_registro" Type="datetime" Nullable="false" />
     <Property Name="asignatura" Type="varchar" MaxLength="90" Nullable="false" />
     <Property Name="grupo" Type="nchar" MaxLength="10" Nullable="false" />
-    <Property Name="programa" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="programa" Type="nchar" MaxLength="90" Nullable="false" />
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
   <EntityType Name="capacitaciones">
@@ -120,6 +120,7 @@
     <Key>
       <PropertyRef Name="id_preguntas_test_respustas" />
       <PropertyRef Name="id_persona" />
+      <PropertyRef Name="id_curso" />
     </Key>
     <Property Name="id_preguntas_test_respustas" Type="int" Nullable="false" />
     <Property Name="id_persona" Type="varchar" MaxLength="12" Nullable="false" />

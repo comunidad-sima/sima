@@ -14,7 +14,7 @@ namespace WebSima.Controllers
     public class CapacitacionController : Controller
     {
         private bd_simaEntitie db = new bd_simaEntitie();
-        String nombreCarpeta = "~/Uploads";
+        String dir_capacitaciones = Direccion.getDirCapacitaciones();
         Sesion sesion = new Sesion();
 
         //
@@ -65,7 +65,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
 
-                string ruta = Server.MapPath(nombreCarpeta + "/" + archivoNombre);
+                string ruta = Server.MapPath(dir_capacitaciones + "/" + archivoNombre);
                 if (Archivo.existeFile(ruta))
                 {
                     var file = File(ruta, "application/octet-stream", archivoNombre);
@@ -96,11 +96,11 @@ namespace WebSima.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult Create(MCapacitacion Mcapacitacion){
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
                
-                string ruta = Server.MapPath(nombreCarpeta);
+                string ruta = Server.MapPath(dir_capacitaciones);
                 if (ModelState.IsValid)
                 {
                     capacitaciones c = new capacitaciones();
@@ -153,7 +153,7 @@ namespace WebSima.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public JsonResult Delete(int id=0){
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {            
                     capacitaciones capacitaciones = db.capacitaciones.Find(id);
@@ -161,7 +161,7 @@ namespace WebSima.Controllers
                     {
                         db.capacitaciones.Remove(capacitaciones);
                         db.SaveChanges();
-                        Archivo.elimiarFichero(Server.MapPath(nombreCarpeta), capacitaciones.nom_File);
+                        Archivo.elimiarFichero(Server.MapPath(dir_capacitaciones), capacitaciones.nom_File);
                         respuesta.RESPUESTA = "OK";
                         
                     }else{

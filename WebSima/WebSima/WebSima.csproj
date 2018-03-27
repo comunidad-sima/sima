@@ -151,6 +151,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="clases\Archivo.cs" />
+    <Compile Include="clases\Direccion.cs" />
     <Compile Include="clases\Excel_informe.cs" />
     <Compile Include="clases\Rutina.cs" />
     <Compile Include="clases\Seguridad.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Models\clases_sima.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MCalificaciones_periodo.cs" />
     <Compile Include="Models\MConfiguracionApp.cs" />
     <Compile Include="Models\configuracion_app.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
@@ -231,7 +233,7 @@
     <Compile Include="Models\respuestas.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Respusta.cs" />
+    <Compile Include="Models\Respuesta.cs" />
     <Compile Include="clases\Sesion.cs" />
     <Compile Include="Models\Test.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>

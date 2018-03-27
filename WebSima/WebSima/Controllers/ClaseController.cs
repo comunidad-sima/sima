@@ -15,7 +15,7 @@ namespace WebSima.Controllers
     {
        
         //String tipo_usuario = "Monitor";
-         String nombreCarpeta = "~/Uploads";
+         String dir_clases = Direccion.getDirClases();
         private bd_simaEntitie db = new bd_simaEntitie();
         private Sesion sesion = new Sesion();
 
@@ -183,7 +183,7 @@ namespace WebSima.Controllers
 
                         if (ModelState.IsValid)
                         {
-                            string ruta = Server.MapPath(nombreCarpeta);
+                            string ruta = Server.MapPath(dir_clases);
                             String materia = sesion.getMateria();
                             String idMonitor = sesion.getIdUsuario();
                             // se verifica que tenga la materia a cargo para evitar que se cambie el monbre de la materia en el select

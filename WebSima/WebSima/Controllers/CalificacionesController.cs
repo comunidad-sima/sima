@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebSima.Models;
 
 namespace WebSima.Controllers
 {
     public class CalificacionesController : Controller
     {
+        private bd_simaEntitie db = new bd_simaEntitie();
         //
         // GET: /Asistencia/
 
@@ -36,18 +38,31 @@ namespace WebSima.Controllers
         // POST: /Asistencia/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public JsonResult Guardar(FormCollection datos_notas)
         {
-            try
-            {
-                // TODO: Add insert logic here
+          //  var notas = Request.Form[0];
+                      
+            Respuesta respuesta = new Respuesta();
+          
+                //se piden las keys 
+                MCalificaciones_periodo aux = new MCalificaciones_periodo();
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                String guardado=aux.guardar(db, datos_notas);
+                if (!guardado.Equals("OK"))
+                {
+                    respuesta.RESPUESTA = "ERROR";
+                    respuesta.MENSAJE = guardado;
+                }
+                else
+                {
+                    respuesta.RESPUESTA = "OK";
+                    respuesta.MENSAJE = "Calificaciones guardadas.";
+                }
+
+               
+            
+
+            return Json(respuesta);
         }
 
         //

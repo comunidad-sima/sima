@@ -3,6 +3,9 @@
     .negative {
         color: red;
     }
+    .error {
+        color: #E67E22;
+    }
 </style>
 <div>
     <ol class="breadcrumb " style="background-color: #ffffff">
@@ -43,24 +46,21 @@
                                     <button class="btn btn-success " type="submit">Enviar</button>
                                 </span>
                             </div>
-
-
-
                         </div>
                     </form>
                 </div>
                 <div class="col-sm-12">
                     <hr />
                 </div>
-
+                <div class="col-sm-12" id="alert_1"></div>
                 <div class="col-sm-12">
                     <div id="notas" class="handsontable  "></div>
                 </div>
                <br />
                 <div style="padding:12px" class="col-sm-12">
                     <p>
-                        <button class="btn btn-success" name="dump" data-dump="#notas" title="Enviar datos">
-                            Guargar
+                        <button class="btn btn-success" name="dump" data-dump="#notas" id="guardar_nota" title="Enviar datos">
+                            Guardar
                         </button>
                     </p>
                 </div>
@@ -70,15 +70,128 @@
     </div>
     <!-- /.box-body -->
 </div>
-
-
 <script>
 
+    $(document).ready(function () {
+        bs_input_file();
+        function bindDumpButton() {
+            $('body').on('click', 'button[name=dump]', function () {
+                var dump = $(this).data('dump');
+                var $container = $(dump);
+                var datos = {                   
+                    "dato_nota": $container.handsontable('getData'),
+                   // "id_prueba": "Prueba"                    
+                }
+                //var datos = $container.handsontable('getData');
+                var btn = $("#guardar_nota");
+                btn.val("Guardando...");
+                btn.prop("disabled", true);
+                $.ajax({
+                    data: datos,
+                    url: "/Calificaciones/Guardar",
+                    dataType: "json",
+                    type: 'post',
+                    beforeSend: function () { },
+                    success: function (response) {
+                        var mensaje = "";
+                        var clase = "";
+                        if (response["RESPUESTA"] == "OK") {                           
+                            mensaje = response["MENSAJE"];
+                            clase = "alert-success";                           
 
+                        } else if (response["RESPUESTA"] == "ERROR") {
+                            mensaje = response["MENSAJE"];
+                            clase = "alert-danger";                          
+                        }                        
+                        btn.prop("disabled", false);
+                        //alert_mensajes() esta en helper.js
+                       $("#alert_1").html(alert_mensajes(mensaje, clase));
+                        // se activa el boton enviar
+                        btn.val("Guardar");
+                    }, error: function (error) {
+                        alert("Error");
+                        btn.val("Guardar");
+                        btn.prop("disabled", false);
+                    }
+                });
+                //console.log('data of ' + dump, $container.handsontable('getData'));
+            });
+        }
+        bindDumpButton();
 
-    // codigo input file
+        function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
+            Handsontable.TextCell.renderer.apply(this, arguments);
+            if (parseFloat(value, 10) < 3) { //if row contains negative number
+                td.className = 'negative'; //add class "negative"
+            }
+            else if (col!=0 &&(parseFloat(value, 10) < 0 || parseFloat(value, 10) > 5)) { //if row contains negative number
+                td.className = 'error'; //add class "negative"
+            }
+            else {
+                td.className = '';
+            }
+            if (row === 0) {
+                td.style.fontWeight = 'bold';
+                td.style.color = 'green';
+            }
+            if (cellProperties.readOnly) {
+                td.style.opacity = 0.7;
+            }
+            //if (value === 'Nissan') {
+            //    td.style.fontStyle = 'italic';
+            //}
 
+            if (!value || value === '') {
+                td.style.background = '#EEE';
+            }
+            else {
+                td.style.background = '';
+            }
+        }
+
+        var data = [
+          ["Identificación", "Nombre", "Taller", "Quiz", "Trabajo"],
+          ["1102230202", "Fredys Jose Vergara Cardenas1", 3, 2, 5],
+          ["2034534098", "Fredys Jose Vergara Cardenas2", 0, (3.7), 3],
+          
+        ];
+
+        var container = $("#notas");
+        container.handsontable({
+            data: data,
+            startRows: 20,
+            startCols: 20,
+            minSpareRows: 1,
+            minSpareCols: 1,
+            colWidths: [80, 220],
+            manualColumnResize: true,
+            rowHeaders: true,
+            colHeaders: true,
+            contextMenu: true,
+            onSelection: function (row, col, row2, col2) {
+                var meta = container.handsontable('getCellMeta', row2, col2);
+                if (meta.isWritable == false) {
+                    container.handsontable('updateSettings', { fillHandle: false });
+                }
+                else {
+                    container.handsontable('updateSettings', { fillHandle: true });
+                }
+            },
+            cells: function (row, col, prop) {
+                var cellProperties = {};
+                if (col === 1/* || container.handsontable('getData')[row][col] === 'readOnly'*/) {
+                    cellProperties.readOnly = true; //make cell read-only if it is first row or the text reads 'readOnly'
+                }
+                cellProperties.type = {
+                    renderer: negativeValueRenderer
+                }
+                return cellProperties;
+            }
+        });
+
+    });
     function bs_input_file() {
+        // codigo input file
         $(".input-file").before(
           function () {
               if (!$(this).prev().hasClass('input-ghost')) {
@@ -101,93 +214,6 @@
           }
         );
     }
-    $(function () {
-        bs_input_file();
-    });
-
-
-
-
-    $(document).ready(function () {
-
-        function bindDumpButton() {
-            $('body').on('click', 'button[name=dump]', function () {
-                var dump = $(this).data('dump');
-                var $container = $(dump);
-                console.log('data of ' + dump, $container.handsontable('getData'));
-            });
-        }
-        bindDumpButton();
-
-        function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
-            Handsontable.TextCell.renderer.apply(this, arguments);
-            if (parseInt(value, 10) < 3) { //if row contains negative number
-                td.className = 'negative'; //add class "negative"
-            }
-            else {
-                td.className = '';
-            }
-            if (row === 0) {
-                td.style.fontWeight = 'bold';
-                td.style.color = 'green';
-            }
-            if (cellProperties.readOnly) {
-                td.style.opacity = 0.7;
-            }
-            if (value === 'Nissan') {
-                td.style.fontStyle = 'italic';
-            }
-
-            if (!value || value === '') {
-                td.style.background = '#EEE';
-            }
-            else {
-                td.style.background = '';
-            }
-        }
-
-        var data = [
-          ["Identificación", "Nombre", "Nissan", "Toyota", "Honda"],
-          ["1102230202", "Fredys Jose Vergara Cardenas", 11, 12, 13],
-          ["203453409", 20, -11, 14, 13],
-          ["45464565", 30, 15, -12, "readOnly"],
-           ["45654633", 30, 15, "hhhh"]
-        ];
-
-        var container = $("#notas");
-        container.handsontable({
-            data: data,
-            startRows: 20,
-            startCols: 20,
-            minSpareRows: 1,
-            minSpareCols: 1,
-            colWidths: [80, 180],
-            manualColumnResize: true,
-            rowHeaders: true,
-            colHeaders: true,
-            contextMenu: true,
-            onSelection: function (row, col, row2, col2) {
-                var meta = container.handsontable('getCellMeta', row2, col2);
-                if (meta.isWritable == false) {
-                    container.handsontable('updateSettings', { fillHandle: false });
-                }
-                else {
-                    container.handsontable('updateSettings', { fillHandle: true });
-                }
-            },
-            cells: function (row, col, prop) {
-                var cellProperties = {};
-                if (row === 0 || col === 0 || container.handsontable('getData')[row][col] === 'readOnly') {
-                    cellProperties.readOnly = true; //make cell read-only if it is first row or the text reads 'readOnly'
-                }
-                cellProperties.type = {
-                    renderer: negativeValueRenderer
-                }
-                return cellProperties;
-            }
-        });
-
-    });
 </script>
 
 

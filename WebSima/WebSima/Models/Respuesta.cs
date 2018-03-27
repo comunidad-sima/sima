@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebSima.Models
 {
-    public class Respusta
+    public class Respuesta
     {
         // tipos de respustas:
         // ERROR

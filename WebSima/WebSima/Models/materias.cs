@@ -16,15 +16,15 @@ namespace WebSima.Models
     {
         public materias()
         {
-            this.calificaciones_periodo = new HashSet<calificaciones_periodo>();
             this.cursos = new HashSet<cursos>();
             this.grupos_acargo = new HashSet<grupos_acargo>();
+            this.calificaciones_periodo = new HashSet<calificaciones_periodo>();
         }
     
         public string nombre { get; set; }
     
-        public virtual ICollection<calificaciones_periodo> calificaciones_periodo { get; set; }
         public virtual ICollection<cursos> cursos { get; set; }
         public virtual ICollection<grupos_acargo> grupos_acargo { get; set; }
+        public virtual ICollection<calificaciones_periodo> calificaciones_periodo { get; set; }
     }
 }
