@@ -73,90 +73,79 @@
 <script>
 
     $(document).ready(function () {
-        bs_input_file();
-        function bindDumpButton() {
-            $('body').on('click', 'button[name=dump]', function () {
-                var dump = $(this).data('dump');
-                var $container = $(dump);
-                var datos = {                   
-                    "dato_nota": $container.handsontable('getData'),
-                   // "id_prueba": "Prueba"                    
-                }
-                //var datos = $container.handsontable('getData');
-                var btn = $("#guardar_nota");
-                btn.val("Guardando...");
-                btn.prop("disabled", true);
-                $.ajax({
-                    data: datos,
-                    url: "/Calificaciones/Guardar",
-                    dataType: "json",
-                    type: 'post',
-                    beforeSend: function () { },
-                    success: function (response) {
-                        var mensaje = "";
-                        var clase = "";
-                        if (response["RESPUESTA"] == "OK") {                           
-                            mensaje = response["MENSAJE"];
-                            clase = "alert-success";
-                            location.href = "/Calificaciones/Registrar";
-
-                        } else if (response["RESPUESTA"] == "ERROR") {
-                            mensaje = response["MENSAJE"];
-                            clase = "alert-danger";                          
-                        }                        
-                        btn.prop("disabled", false);
-                        //alert_mensajes() esta en helper.js
-                       $("#alert_1").html(alert_mensajes(mensaje, clase));
-                        // se activa el boton enviar
-                        btn.val("Guardar");
-                    }, error: function (error) {
-                        alert("Error");
-                        btn.val("Guardar");
-                        btn.prop("disabled", false);
-                    }
-                });
-                //console.log('data of ' + dump, $container.handsontable('getData'));
-            });
-        }
+        bs_input_file();        
         bindDumpButton();
-
-        function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
-            Handsontable.TextCell.renderer.apply(this, arguments);
-            if (parseFloat(value, 10) < 3) { //if row contains negative number
-                td.className = 'negative'; //add class "negative"
-            }
-            else if (col!=0 &&(parseFloat(value, 10) < 0 || parseFloat(value, 10) > 5)) { //if row contains negative number
-                td.className = 'error'; //add class "negative"
-            }
-            else {
-                td.className = '';
-            }
-            if (row === 0) {
-                td.style.fontWeight = 'bold';
-                td.style.color = 'green';
-            }
-            if (cellProperties.readOnly) {
-                td.style.opacity = 0.7;
-            }
-            //if (value === 'Nissan') {
-            //    td.style.fontStyle = 'italic';
-            //}
-
-            if (!value || value === '') {
-                td.style.background = '#EEE';
-            }
-            else {
-                td.style.background = '';
-            }
-        }
-
         var data = [
           ["Identificación", "Nombre", "Taller", "Quiz", "Trabajo"],
           ["1102230202", "Fredys Jose Vergara Cardenas1", 3, 2, 5],
-          ["2034534098", "Fredys Jose Vergara Cardenas2", 0, (3.7), 3],
-          
+          ["2034534098", "Fredys Jose Vergara Cardenas2", 0, (3.7), 3]          
         ];
 
+        $.ajax({
+            //data: "",
+            url: "/Calificaciones/CaligicacionesRegistro/-1",
+            dataType: "json",
+            type: 'post',
+            beforeSend: function () { },
+            success: function (response) {
+                data = response;
+                cargarTablaNota(data);
+                console.log(response);
+            }, error: function (error) {
+                alert("Error al cargar los datos");
+               
+            }
+        });
+
+             
+
+    });
+    function bindDumpButton() {
+        $('body').on('click', 'button[name=dump]', function () {
+            var dump = $(this).data('dump');
+            var $container = $(dump);
+            var datos = {
+                "dato_nota": $container.handsontable('getData'),
+                // "id_prueba": "Prueba"                    
+            }
+            //var datos = $container.handsontable('getData');
+            var btn = $("#guardar_nota");
+            btn.val("Guardando...");
+            btn.prop("disabled", true);
+            /// se envian las notas 
+            $.ajax({
+                data: datos,
+                url: "/Calificaciones/Guardar",
+                dataType: "json",
+                type: 'post',
+                beforeSend: function () { },
+                success: function (response) {
+                    var mensaje = "";
+                    var clase = "";
+                    if (response["RESPUESTA"] == "OK") {
+                        mensaje = response["MENSAJE"];
+                        clase = "alert-success";
+                        location.href = "/Calificaciones/Registrar";
+
+                    } else if (response["RESPUESTA"] == "ERROR") {
+                        mensaje = response["MENSAJE"];
+                        clase = "alert-danger";
+                    }
+                    btn.prop("disabled", false);
+                    //alert_mensajes() esta en helper.js
+                    $("#alert_1").html(alert_mensajes(mensaje, clase));
+                    // se activa el boton enviar
+                    btn.val("Guardar");
+                }, error: function (error) {
+                    alert("Error");
+                    btn.val("Guardar");
+                    btn.prop("disabled", false);
+                }
+            });
+            //console.log('data of ' + dump, $container.handsontable('getData'));
+        });
+    }
+    function cargarTablaNota(data) {
         var container = $("#notas");
         container.handsontable({
             data: data,
@@ -180,7 +169,7 @@
             },
             cells: function (row, col, prop) {
                 var cellProperties = {};
-                if (col === 1/* || container.handsontable('getData')[row][col] === 'readOnly'*/) {
+                if (col === 20000/* || container.handsontable('getData')[row][col] === 'readOnly'*/) {
                     cellProperties.readOnly = true; //make cell read-only if it is first row or the text reads 'readOnly'
                 }
                 cellProperties.type = {
@@ -189,8 +178,36 @@
                 return cellProperties;
             }
         });
+    }
+    function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
+        Handsontable.TextCell.renderer.apply(this, arguments);
+        if (parseFloat(value, 10) < 3) { //if row contains negative number
+            td.className = 'negative'; //add class "negative"
+        }
+        else if (col != 0 && (parseFloat(value, 10) < 0 || parseFloat(value, 10) > 5)) { //if row contains negative number
+            td.className = 'error'; //add class "negative"
+        }
+        else {
+            td.className = '';
+        }
+        if (row === 0) {
+            td.style.fontWeight = 'bold';
+            td.style.color = 'green';
+        }
+        if (cellProperties.readOnly) {
+            td.style.opacity = 0.7;
+        }
+        //if (value === 'Nissan') {
+        //    td.style.fontStyle = 'italic';
+        //}
 
-    });
+        if (!value || value === '') {
+            td.style.background = '#EEE';
+        }
+        else {
+            td.style.background = '';
+        }
+    }
     function bs_input_file() {
         // codigo input file
         $(".input-file").before(
