@@ -5142,6 +5142,7 @@
     <Content Include="Scripts\paginacion.js" />
     <Content Include="Scripts\helper.js" />
     <Content Include="Scripts\valida.js" />
+    <Content Include="Scripts\xlsx.core.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

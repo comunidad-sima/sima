@@ -24,11 +24,11 @@ namespace WebSima.Models.WebApi
 
         }
         /// <summary>
-        /// Función encargada de consultar todos los estudiantes matriculado en una materia.
+        /// Funcion encargada de consultar todos los estudiantes matriculado en una materia.
         /// </summary>
         /// <param name="periodo">Periodo en el que se desea consultar </param>
         /// <param name="materia">Materia la que se quiere consultar los estudiantes</param>
-        /// <returns>retorna un List<EstudianteMateria> con los estudiantes que cursan la materia pasada por parametro, si hay un error retorna una List null</returns>
+        /// <returns>retorna un List con los estudiantes que cursan la materia pasada por parametro, si hay un error retorna una List null</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static  List<EstudianteMateria> getEstudiantesMateria(String periodo, String materia)
         {

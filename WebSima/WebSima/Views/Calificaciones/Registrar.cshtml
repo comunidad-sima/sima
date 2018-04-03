@@ -35,7 +35,7 @@
                 <div class="  col-sm-12 col-md-8 col-lg-6">
 
                     <form method="POST" action="#">
-                        <!-- COMPONENT START -->
+                        <input type="file" id="files" name="files" />                      <!-- COMPONENT START -->
                         <div class="form-group">
                             <div class="input-group input-file">
                                 <span class="input-group-btn">
@@ -43,7 +43,7 @@
                                 </span>
                                 <input type="text" class="form-control" placeholder='Choose a file...' />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-success " type="submit">Enviar</button>
+                                    <button class="btn btn-success "  type="submit">Enviar</button>
                                 </span>
                             </div>
                         </div>
@@ -75,11 +75,7 @@
     $(document).ready(function () {
         bs_input_file();        
         bindDumpButton();
-        var data = [
-          ["Identificación", "Nombre", "Taller", "Quiz", "Trabajo"],
-          ["1102230202", "Fredys Jose Vergara Cardenas1", 3, 2, 5],
-          ["2034534098", "Fredys Jose Vergara Cardenas2", 0, (3.7), 3]          
-        ];
+        var data = [];
 
         $.ajax({
             //data: "",
@@ -90,7 +86,7 @@
             success: function (response) {
                 data = response;
                 cargarTablaNota(data);
-                console.log(response);
+                //console.log(response);
             }, error: function (error) {
                 alert("Error al cargar los datos");
                
@@ -153,7 +149,9 @@
             startCols: 20,
             minSpareRows: 1,
             minSpareCols: 1,
-            colWidths: [80, 220],
+            colWidths: [90, 400],
+            manualRowResize: true,
+           // stretchH: 'all',
             manualColumnResize: true,
             rowHeaders: true,
             colHeaders: true,
@@ -220,6 +218,7 @@
                   });
                   $(this).find("button.btn-choose").click(function () {
                       element.click();
+                      aler();
                   });
 
                   $(this).find('input').css("cursor", "pointer");
@@ -235,3 +234,77 @@
 </script>
 
 
+<script>
+    function handleFile(e) {
+        //Get the files from Upload control
+        var files = e.target.files;
+        var i, f;
+        //Loop through files
+        for (i = 0, f = files[i]; i != files.length; ++i) {
+            var reader = new FileReader();
+            var name = f.name;
+            reader.onload = function (e) {
+                var data = e.target.result;
+
+                var result;
+                var workbook = XLSX.read(data, { type: 'binary' });
+
+                var sheet_name_list = workbook.SheetNames;
+                sheet_name_list.forEach(function (y) { /* iterate through sheets */
+                    //Convert the cell value to Json
+                    var roa = XLSX.utils.sheet_to_json(workbook.Sheets[y]);                     
+                    if (roa.length > 0) {
+                        result = roa;                       
+                    }
+                });
+                //Get the first column first cell value
+                var datos = getDatos(result);
+                cargarTablaNota(datos);
+               
+            };
+            reader.readAsArrayBuffer(f);
+        }
+    }
+
+    //Change event to dropdownlist
+    $(document).ready(function () {
+        $('#files').change(handleFile);
+    });
+
+    function getCabeza(jsondata) {
+      
+        var columnSet = [];
+
+        for (var i = 0; i < jsondata.length; i++) {
+            var rowHash = jsondata[i];
+            for (var key in rowHash) {
+                if (rowHash.hasOwnProperty(key)) {
+                    if ($.inArray(key, columnSet) == -1) {/*Adding each unique column names to a variable array*/
+                        columnSet.push(key);
+
+                    }
+                }
+            }
+        }
+        return columnSet;
+    }
+    function getDatos(jsondata) {/*Function used to convert the JSON array to Html Table*/
+        var data_2 = [];
+        var columns = getCabeza(jsondata);
+        data_2.push(columns);
+        console.log(jsondata);
+        for (var i = 0; i < jsondata.length; i++) {
+            var dataTaTem = [];
+            for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+                var cellValue = jsondata[i][columns[colIndex]];
+                if (cellValue == null)
+                    cellValue = "";
+                dataTaTem.push(cellValue)
+                
+            }
+            data_2.push(dataTaTem)
+           
+        }
+        return data_2;
+    }
+</script>

@@ -76,7 +76,7 @@ namespace WebSima.Controllers
             cabeza.Add("Identificación");
             cabeza.Add("Nombre"); 
             String[] notas ;   
-            List<EstudianteMateria> estudiantes= ConsumidorAppi.getPruebaEstudinates();
+            List<EstudianteMateria> estudiantes= ConsumidorAppi.getEstudiantesMateria(MConfiguracionApp.getPeridoActual(db),asignatura);
             try
             {
                 if (calificaciones_periodo != null)
