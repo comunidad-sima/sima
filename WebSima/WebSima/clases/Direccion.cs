@@ -10,8 +10,9 @@ namespace WebSima.clases
 
         private static String urlBase = "~/Uploads";
 
-        private static String urlCapacitaciones = "/calapcitaciones";
+        private static String urlCapacitaciones = "/capacitaciones";
         private static String urlClase = "/clases";
+        private static String urlPlantillas = "/plantillas";
 
         public static String getDirCapacitaciones()
         {
@@ -20,6 +21,10 @@ namespace WebSima.clases
         public static String getDirClases()
         {
             return (urlBase + urlClase);
+        }
+        public static String getDirPlatillas()
+        {
+            return (urlBase + urlPlantillas);
         }
 
     }
