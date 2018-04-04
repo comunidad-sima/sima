@@ -151,7 +151,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="clases\Archivo.cs" />
+    <Compile Include="clases\Direccion.cs" />
     <Compile Include="clases\Excel_informe.cs" />
+    <Compile Include="clases\HelperAlerta.cs" />
     <Compile Include="clases\Rutina.cs" />
     <Compile Include="clases\Seguridad.cs" />
     <Compile Include="Controllers\CalificacionesController.cs" />
@@ -169,6 +171,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\PerfilHelper.cs" />
+    <Compile Include="Models\Alertas.cs">
+      <DependentUpon>Model_sima.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\calificaciones_periodo.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
@@ -178,6 +183,8 @@
     <Compile Include="Models\clases_sima.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MAlerta.cs" />
+    <Compile Include="Models\MCalificaciones_periodo.cs" />
     <Compile Include="Models\MConfiguracionApp.cs" />
     <Compile Include="Models\configuracion_app.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
@@ -231,7 +238,7 @@
     <Compile Include="Models\respuestas.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Respusta.cs" />
+    <Compile Include="Models\Respuesta.cs" />
     <Compile Include="clases\Sesion.cs" />
     <Compile Include="Models\Test.cs">
       <DependentUpon>Model_sima.tt</DependentUpon>
@@ -5135,6 +5142,7 @@
     <Content Include="Scripts\paginacion.js" />
     <Content Include="Scripts\helper.js" />
     <Content Include="Scripts\valida.js" />
+    <Content Include="Scripts\xlsx.core.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -5562,6 +5570,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Test\Edit_test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calificaciones\Grupos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calificaciones\Home.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

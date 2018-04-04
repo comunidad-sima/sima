@@ -43,7 +43,7 @@ namespace WebSima.Controllers
         public JsonResult Delete_test(int id)
         {
 
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
                 Test test = db.Test.Find(id);
@@ -165,7 +165,7 @@ namespace WebSima.Controllers
         public JsonResult add_pregunta(MPreguntas_test Mpregunta)
         {
 
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
                 if (ModelState.IsValid)
@@ -221,7 +221,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Crear(MTest Mtest, int[] id_preguntas = null)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (id_preguntas == null)
             {
                 respuesta.RESPUESTA = "ERROR";
@@ -369,7 +369,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Guardar_respuesta()
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             bool error = false;
             List<respuestas> respuestas = new List<respuestas>();
             List<MPreguntas_test> preguntas = null;
@@ -596,7 +596,7 @@ namespace WebSima.Controllers
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
 
             if (sesion.esAdministrador(db))
             {
@@ -662,7 +662,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Edit_Pregunta(MPreguntas_test pregunta)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
                
@@ -696,7 +696,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Edit_test(MTest Mtest, int[] id_preguntas = null)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (id_preguntas == null)
             {
                 respuesta.RESPUESTA = "ERROR";

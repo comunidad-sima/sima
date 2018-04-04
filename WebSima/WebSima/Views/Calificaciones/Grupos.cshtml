@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "Grupos";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">Ingenieria de sistemas</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table class="table tablaPaginacion table-responsive table-hover">
+
+                    <tbody>
+                       
+                            <tr>
+                                <td>
+                                  MATEMATICA CASICA: GRUPO -1 
+                                   
+                                </td>
+
+
+                                <td style="width:30px">
+                                    @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA DE SISTEMAS|MATEMATICA BASICA|1" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
+
+
+                                </td>
+                                
+
+                            </tr>
+                        <tr>
+                            <td>
+                                MATEMATICA CASICA: GRUPO - 2
+
+                            </td>
+
+
+                            <td style="width:30px">
+                                @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA DE SISTEMAS|MATEMATICA BASICA|2" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
+
+
+                            </td>
+
+
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">Ingenieria Industrial</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table class="table tablaPaginacion table-responsive table-hover">
+
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                MATEMATICA CASICA: GRUPO -1
+
+                            </td>
+
+
+                            <td style="width:30px">
+                                @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA INDUSTRIAL|MATEMATICA BASICA|1" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
+
+
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <td>
+                                MATEMATICA CASICA: GRUPO - 2
+
+                            </td>
+
+
+                            <td style="width:30px">
+                                @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA INDUSTRIAL|MATEMATICA BASICA|2" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
+
+
+                            </td>
+
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>

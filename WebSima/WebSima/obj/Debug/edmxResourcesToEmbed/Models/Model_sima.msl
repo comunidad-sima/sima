@@ -1,20 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="bd_simaModelStoreContainer" CdmEntityContainer="bd_simaEntitie">
-    <EntitySetMapping Name="calificaciones_periodo">
-      <EntityTypeMapping TypeName="bd_simaModel.calificaciones_periodo">
-        <MappingFragment StoreEntitySet="calificaciones_periodo">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="programa" ColumnName="programa" />
-          <ScalarProperty Name="grupo" ColumnName="grupo" />
-          <ScalarProperty Name="asignatura" ColumnName="asignatura" />
-          <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
-          <ScalarProperty Name="periodo" ColumnName="periodo" />
-          <ScalarProperty Name="corte" ColumnName="corte" />
-          <ScalarProperty Name="id_docente" ColumnName="id_docente" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="capacitaciones">
       <EntityTypeMapping TypeName="bd_simaModel.capacitaciones">
         <MappingFragment StoreEntitySet="capacitaciones">
@@ -92,17 +78,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Notas">
-      <EntityTypeMapping TypeName="bd_simaModel.Notas">
-        <MappingFragment StoreEntitySet="Notas">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="id_estudiante" ColumnName="id_estudiante" />
-          <ScalarProperty Name="tipo" ColumnName="tipo" />
-          <ScalarProperty Name="id_calificaciones_periodo" ColumnName="id_calificaciones_periodo" />
-          <ScalarProperty Name="valor" ColumnName="valor" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="pregunta_test_responder">
       <EntityTypeMapping TypeName="bd_simaModel.pregunta_test_responder">
         <MappingFragment StoreEntitySet="pregunta_test_responder">
@@ -159,6 +134,46 @@
           <ScalarProperty Name="punto" ColumnName="punto" />
           <ScalarProperty Name="id_persona" ColumnName="id_persona" />
           <ScalarProperty Name="id_preguntas_test_respustas" ColumnName="id_preguntas_test_respustas" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="calificaciones_periodo">
+      <EntityTypeMapping TypeName="bd_simaModel.calificaciones_periodo">
+        <MappingFragment StoreEntitySet="calificaciones_periodo">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="programa" ColumnName="programa" />
+          <ScalarProperty Name="grupo" ColumnName="grupo" />
+          <ScalarProperty Name="asignatura" ColumnName="asignatura" />
+          <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+          <ScalarProperty Name="periodo" ColumnName="periodo" />
+          <ScalarProperty Name="corte" ColumnName="corte" />
+          <ScalarProperty Name="id_docente" ColumnName="id_docente" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notas">
+      <EntityTypeMapping TypeName="bd_simaModel.Notas">
+        <MappingFragment StoreEntitySet="Notas">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="id_estudiante" ColumnName="id_estudiante" />
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="id_calificaciones_periodo" ColumnName="id_calificaciones_periodo" />
+          <ScalarProperty Name="valor" ColumnName="valor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Alertas">
+      <EntityTypeMapping TypeName="bd_simaModel.Alertas">
+        <MappingFragment StoreEntitySet="Alertas">
+          <ScalarProperty Name="titulo" ColumnName="titulo" />
+          <ScalarProperty Name="perfil_ver" ColumnName="perfil_ver" />
+          <ScalarProperty Name="creador" ColumnName="creador" />
+          <ScalarProperty Name="fecha_creada" ColumnName="fecha_creada" />
+          <ScalarProperty Name="tipo_alerta" ColumnName="tipo_alerta" />
+          <ScalarProperty Name="mensaje" ColumnName="mensaje" />
+          <ScalarProperty Name="eliminada" ColumnName="eliminada" />
+          <ScalarProperty Name="vista" ColumnName="vista" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -2,6 +2,8 @@
 @{
  
   WebSima.Models.Sesion session = new WebSima.Models.Sesion();
+  List<WebSima.Models.MAlerta> alerta = WebSima.clases.HelperAlerta.getAlertar();
+  
 }
 
 <!DOCTYPE html>
@@ -14,16 +16,20 @@
     <title>SIMA</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- handsontable-->
-
-    <link href="~/Content/handsontable/dist/jquery.handsontable.full.css" rel="stylesheet" />
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/Content/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="~/Content/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="~/Content/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
-
+    <!-- handsontable-->
+    <link href="~/Content/handsontable/dist/jquery.handsontable.full.css" rel="stylesheet" />
     <!-- Select2 -->
     <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
 
@@ -110,21 +116,27 @@
                         </li>
                         <!-- Notifications: style can be found in dropdown.less -->
                         <li class="dropdown notifications-menu">
+                            @{
+                                var alertaPerfil = (from a in alerta where (a.perfil_ver == session.getIPerfilUsusrio()) select a).ToList();
+                            }
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-danger">@alertaPerfil.Count()</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 10 notifications</li>
+                               
+                                <li class="header">Alertas disponibles: @alertaPerfil.Count()</li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">                                 
                                          
                                         
                                         <li>
+                                            @foreach(var alert in alertaPerfil){
                                             <a href="#">
-                                                <i class="fa fa-user text-red"></i> You changed your username
+                                                <i class="fa fa-user text-red"></i> @alert.titulo
                                             </a>
+                                            }
                                         </li>
                                     </ul>
                                 </li>
@@ -138,7 +150,8 @@
                                 <span class="label label-danger">9</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 9 tasks</li>
+                                
+                                <li class="header">Alertar disponibles </li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
@@ -437,6 +450,19 @@
 
                         </ul>
                     </li>
+                      <li id="asistencia" class="treeview">
+                        <a href="#">
+                            <i class="fa fa-file-o"></i> <span>Calificaciones</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="registro_calificaciones" class="active"><a href="/Calificaciones/Registrar"><i class="fa fa-registered"></i>Registrar</a></li>
+                            <li id="grupos_notas" class="active"><a href="/Calificaciones/Grupos"><i class="fa fa-registered"></i>Registrar</a></li>
+
+                        </ul>
+                    </li>
                   }
 
                     <li class="header">LABELS</li>
@@ -460,12 +486,7 @@
         </footer>
     </div>
  
-    <!-- handsontable-->
-    <script src="~/Content/handsontable/dist/jquery.handsontable.full.js"></script>
-    <!-- DataTables -->
-    <script src="/Content/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-
+    
     <!-- jQuery UI 1.11.4 -->
     <script src="/Content/bower_components/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -494,6 +515,12 @@
     <script src="/Content/bower_components/fastclick/lib/fastclick.js"></script>
     <!-- Select2 -->
     <script src="/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+    <!-- handsontable-->
+    <script src="~/Content/handsontable/dist/jquery.handsontable.full.js"></script>
+    <!-- DataTables -->
+    <script src="/Content/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
 
 
     <!-- iCheck 1.0.1 -->
@@ -501,7 +528,8 @@
     <!-- AdminLTE App -->
     <script src="/Content/dist/js/adminlte.min.js"></script>
     
-  
+
+    <script src="~/Scripts/xlsx.core.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="/Content/dist/js/demo.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>

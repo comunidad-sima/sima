@@ -124,7 +124,7 @@ namespace WebSima.Controllers
         public JsonResult Create(MCurso curso)
         {
            String periodo = MConfiguracionApp.getPeridoActual(db);
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
 
@@ -218,7 +218,7 @@ namespace WebSima.Controllers
         public JsonResult Edit(MCurso curso)
         {
             String periodo = MConfiguracionApp.getPeridoActual(db);
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
 
             if (sesion.esAdministrador(db))
             {
@@ -318,7 +318,7 @@ namespace WebSima.Controllers
        
         public JsonResult Delete(int id)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
                 cursos cursos = db.cursos.Find(id);

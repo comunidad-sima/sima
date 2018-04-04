@@ -5,6 +5,20 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="bd_simaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alertas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vista" Type="tinyint" Nullable="false" />
+          <Property Name="eliminada" Type="tinyint" Nullable="false" />
+          <Property Name="mensaje" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="tipo_alerta" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fecha_creada" Type="datetime" Nullable="false" />
+          <Property Name="creador" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="perfil_ver" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="titulo" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="calificaciones_periodo">
           <Key>
             <PropertyRef Name="id" />
@@ -15,7 +29,7 @@
           <Property Name="fecha_registro" Type="datetime" Nullable="false" />
           <Property Name="asignatura" Type="varchar" MaxLength="90" Nullable="false" />
           <Property Name="grupo" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="programa" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="programa" Type="nchar" MaxLength="90" Nullable="false" />
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="capacitaciones">
@@ -329,6 +343,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="bd_simaModelStoreContainer">
+          <EntitySet Name="Alertas" EntityType="Self.Alertas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="calificaciones_periodo" EntityType="Self.calificaciones_periodo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="capacitaciones" EntityType="Self.capacitaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="clases_sima" EntityType="Self.clases_sima" Schema="dbo" store:Type="Tables" />
@@ -405,7 +420,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="bd_simaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="bd_simaEntitie" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="calificaciones_periodo" EntityType="bd_simaModel.calificaciones_periodo" />
           <EntitySet Name="capacitaciones" EntityType="bd_simaModel.capacitaciones" />
           <EntitySet Name="clases_sima" EntityType="bd_simaModel.clases_sima" />
           <EntitySet Name="configuracion_app" EntityType="bd_simaModel.configuracion_app" />
@@ -413,19 +427,10 @@
           <EntitySet Name="estudiantes_asistentes" EntityType="bd_simaModel.estudiantes_asistentes" />
           <EntitySet Name="grupos_acargo" EntityType="bd_simaModel.grupos_acargo" />
           <EntitySet Name="materias" EntityType="bd_simaModel.materias" />
-          <EntitySet Name="Notas" EntityType="bd_simaModel.Notas" />
           <EntitySet Name="pregunta_test_responder" EntityType="bd_simaModel.pregunta_test_responder" />
           <EntitySet Name="preguntas_test" EntityType="bd_simaModel.preguntas_test" />
           <EntitySet Name="Test" EntityType="bd_simaModel.Test" />
           <EntitySet Name="usuarios" EntityType="bd_simaModel.usuarios" />
-          <AssociationSet Name="FK_calificaciones_periodo_materias" Association="bd_simaModel.FK_calificaciones_periodo_materias">
-            <End Role="materias" EntitySet="materias" />
-            <End Role="calificaciones_periodo" EntitySet="calificaciones_periodo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Notas_calificaciones_periodo" Association="bd_simaModel.FK_Notas_calificaciones_periodo">
-            <End Role="calificaciones_periodo" EntitySet="calificaciones_periodo" />
-            <End Role="Notas" EntitySet="Notas" />
-          </AssociationSet>
           <AssociationSet Name="FK_clases_sima_cursos" Association="bd_simaModel.FK_clases_sima_cursos">
             <End Role="cursos" EntitySet="cursos" />
             <End Role="clases_sima" EntitySet="clases_sima" />
@@ -475,22 +480,18 @@
             <End Role="pregunta_test_responder" EntitySet="pregunta_test_responder" />
             <End Role="respuestas" EntitySet="respuestas" />
           </AssociationSet>
+          <EntitySet Name="calificaciones_periodo" EntityType="bd_simaModel.calificaciones_periodo" />
+          <EntitySet Name="Notas" EntityType="bd_simaModel.Notas" />
+          <AssociationSet Name="FK_calificaciones_periodo_materias" Association="bd_simaModel.FK_calificaciones_periodo_materias">
+            <End Role="materias" EntitySet="materias" />
+            <End Role="calificaciones_periodo" EntitySet="calificaciones_periodo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notas_calificaciones_periodo" Association="bd_simaModel.FK_Notas_calificaciones_periodo">
+            <End Role="calificaciones_periodo" EntitySet="calificaciones_periodo" />
+            <End Role="Notas" EntitySet="Notas" />
+          </AssociationSet>
+          <EntitySet Name="Alertas" EntityType="bd_simaModel.Alertas" />
           </EntityContainer>
-        <EntityType Name="calificaciones_periodo">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id_docente" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="corte" Type="Int32" Nullable="false" />
-          <Property Name="periodo" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="asignatura" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
-          <Property Name="grupo" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="programa" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="materias" Relationship="bd_simaModel.FK_calificaciones_periodo_materias" FromRole="calificaciones_periodo" ToRole="materias" />
-          <NavigationProperty Name="Notas" Relationship="bd_simaModel.FK_Notas_calificaciones_periodo" FromRole="calificaciones_periodo" ToRole="Notas" />
-        </EntityType>
         <EntityType Name="capacitaciones">
           <Key>
             <PropertyRef Name="id" />
@@ -576,20 +577,9 @@
             <PropertyRef Name="nombre" />
           </Key>
           <Property Name="nombre" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="calificaciones_periodo" Relationship="bd_simaModel.FK_calificaciones_periodo_materias" FromRole="materias" ToRole="calificaciones_periodo" />
           <NavigationProperty Name="cursos" Relationship="bd_simaModel.FK_cursos_materias" FromRole="materias" ToRole="cursos" />
           <NavigationProperty Name="grupos_acargo" Relationship="bd_simaModel.FK_grupos_acargo_materias" FromRole="materias" ToRole="grupos_acargo" />
-        </EntityType>
-        <EntityType Name="Notas">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="valor" Type="Double" Nullable="false" />
-          <Property Name="id_calificaciones_periodo" Type="Int32" Nullable="false" />
-          <Property Name="tipo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="id_estudiante" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="calificaciones_periodo" Relationship="bd_simaModel.FK_Notas_calificaciones_periodo" FromRole="Notas" ToRole="calificaciones_periodo" />
+          <NavigationProperty Name="calificaciones_periodo" Relationship="bd_simaModel.FK_calificaciones_periodo_materias" FromRole="materias" ToRole="calificaciones_periodo" />
         </EntityType>
         <EntityType Name="pregunta_test_responder">
           <Key>
@@ -645,30 +635,6 @@
           <NavigationProperty Name="grupos_acargo" Relationship="bd_simaModel.FK_grupos_acargo_usuarios" FromRole="usuarios" ToRole="grupos_acargo" />
           <NavigationProperty Name="Test" Relationship="bd_simaModel.FK_Test_usuarios" FromRole="usuarios" ToRole="Test" />
         </EntityType>
-        <Association Name="FK_calificaciones_periodo_materias">
-          <End Type="bd_simaModel.materias" Role="materias" Multiplicity="1" />
-          <End Type="bd_simaModel.calificaciones_periodo" Role="calificaciones_periodo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="materias">
-              <PropertyRef Name="nombre" />
-            </Principal>
-            <Dependent Role="calificaciones_periodo">
-              <PropertyRef Name="asignatura" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Notas_calificaciones_periodo">
-          <End Type="bd_simaModel.calificaciones_periodo" Role="calificaciones_periodo" Multiplicity="1" />
-          <End Type="bd_simaModel.Notas" Role="Notas" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="calificaciones_periodo">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Notas">
-              <PropertyRef Name="id_calificaciones_periodo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_clases_sima_cursos">
           <End Type="bd_simaModel.cursos" Role="cursos" Multiplicity="1" />
           <End Type="bd_simaModel.clases_sima" Role="clases_sima" Multiplicity="*" />
@@ -827,26 +793,76 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="calificaciones_periodo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id_docente" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="corte" Type="Int32" Nullable="false" />
+          <Property Name="periodo" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="asignatura" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="false" />
+          <Property Name="grupo" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="programa" Type="String" Nullable="false" MaxLength="90" FixedLength="true" Unicode="true" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="materias" Relationship="bd_simaModel.FK_calificaciones_periodo_materias" FromRole="calificaciones_periodo" ToRole="materias" />
+          <NavigationProperty Name="Notas" Relationship="bd_simaModel.FK_Notas_calificaciones_periodo" FromRole="calificaciones_periodo" ToRole="Notas" />
+        </EntityType>
+        <EntityType Name="Notas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="valor" Type="Double" Nullable="false" />
+          <Property Name="id_calificaciones_periodo" Type="Int32" Nullable="false" />
+          <Property Name="tipo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="id_estudiante" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="calificaciones_periodo" Relationship="bd_simaModel.FK_Notas_calificaciones_periodo" FromRole="Notas" ToRole="calificaciones_periodo" />
+        </EntityType>
+        <Association Name="FK_calificaciones_periodo_materias">
+          <End Type="bd_simaModel.materias" Role="materias" Multiplicity="1" />
+          <End Type="bd_simaModel.calificaciones_periodo" Role="calificaciones_periodo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="materias">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="calificaciones_periodo">
+              <PropertyRef Name="asignatura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notas_calificaciones_periodo">
+          <End Type="bd_simaModel.calificaciones_periodo" Role="calificaciones_periodo" Multiplicity="1" />
+          <End Type="bd_simaModel.Notas" Role="Notas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="calificaciones_periodo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Notas">
+              <PropertyRef Name="id_calificaciones_periodo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Alertas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vista" Type="Byte" Nullable="false" />
+          <Property Name="eliminada" Type="Byte" Nullable="false" />
+          <Property Name="mensaje" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="tipo_alerta" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_creada" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="creador" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="perfil_ver" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="titulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="bd_simaModelStoreContainer" CdmEntityContainer="bd_simaEntitie">
-          <EntitySetMapping Name="calificaciones_periodo">
-            <EntityTypeMapping TypeName="bd_simaModel.calificaciones_periodo">
-              <MappingFragment StoreEntitySet="calificaciones_periodo">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="programa" ColumnName="programa" />
-                <ScalarProperty Name="grupo" ColumnName="grupo" />
-                <ScalarProperty Name="asignatura" ColumnName="asignatura" />
-                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
-                <ScalarProperty Name="periodo" ColumnName="periodo" />
-                <ScalarProperty Name="corte" ColumnName="corte" />
-                <ScalarProperty Name="id_docente" ColumnName="id_docente" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="capacitaciones">
             <EntityTypeMapping TypeName="bd_simaModel.capacitaciones">
               <MappingFragment StoreEntitySet="capacitaciones">
@@ -924,17 +940,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Notas">
-            <EntityTypeMapping TypeName="bd_simaModel.Notas">
-              <MappingFragment StoreEntitySet="Notas">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="id_estudiante" ColumnName="id_estudiante" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
-                <ScalarProperty Name="id_calificaciones_periodo" ColumnName="id_calificaciones_periodo" />
-                <ScalarProperty Name="valor" ColumnName="valor" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="pregunta_test_responder">
             <EntityTypeMapping TypeName="bd_simaModel.pregunta_test_responder">
               <MappingFragment StoreEntitySet="pregunta_test_responder">
@@ -994,7 +999,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="calificaciones_periodo">
+            <EntityTypeMapping TypeName="bd_simaModel.calificaciones_periodo">
+              <MappingFragment StoreEntitySet="calificaciones_periodo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="programa" ColumnName="programa" />
+                <ScalarProperty Name="grupo" ColumnName="grupo" />
+                <ScalarProperty Name="asignatura" ColumnName="asignatura" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="periodo" ColumnName="periodo" />
+                <ScalarProperty Name="corte" ColumnName="corte" />
+                <ScalarProperty Name="id_docente" ColumnName="id_docente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notas">
+            <EntityTypeMapping TypeName="bd_simaModel.Notas">
+              <MappingFragment StoreEntitySet="Notas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_estudiante" ColumnName="id_estudiante" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="id_calificaciones_periodo" ColumnName="id_calificaciones_periodo" />
+                <ScalarProperty Name="valor" ColumnName="valor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Alertas">
+            <EntityTypeMapping TypeName="bd_simaModel.Alertas">
+              <MappingFragment StoreEntitySet="Alertas">
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="perfil_ver" ColumnName="perfil_ver" />
+                <ScalarProperty Name="creador" ColumnName="creador" />
+                <ScalarProperty Name="fecha_creada" ColumnName="fecha_creada" />
+                <ScalarProperty Name="tipo_alerta" ColumnName="tipo_alerta" />
+                <ScalarProperty Name="mensaje" ColumnName="mensaje" />
+                <ScalarProperty Name="eliminada" ColumnName="eliminada" />
+                <ScalarProperty Name="vista" ColumnName="vista" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

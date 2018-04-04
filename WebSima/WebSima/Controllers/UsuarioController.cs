@@ -43,7 +43,7 @@ namespace WebSima.Controllers
 
         public ActionResult Rehacer(String id)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
 
             if (sesion.esAdministrador(db))
             {
@@ -128,7 +128,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Create(MUsuario usuario)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
                 if (ModelState.IsValid)
@@ -215,7 +215,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Edit(MUsuario usuario, String idAntiguo)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
                 if (ModelState.IsValid)
@@ -287,7 +287,7 @@ namespace WebSima.Controllers
        // [ValidateAntiForgeryToken]
         public JsonResult Delete(String id)
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
 
             if (sesion.esAdministrador(db))
             {

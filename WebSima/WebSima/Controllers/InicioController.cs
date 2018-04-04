@@ -30,7 +30,7 @@ namespace WebSima.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Login_test(String id="")
         {
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
             if (!id.Equals(""))
             {
                 Rutina.Rutinas();

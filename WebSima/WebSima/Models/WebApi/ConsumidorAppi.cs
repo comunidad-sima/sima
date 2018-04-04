@@ -24,11 +24,11 @@ namespace WebSima.Models.WebApi
 
         }
         /// <summary>
-        /// Función encargada de consultar todos los estudiantes matriculado en una materia.
+        /// Funcion encargada de consultar todos los estudiantes matriculado en una materia.
         /// </summary>
         /// <param name="periodo">Periodo en el que se desea consultar </param>
         /// <param name="materia">Materia la que se quiere consultar los estudiantes</param>
-        /// <returns>retorna un List<EstudianteMateria> con los estudiantes que cursan la materia pasada por parametro, si hay un error retorna una List null</returns>
+        /// <returns>retorna un List con los estudiantes que cursan la materia pasada por parametro, si hay un error retorna una List null</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static  List<EstudianteMateria> getEstudiantesMateria(String periodo, String materia)
         {
@@ -100,7 +100,7 @@ namespace WebSima.Models.WebApi
             List<EstudianteMateria> estudiantes = null;
             try
             {
-                // se convierte el perido al formato de cecar. Ejemplo 2017-2 a 20172
+                // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
                 periodo = periodo.Replace("-", "");
                 String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetDatosEstudiante";
                 var client = new RestClient(url);
@@ -113,7 +113,7 @@ namespace WebSima.Models.WebApi
                 {
                     request.AddParameter("num_identificacion", id);
                 }
-                // se hace y la peticion y se reciben los datos
+                // se hace  la peticion y se reciben los datos
                 IRestResponse respuetaDatos = client.Execute(request);
                 // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
                 estudiantes = JsonConvert.DeserializeObject<List<EstudianteMateria>>(respuetaDatos.Content) as List<EstudianteMateria>;
@@ -137,7 +137,7 @@ namespace WebSima.Models.WebApi
             List<AsignaturaGrupo> estudiantes = null;
             try
             {
-             // se convierte el perido al formato de cecar. Ejemplo 2017-2 a 20172
+             // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
                 periodo = periodo.Replace("-", "");
                 String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetGrupo";
                 var client = new RestClient(url);
@@ -158,96 +158,99 @@ namespace WebSima.Models.WebApi
             return estudiantes;
 
         }
+        /// <summary>
+        /// se utiliza para realizar pruebas sin tener q hacer peticiones a la api
+        /// </summary>
+        /// <returns></returns>
+         public static List<EstudianteMateria> getPruebaEstudinates()
+         {
+             List<EstudianteMateria> p = new List<EstudianteMateria>();
 
-        //public static List<EstudianteMateria> getPruebaEstudinates()
-        //{
-        //    List<EstudianteMateria> p = new List<EstudianteMateria>();
-            
-        //    p.Add(new EstudianteMateria
-        //    {
-            
-        //id_grupo="7310",
-        //num_identificacion="1002488635",
-        //nom_largo="ARRAUT AMARIS LAURA MARCELA",
-        //dir_email= "laura.arraut@cecar.edu.co",
-        //cod_periodo= "20172",
-        //fec_matricula="2017-08-14T13:37:34",
-        //cod_materia= "00964",
-        //nom_materia ="MATEMATICA BASICA",
-        //semestre= "1",
-        //num_grupo= "2",
-        //cod_sede="3",
-        //nom_sede="SINCELEJO                     ",
-        //cod_unidad="18",
-        //nom_unidad="CONTADURIA PUBLICA",
-        //programa_matricula_estudiante="18",
-        //nom_prog_matricula_estudiante= "CONTADURIA PUBLICA"
-        //    });
-        //   p.Add(new EstudianteMateria
-        //    {
+             p.Add(new EstudianteMateria
+             {
 
-        //        id_grupo = "7310",
-        //        num_identificacion = "1072263553",
-        //        nom_largo = "ARRAUT  LAURA MARCELA",
-        //        dir_email = "laura.arraut@cecar.edu.co",
-        //        cod_periodo = "20172",
-        //        fec_matricula = "2017-08-14T13:37:34",
-        //        cod_materia = "00964",
-        //        nom_materia = "MATEMATICA BASICA",
-        //        semestre = "1",
-        //        num_grupo = "1",
-        //        cod_sede = "3",
-        //        nom_sede = "SINCELEJO                     ",
-        //        cod_unidad = "18",
-        //        nom_unidad = "CONTADURIA PUBLICA",
-        //        programa_matricula_estudiante = "18",
-        //        nom_prog_matricula_estudiante = "CONTADURIA PUBLICA"
-        //    });
-        //    p.Add(new EstudianteMateria
-        //    {
+                 id_grupo = "7310",
+                 num_identificacion = "1002488635",
+                 nom_largo = "ARRAUT AMARIS LAURA MARCELA",
+                 dir_email = "laura.arraut@cecar.edu.co",
+                 cod_periodo = "20172",
+                 fec_matricula = "2017-08-14T13:37:34",
+                 cod_materia = "00964",
+                 nom_materia = "MATEMATICA BASICA",
+                 semestre = "1",
+                 num_grupo = "1",
+                 cod_sede = "3",
+                 nom_sede = "SINCELEJO                     ",
+                 cod_unidad = "18",
+                 nom_unidad = "INGENIERIA DE SISTEMAS",
+                 programa_matricula_estudiante = "18",
+                 nom_prog_matricula_estudiante = "INGENIERIA DE SISTEMAS"
+             });
+             p.Add(new EstudianteMateria
+              {
 
-        //        id_grupo = "7310",
-        //        num_identificacion = "1072263550",
-        //        nom_largo = "ARRAUT  LAURA MARCELA",
-        //        dir_email = "laura.arraut@cecar.edu.co",
-        //        cod_periodo = "20172",
-        //        fec_matricula = "2017-08-14T13:37:34",
-        //        cod_materia = "00964",
-        //        nom_materia = "MATEMATICA BASICA",
-        //        semestre = "1",
-        //        num_grupo = "1",
-        //        cod_sede = "3",
-        //        nom_sede = "SINCELEJO                     ",
-        //        cod_unidad = "18",
-        //        nom_unidad = "INGENIERIA DE SISTEMAS",
-        //        programa_matricula_estudiante = "18",
-        //        nom_prog_matricula_estudiante = "INGENIERIA DE SISTEMAS"
-        //    });
-        //    p.Add(new EstudianteMateria
-        //    {
+                  id_grupo = "7310",
+                  num_identificacion = "1072263553",
+                  nom_largo = "ARRAUT  LAURA MARCELA",
+                  dir_email = "laura.arraut@cecar.edu.co",
+                  cod_periodo = "20172",
+                  fec_matricula = "2017-08-14T13:37:34",
+                  cod_materia = "00964",
+                  nom_materia = "MATEMATICA BASICA",
+                  semestre = "1",
+                  num_grupo = "1",
+                  cod_sede = "3",
+                  nom_sede = "SINCELEJO                     ",
+                  cod_unidad = "18",
+                  nom_unidad = "INGENIERIA DE SISTEMAS",
+                  programa_matricula_estudiante = "18",
+                  nom_prog_matricula_estudiante = "INGENIERIA DE SISTEMAS"
+              });
+             p.Add(new EstudianteMateria
+             {
 
-        //        id_grupo = "7095",
-        //        num_identificacion = "1072263520",
-        //        nom_largo = "ARRAUT  LAURA MARCELA",
-        //        dir_email = "laura.arraut@cecar.edu.co",
-        //        cod_periodo = "20172",
-        //        fec_matricula = "2017-08-14T13:37:34",
-        //        cod_materia = "00964",
-        //        nom_materia = "MATEMATICA BASICA",
-        //        semestre = "1",
-        //        num_grupo = "2",
-        //        cod_sede = "3",
-        //        nom_sede = "SINCELEJO                     ",
-        //        cod_unidad = "18",
-        //        nom_unidad = "INGENIERIA DE INDUSTRIAL",
-        //        programa_matricula_estudiante = "18",
-        //        nom_prog_matricula_estudiante = "INGENIERIA DE INDUSTRIAL"
-        //    });
+                 id_grupo = "7310",
+                 num_identificacion = "1072263550",
+                 nom_largo = "ARRAUT  LAURA MARCELA",
+                 dir_email = "laura.arraut@cecar.edu.co",
+                 cod_periodo = "20172",
+                 fec_matricula = "2017-08-14T13:37:34",
+                 cod_materia = "00964",
+                 nom_materia = "MATEMATICA BASICA",
+                 semestre = "1",
+                 num_grupo = "1",
+                 cod_sede = "3",
+                 nom_sede = "SINCELEJO                     ",
+                 cod_unidad = "18",
+                 nom_unidad = "INGENIERIA DE SISTEMAS",
+                 programa_matricula_estudiante = "18",
+                 nom_prog_matricula_estudiante = "INGENIERIA DE SISTEMAS"
+             });
+             p.Add(new EstudianteMateria
+             {
 
-          
-          
-        //    return p;
-        //}
+                 id_grupo = "7095",
+                 num_identificacion = "1072263520",
+                 nom_largo = "ARRAUT  LAURA MARCELA",
+                 dir_email = "laura.arraut@cecar.edu.co",
+                 cod_periodo = "20172",
+                 fec_matricula = "2017-08-14T13:37:34",
+                 cod_materia = "00964",
+                 nom_materia = "MATEMATICA BASICA",
+                 semestre = "1",
+                 num_grupo = "1",
+                 cod_sede = "3",
+                 nom_sede = "SINCELEJO                     ",
+                 cod_unidad = "18",
+                 nom_unidad = "INGENIERIA DE INDUSTRIAL",
+                 programa_matricula_estudiante = "18",
+                 nom_prog_matricula_estudiante = "INGENIERIA DE INDUSTRIAL"
+             });
+
+
+
+             return p;
+         }
          public static List<HorarioEstudiante> getHorarioEstudiante(String periodo, String materia)
          {
              List<HorarioEstudiante> horarios = null;

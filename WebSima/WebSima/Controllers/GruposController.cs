@@ -64,7 +64,7 @@ namespace WebSima.Controllers
             int idCuro;
 
             bool error = false;
-            Respusta respuesta = new Respusta();
+            Respuesta respuesta = new Respuesta();
 
             using (var transaccion = new TransactionScope())
             {

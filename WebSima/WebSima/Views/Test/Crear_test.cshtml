@@ -17,27 +17,27 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 <div class="box box-success">
-    <div class="box-header with-border">
+    <div class="box-header with-border panelBorder">
         <div class="box-header with-border panelBorder ">
             <div id="alert_1"></div>
             <div class="form-group col-sm-4">
                 <h4>
                     @Html.LabelFor(model => model.ferfil_usuario)
-               </h4>
+                </h4>
                 <div class="input-group date">
                     <label>
                         <input class="flat-red " type="radio" value="Estudiante" id="ferfil_usuario" checked name="ferfil_usuario" />
-                        
+
                         Estudiantes
                     </label>
-                    
+
                     <br />
 
                     <label>
                         <input class="flat-red " type="radio" value="Docente" id="ferfil_usuario" name="ferfil_usuario" />
                         Docentes
                     </label>
-                 
+
                 </div>
                 @Html.ValidationMessageFor(model => model.ferfil_usuario, null, new { @class = "label label-danger" })
             </div>
@@ -48,9 +48,9 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                  
+
                     @Html.TextBoxFor(model => model.fecha_inicio, new { @class = "form-control datepicker " })
-                    @Html.ValidationMessageFor(model => model.fecha_inicio, null, new { @class = "label label-danger"})
+                    @Html.ValidationMessageFor(model => model.fecha_inicio, null, new { @class = "label label-danger" })
 
                 </div>
             </div>
@@ -66,48 +66,49 @@
 
                 </div>
             </div>
-      
-            <!-- segundo despligue -->
-            <div class="col-sm-12">
-                <br />
-                <h3>Seleccione las preguntas que se deben responder en el test</h3>
+        </div>
 
-                <table class="table tablaPaginacion table-responsive table-hover">
+        <!-- segundo despligue -->
+        <div class="col-sm-12 ">
+            <br />
+            <h3>Seleccione las preguntas que se deben responder en el test</h3>
 
-                    <tbody>
-                        @foreach (var pregunta in preguntas.OrderByDescending(x=>x.tipo))
-                        {
-                            <tr>
-                                <td style="width:20px">
-                                @if (pregunta.tipo.Equals("Abierta")) { 
-                                 <i class="fa  fa-unlock" title="Esta pregunta es abierta"></i>
+            <table class="table tablaPaginacion table-responsive table-hover">
+
+                <tbody>
+                    @foreach (var pregunta in preguntas.OrderByDescending(x => x.tipo))
+                    {
+                        <tr>
+                            <td style="width:20px">
+                                @if (pregunta.tipo.Equals("Abierta"))
+                                {
+                                    <i class="fa  fa-unlock" title="Esta pregunta es abierta"></i>
                                 }
                                 else if (pregunta.tipo.Equals("Cerrada"))
                                 {
                                     <i class="fa   fa-unlock-alt" title="Esta pregunta es cerrada"></i>
                                 }
-                                </td>
-                                
-
-                                <td style="width:20px">
-                                    <input type="checkbox" name="id_preguntas" value="@pregunta.id" class="flat-red">
-                                </td>
-                                <td>@pregunta.Pregunata </td>
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-                <button type="submit" id="enviar" class="btn btn-success"><i class="fa fa-floppy-o"></i>  Enviar </button>
+                            </td>
 
 
-            </div>
+                            <td style="width:20px">
+                                <input type="checkbox" name="id_preguntas" value="@pregunta.id" class="flat-red">
+                            </td>
+                            <td>@pregunta.Pregunata </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <button type="submit" id="enviar" class="btn btn-success"><i class="fa fa-floppy-o"></i>  Enviar </button>
+
 
         </div>
 
     </div>
-</div>
+
+    </div>
 }
 <script>
     $(function () {
