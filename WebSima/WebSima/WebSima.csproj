@@ -165,6 +165,7 @@
     <Compile Include="Controllers\HorarioController.cs" />
     <Compile Include="Controllers\InformeController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\NotasSubidasController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
@@ -5576,6 +5577,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Calificaciones\Home.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Alerta\NotasSubidas.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
