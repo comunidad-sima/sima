@@ -20,185 +20,187 @@
     </ol>
 </div>
 
-<div class="box box-success">
-    <div class="box-header with-border">
-            <div class="box-header with-border ">
-                    <div class="row">
-                        @using (Html.BeginForm("Reporte_asistencia", "Informe", FormMethod.Get, new { id = "formdato" }))
-                        {
-                            <div class="col-sm-12 col-12  col-lg-2 ">
-                                <h3 class=" margin">
-                                    Período
-                                </h3>
-                                <select required class="form-control " id="peorido" name="periodo">
-                                    @foreach (String periodo in periodos)
-                                    {
-                                        if (peridoSeleccionado.Equals(periodo))
-                                        {
-                                            <option @seleted value="@periodo">@periodo</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@periodo">@periodo</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-sm-12 col-12  col-lg-5 ">
-                                <h3 class=" margin">
-                                    Asignaturas
-                                </h3>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group  ">
-                                            @Html.DropDownList("materia", materias, asignatura,
+<div class="box box-success ">
+    <div class="box-header  with-border">
+        <div class="box-header with-border panelBorder ">
+            <div class="row">
+                @using (Html.BeginForm("Reporte_asistencia", "Informe", FormMethod.Get, new { id = "formdato" }))
+                {
+                    <div class="col-sm-12 col-12  col-lg-2 ">
+                        <h3 class=" margin">
+                            Período
+                        </h3>
+                        <select required class="form-control " id="peorido" name="periodo">
+                            @foreach (String periodo in periodos)
+                            {
+                                if (peridoSeleccionado.Equals(periodo))
+                                {
+                                    <option @seleted value="@periodo">@periodo</option>
+                                }
+                                else
+                                {
+                                    <option value="@periodo">@periodo</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-12  col-lg-5 ">
+                        <h3 class=" margin">
+                            Asignaturas
+                        </h3>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group  ">
+                                    @Html.DropDownList("materia", materias, asignatura,
                            new { @class = "form-control select2", style = "width: 100%" })
 
-                                            <span class="input-group-btn">
-                                                <button type="submit" class="btn btn-success">Buscar</button>
-                                            </span>
-                                        </div>
-                                        <!-- /input-group -->
-                                    </div>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-success">Buscar</button>
+                                    </span>
                                 </div>
+                                <!-- /input-group -->
                             </div>
-                        }
+                        </div>
                     </div>
+                }
             </div>
+        </div>
+        <br />
+        <div class="box-body col-sm-12 panelBorder">
+            <!-- segundo despligue -->
+            <div class=" box-body " style="border: 1px solid #e0e0e0; ">
 
-                <div class="box-body col-sm-12">
-                    <!-- segundo despligue -->
-                    <div class=" box-body " style="border: 1px solid #e0e0e0; ">
+                <div class="box-tools pull-right">
 
-                        <div class="box-tools pull-right">
-
-
-                        </div>
-
-
-                        <div class="col-sm-12 table-responsive">
-                            <table class="table tablaPaginacion table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>IDENTIFICACÓN</th>
-                                        <th>NOMBRE COMPLETO</th>
-                                        <th>PROGRAMA</th>                                       
-                                        <th>NOTA-1</th>
-                                        <th>NOTA-2</th>
-                                        <th>DEFINITIVA</th>
-                                        
-                                        <th>ASISTENCIA</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        int i = 1;
-                                        if (asistencia != null) { 
-                                        foreach (String[] item in asistencia)
-                                        {
-                                            var estudiante = (from e in datos_estudiante where(e.num_identificacion.Equals(item[1])) select(e)).ToList();
-                                            // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
-                                            <tr>
-                                                <td>@(i++)</td>
-                                                <td>@item[1]</td>
-                                                <td >
-                                                    @if (estudiante.Count() > 0)
-                                                    {
-                                                        @estudiante[0].nom_largo;
-                                                    }
-                                                    else
-                                                    {
-                                                        String mesanje = "Nombre no identificado";
-                                                        @mesanje;
-                                                    }
-
-
-                                                </td>
-
-                                                <td>
-
-                                                    @if (estudiante.Count() > 0)
-                                                    {
-                                                        @estudiante[0].nom_prog_matricula_estudiante
-                                                    }
-                                                    else
-                                                    {
-                                                        String mesanje = "Programa no identificado";
-                                                        @mesanje;
-                                                    }
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (estudiante.Count() > 0)
-                                                    {
-
-                                                        @(Double.Parse(estudiante[0].nota, provider).ToString("#.##"));
-                                                    }
-                                                    else
-                                                    {
-                                                         <div class="text-red">0,0</div>
-                                                    }
-
-
-                                                </td>
-                                                <td class ="text-center">
-                                                    @if (estudiante.Count() > 0)
-                                                    {
-                                                        @(Double.Parse(estudiante[1].nota, provider).ToString("#.##"));
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="text-red">0,0</div>
-                                                    }
-
-
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (estudiante.Count() > 0)
-                                                    {
-
-                                                        provider.NumberDecimalSeparator = ".";
-                                                        double nota1 = Double.Parse(estudiante[0].nota, provider) * (0.4);
-                                                        double nota2 = Double.Parse(estudiante[1].nota, provider) * (0.6);
-                                                        double notaFin = nota1 + nota2;
-                                                        if (Math.Round(notaFin, 1) <3)
-                                                        { 
-                                                        <div class="text-red">@(Math.Round(notaFin, 1))</div>
-                                                            }
-                                                        else
-                                                        {
-                                                            @(Math.Round(notaFin, 1));
-                                                        }
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="text-red">0,0</div>
-                                                       
-                                                    
-                                                    }
-
-
-                                                </td>
-
-                                                <td class="text-center">@item[0]</td>
-                                            </tr>
-                                        }
-                                    }
-                                    }
-                                </tbody>
-                            </table>
-                            @if (asistencia.Count() > 0)
-                            {
-                                <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o"></i>Exportar </a>
-
-                            }
-                        </div>
-                    </div>
 
                 </div>
+
+
+                <div class="col-sm-12 table-responsive">
+                    <table class="table tablaPaginacion table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>IDENTIFICACÓN</th>
+                                <th>NOMBRE COMPLETO</th>
+                                <th>PROGRAMA</th>
+                                <th>NOTA-1</th>
+                                <th>NOTA-2</th>
+                                <th>DEFINITIVA</th>
+
+                                <th>ASISTENCIA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 1;
+                                if (asistencia != null)
+                                {
+                                    foreach (String[] item in asistencia)
+                                    {
+                                        var estudiante = (from e in datos_estudiante where (e.num_identificacion.Equals(item[1])) select (e)).ToList();
+                                        // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
+                                        <tr>
+                                            <td>@(i++)</td>
+                                            <td>@item[1]</td>
+                                            <td>
+                                                @if (estudiante.Count() > 0)
+                                                {
+                                                    @estudiante[0].nom_largo;
+                                                }
+                                                else
+                                                {
+                                                    String mesanje = "Nombre no identificado";
+                                                    @mesanje;
+                                                }
+
+
+                                            </td>
+
+                                            <td>
+
+                                                @if (estudiante.Count() > 0)
+                                                {
+                                                    @estudiante[0].nom_prog_matricula_estudiante
+                                                }
+                                                else
+                                                {
+                                                    String mesanje = "Programa no identificado";
+                                                    @mesanje;
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                @if (estudiante.Count() > 0)
+                                                {
+
+                                                    @(Double.Parse(estudiante[0].nota, provider).ToString("#.##"));
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-red">0,0</div>
+                                                }
+
+
+                                            </td>
+                                            <td class="text-center">
+                                                @if (estudiante.Count() > 0)
+                                                {
+                                                    @(Double.Parse(estudiante[1].nota, provider).ToString("#.##"));
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-red">0,0</div>
+                                                }
+
+
+                                            </td>
+                                            <td class="text-center">
+                                                @if (estudiante.Count() > 0)
+                                                {
+
+                                                    provider.NumberDecimalSeparator = ".";
+                                                    double nota1 = Double.Parse(estudiante[0].nota, provider) * (0.4);
+                                                    double nota2 = Double.Parse(estudiante[1].nota, provider) * (0.6);
+                                                    double notaFin = nota1 + nota2;
+                                                    if (Math.Round(notaFin, 1) < 3)
+                                                    {
+                                                        <div class="text-red">@(Math.Round(notaFin, 1))</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        @(Math.Round(notaFin, 1));
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-red">0,0</div>
+
+
+                                                }
+
+
+                                            </td>
+
+                                            <td class="text-center">@item[0]</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    @if (asistencia.Count() > 0)
+                    {
+                        <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o"></i>Exportar </a>
+
+                    }
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
         $('.select2').select2();

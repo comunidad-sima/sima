@@ -58,7 +58,9 @@ namespace WebSima.Controllers
              List<String[]> datos= new List<string[]>();
              if (!materia.Equals("Seleccione asignatura"))
              {
-                 datos = info.consultarAsistencia(materia,periodo);
+                 datos=info.ProcedimientoPrueba(materia, periodo);
+                 //datos = info.consultarAsistencia(materia,periodo);
+                 
 
                  if (datos.Count() > 0)
                  {

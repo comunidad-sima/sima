@@ -161,7 +161,7 @@ namespace WebSima.Models
                 else
                     valido = "Faltan datos";
             }catch(Exception ){
-                valido = "Nota invalida ["+nota+"]";
+                valido = "Nota inválida ["+nota+"]";
             }
             return valido;
         }
