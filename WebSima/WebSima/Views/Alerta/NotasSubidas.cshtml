@@ -1,0 +1,156 @@
+﻿@{
+    ViewBag.Title = "notasSubidas";
+}
+
+
+<ol class="breadcrumb ">
+    <li class="breadcrumb-item ">Notas Registradas</li>
+    <li class="breadcrumb-item active">Clases</li>
+
+</ol>
+
+<div class="panelBorder">
+    <h3>Notas Registradas</h3>
+    <hr />
+
+    <div class="row">
+        <div class="col-sm-12 col-12   col-lg-2">
+            <label>Periodo:*</label>
+            <select class="form-control buscarGrupo" id="periodoBuscar" name="periodoBuscar" required>
+                <option>Seleccione periodo</option>
+
+                <option value="--">No periodos</option>
+            </select>
+
+        </div>
+        <div class="col-sm-12 col-12   col-lg-4">
+            <label>Programa:*</label>
+            <select class="form-control " id="idPrograma" name="idPrograma" required>
+                <option value="">Todos</option>
+
+                <option value="--">No Programa</option>
+            </select>
+        </div>
+        <div class="col-sm-12 col-12   col-lg-4">
+            <label>Asignatura:*</label>
+            <select class="form-control " id="materia" name="materia" required>
+                <option value="">Todos</option>
+
+                <option value="--">No Materia</option>
+            </select>
+        </div>
+        <div class="col-sm-12 col-12   col-lg-2">
+            <label>Grupo:*</label>
+            <select class="form-control" id="grupo" name="grupo" required>
+                <option value="">Todas</option>
+
+                <option value="--">No periodos</option>
+            </select>
+        </div>
+
+    </div>
+
+    <br />
+    <div class="table-responsive">
+        <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Identificacion
+                    </th>
+                    <th>
+                        Nombres
+                    </th>
+                    <th>
+                        Nota 1
+                    </th>
+                    <th>
+                        Nota 2
+                    </th>
+                    <th>
+                        Nota 3
+                    </th>
+                    <th class="text-center">
+                        Asistencia Clases
+                    </th>
+                    <th class="text-center">
+                        Asistencia Monitorias
+                    </th>
+                    <th class="text-center">
+                        Opciones
+                    </th>
+
+                </tr>
+            </thead>
+            <tr>
+                <td class="text-center">
+                    123322
+                </td>
+                <td>
+                    Jean C
+                </td>
+                <td>
+                    5
+                </td>
+                <td class="text-center">
+                    5
+                </td>
+                <td>
+                    5
+                </td>
+                <td class="text-right">
+                    10
+                </td>
+                <td class="text-right">
+                    20
+                </td>
+                <td>
+                    <a href="#">Detalles</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class=" panelBorder">
+        <div class="box-header with-border">
+            <i class="fa fa-bar-chart-o"></i>
+            <h3 class="box-title">Estadistica</h3>
+
+        </div>
+        <div class="box-body">
+            <div class="col-sm-6">
+
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+        <!-- /.box-body-->
+    </div>
+
+</div>
+<script>
+    $(function () {
+
+        //pie
+        var ctxP = document.getElementById("pieChart").getContext('2d');
+        var myPieChart = new Chart(ctxP, {
+            type: 'pie',
+            data: {
+                labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
+                datasets: [
+                    {
+                        data: [300, 50, 100, 40, 120],
+                        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+                        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                    }
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+
+    })
+</script>
+<script src="~/Scripts/paginacion.js"></script>
+

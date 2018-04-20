@@ -165,6 +165,7 @@
     <Compile Include="Controllers\HorarioController.cs" />
     <Compile Include="Controllers\InformeController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\AlertaController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
@@ -5587,6 +5588,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Views\Alerta\NotasSubidas.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

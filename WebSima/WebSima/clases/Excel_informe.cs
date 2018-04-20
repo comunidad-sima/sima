@@ -24,7 +24,7 @@ namespace WebSima.clases
             List<String> idEstudiantes = new List<string>();
             List<ComportamientoNotaEstudiente> datos_2 = new List<ComportamientoNotaEstudiente>();
             MInforme info = new MInforme();
-            List<String[]> datos = info.consultarAsistencia(materia, periodo);
+            List<String[]> datos = info.ProcedimientoPrueba(materia, periodo);
             if (datos.Count() > 0)
             {
                 // seleccionamaos todas las id de los estudiantes 

@@ -4,78 +4,91 @@
     ViewBag.Title = "Avance";
 }
 
-<h2>Avance</h2>
+<ol class="breadcrumb ">
+    <li class="breadcrumb-item ">Avance</li>
+    <li class="breadcrumb-item active">Clases</li>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_registro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.periodo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.tema)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.comentario)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.cursos_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.usuarios_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.evidencia)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_realizada)
-        </th>
-        <th></th>
-    </tr>
+</ol>
+<div class="panelBorder">
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <div class="table-responsive">
+        <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.fecha_registro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.periodo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.tema)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.comentario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.cursos_id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.usuarios_id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.evidencia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.fecha_realizada)
+                </th>
+                <th>Opciones</th>
+            </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_registro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.periodo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.tema)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.comentario)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cursos_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.usuarios_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.evidencia)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_realizada)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_registro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.periodo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tema)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.comentario)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.cursos_id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.usuarios_id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.evidencia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_realizada)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
 
-</table>
+        </table>
+        </div>
+    </div>
+<script src="~/Scripts/paginacion.js"></script>
+
+
+
+
