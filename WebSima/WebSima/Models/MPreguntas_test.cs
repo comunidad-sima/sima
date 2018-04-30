@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -30,39 +32,62 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="id">id de la pregunta</param>
         /// <returns></returns>
-        public MPreguntas_test getPreguntaId(bd_simaEntitie db, int id)
+        public MPreguntas_test getPreguntaId(int id)
         {
+
             MPreguntas_test pregunta = null;
-            pregunta = (from p in db.preguntas_test
-                        where (p.id == id)
-                        select (new MPreguntas_test
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_preguntas_por_id", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id_pregunta", id);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        pregunta = new MPreguntas_test
                         {
-                            eliminado = p.eliminado,
-                            id = p.id,
-                            Pregunata = p.Pregunata,
-                            pregunta_test_responder = p.pregunta_test_responder,
-                            tipo = p.tipo
-                        })).First();
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            Pregunata = row["Pregunata"].ToString(),
+                            tipo = row["tipo"].ToString(),
+                            eliminado = Convert.ToByte(row["eliminado"]),
+                        };
+
+                       
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
 
             return pregunta;
         }
 
-        public bool actualizar_pregunta(bd_simaEntitie db,MPreguntas_test pregunta){
-            bool actualizado = false;
-            try
-            {
-                preguntas_test pre = db.preguntas_test.Find(pregunta.id);
-                pre.Pregunata = pregunta.Pregunata;
-                pre.tipo = pregunta.tipo;
-                db.Entry(pre).State = EntityState.Modified;
-                db.SaveChanges();
-                actualizado = true;
-            }
-            catch (Exception)
-            {
+        public int actualizar_pregunta(bd_simaEntitie db,MPreguntas_test pregunta){
+            String sql = "UPDATE preguntas_test SET  Pregunata= @Pregunata WHERE  id= @id";
 
-            }
-            return actualizado;
+            var resultado = db.Database.ExecuteSqlCommand(sql,
+                   new SqlParameter("@id", pregunta.id),
+                   new SqlParameter("@Pregunata", pregunta.Pregunata)                   
+                    );
+            return resultado;
+            
 
         }
 
@@ -72,21 +97,51 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="eliminado">Estado de la pregunta</param>
         /// <returns></returns>
-        public  List<MPreguntas_test> getPreguntas(bd_simaEntitie db ,int eliminado=0)
+        public  List<MPreguntas_test> getPreguntas(int eliminado=0)
         {
 
-            var preguntas =
-                from pre in db.preguntas_test
-                where pre.eliminado == eliminado
-                select new MPreguntas_test
+            List<MPreguntas_test> listapregunta = new List<MPreguntas_test>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
                 {
-                    id = pre.id,
-                    eliminado = pre.eliminado,
-                    Pregunata = pre.Pregunata,
-                    tipo = pre.tipo,
-                    
-                };
-            return preguntas.ToList();
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_preguntas", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@eliminado", eliminado);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        MPreguntas_test p = new MPreguntas_test
+                        {
+                            id = Convert.ToInt32( row["id"].ToString()),
+                            Pregunata = row["Pregunata"].ToString(),
+                            tipo = row["tipo"].ToString(),
+                            eliminado = Convert.ToByte(row["eliminado"]),
+                        };
+
+                        listapregunta.Add(p);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+
+            return listapregunta;
         }
         /// <summary>
         /// Registra un nueva pregunta 
@@ -110,27 +165,28 @@ namespace WebSima.Models
             }
             return guardado;
         }
-        /// <summary>
-        /// Consulta las preguntas registradas para la creacion de los test
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="eliminado"></param>
-        /// <returns></returns>
-        public List<MPreguntas_test> getPreguntas_test(bd_simaEntitie db, int eliminado=0)
-        {
-            List<MPreguntas_test> preguntas = null;
+        ///// <summary>
+        ///// Consulta las preguntas registradas para la creacion de los test
+        ///// </summary>
+        ///// <param name="db"></param>
+        ///// <param name="eliminado"></param>
+        ///// <returns></returns>
+        //public List<MPreguntas_test> getPreguntas_test(bd_simaEntitie db, int eliminado=0)
+        //{
+        //    List<MPreguntas_test> preguntas = null;
 
-            preguntas = (from p in db.preguntas_test
-                        where (p.eliminado == 0)
-                        select new MPreguntas_test
-                        {
-                            eliminado = p.eliminado,
-                            id = p.id,
-                            Pregunata = p.Pregunata,
-                            pregunta_test_responder = p.pregunta_test_responder,
-                            tipo = p.tipo
-                        }).ToList();
-            return preguntas;
-        }
+            
+        //    preguntas = (from p in db.preguntas_test
+        //                where (p.eliminado == 0)
+        //                select new MPreguntas_test
+        //                {
+        //                    eliminado = p.eliminado,
+        //                    id = p.id,
+        //                    Pregunata = p.Pregunata,
+        //                    pregunta_test_responder = p.pregunta_test_responder,
+        //                    tipo = p.tipo
+        //                }).ToList();
+        //    return preguntas;
+        //}
     }
 }

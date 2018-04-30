@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
@@ -18,9 +21,7 @@ namespace WebSima.Models
         /// </summary>
         /// <param name="db"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]  
-       
-        public static List<SelectListItem> getMaterias(bd_simaEntitie db)
+        public  List<SelectListItem> getMaterias(bd_simaEntitie db)
         {
             var materias = (from m in db.materias
                            select new SelectListItem
@@ -31,12 +32,22 @@ namespace WebSima.Models
             return materias.ToList();
 
         }
+        public MMateria getMateriaId(bd_simaEntitie db, string nomMateria)
+        {
+            var materia = db.materias.Find(nomMateria);
+            MMateria m = new MMateria
+            {
+                nombre = materia.nombre
+            };
+            return m;
+
+        }
         /// <summary>
         /// consulta el nombre de las materias que se le ha creado un curso en un perido
         /// </summary>
         /// <param name="db"></param>
         /// <returns></returns>
-        public static List<SelectListItem> getMaterias_registro_grupos(bd_simaEntitie db, String periodo )
+        public  List<SelectListItem> getMaterias_registro_grupos(bd_simaEntitie db, String periodo )
         {
             //List<cursos> materia = ((from m in db.cursos
             //                where(m.periodo.Equals(periodo))
@@ -53,6 +64,47 @@ namespace WebSima.Models
    
             return k;
 
+        }
+        /// <summary>
+        /// Consulta el nombre de la asignatura por el id de un grupo
+        /// </summary>
+        /// <param name="id_curso"></param>
+        /// <returns></returns>
+        public  string getNombreMateriaPorIDCurso(int id_curso)
+        {
+
+            string materia = null;
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_materioa_por_id_curso", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@curso_id", id_curso);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        materia = row["nombre_materia"].ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+
+            }
+
+            return materia;
         }
 
     }

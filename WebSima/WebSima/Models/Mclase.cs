@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -50,8 +53,19 @@ namespace WebSima.Models
         /// <param name="periodo"></param>
         /// <param name="idMonitor"></param>
         /// <returns></returns>
-        public static List<Mclase> getClasesMonitorPerido(bd_simaEntitie db,String periodo, String idMonitor, String materia){
+        public  List<Mclase> getClasesMonitorPerido(bd_simaEntitie db,String periodo, String idMonitor, String materia){
           //  var clases_sima = db.clases_sima.Include(c => c.cursos).Include(c => c.usuarios);
+
+
+
+
+
+            ///SP_Clases_Monitor_Periodo
+            ///
+
+
+
+
             var clases =(from c in db.clases_sima
                          where c.periodo == periodo && c.usuarios_id.StartsWith(idMonitor) && c.cursos.nombre_materia.StartsWith(materia)
                 select new Mclase
@@ -129,7 +143,7 @@ namespace WebSima.Models
         /// </summary>
         /// <param name="db"></param>
         /// <returns></returns>
-        public static List<String> getPeriodosRegistradosDeClase(bd_simaEntitie db)
+        public  List<String> getPeriodosRegistradosDeClase(bd_simaEntitie db)
         {
             return db.Database.SqlQuery<String>("select DISTINCT periodo from clases_sima").ToList();
         }
@@ -140,30 +154,87 @@ namespace WebSima.Models
         /// <param name="periodo"></param>
         /// <param name="id_estudiante"></param>
         /// <returns></returns>
-        public int getCantidadClaseAsistidaEstudianteId(bd_simaEntitie db, String periodo , String id_estudiante)
+        public int getCantidadClaseAsistidaEstudianteId(string periodo , string id_estudiante)
         {
             int  cantidadAsistencia  = 0;
-            cantidadAsistencia = (from c in db.clases_sima
-                         join e in db.estudiantes_asistentes on c.id equals e.clase_id                         
-                         where (c.periodo == periodo && e.estudiante_id==id_estudiante)                         
-                         select c ).Count();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_cantidad_asistencia", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@id_estudiante", id_estudiante);
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        cantidadAsistencia = Convert.ToInt32(row["cantidad"]);                        
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
             return cantidadAsistencia;
         }
 
         /// <summary>
-        /// Consulta la cantidad de case asistida que tiene un estudinate en un curso
+        /// Consulta la cantidad de clase asistida que tiene un estudinate en un curso
         /// </summary>
         /// <param name="db"></param>
         /// <param name="id_curso"></param>
         /// <param name="id_estudiante"></param>
         /// <returns></returns>
-        public int getClaseAsistedaEstudianteEnGrupo(bd_simaEntitie db, int id_curso, String id_estudiante)
+        public int getClaseAsistedaEstudianteEnGrupo( int id_curso, string id_estudiante)
         {
             int cantidadAsistencia = 0;
-            cantidadAsistencia = (from c in db.clases_sima
-                                  join e in db.estudiantes_asistentes on c.id equals e.clase_id
-                                  where (c.cursos_id==id_curso && e.estudiante_id.Equals(id_estudiante))
-                                  select c).Count();
+
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_cantidad_asistencia_curso", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@id_estudiante", id_estudiante);
+                    cmd.Parameters.AddWithValue("@id_curso", id_curso);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        cantidadAsistencia = Convert.ToInt32(row["cantidad"]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
             return cantidadAsistencia;
         }
         /// <summary>
@@ -173,36 +244,147 @@ namespace WebSima.Models
         /// <param name="periodo"></param>
         /// <param name="id_estudiante"></param>
         /// <returns></returns>
-        public List<MCurso> getCursos_por_clase(bd_simaEntitie db, String periodo, String id_estudiante)
+        public List<MCurso> getCursos_por_clase(string periodo, string id_estudiante)
         {
-            List<MCurso> cursos = null;
-            /// se consultan los cursos donde asistio al mnos una vez a calse
-            List<cursos> cuerso_tem = (from c in db.clases_sima
-                              join cu in db.cursos on c.cursos_id equals cu.id
-                              join e in db.estudiantes_asistentes on c.id equals e.clase_id
+            List<MCurso> cursos = new List<MCurso>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Cursos_por_clase", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@id_estudiante", id_estudiante);
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        MCurso c = new MCurso
+                        {
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            estado = Convert.ToByte(row["estado"]),
+                            fecha_finalizacion = DateTime.Parse(row["fecha_finalizacion"].ToString()),
+                            idUsuario = row["idUsuario"].ToString(),
+                            nombre_materia = row["nombre_materia"].ToString(),
+                            periodo = row["periodo"].ToString()
 
-                              where (c.periodo == periodo && e.estudiante_id == id_estudiante)
-                              select (cu)).Distinct().ToList();
-            // se convierten a Mcurso
-            cursos = (from cu in cuerso_tem
-                     select new MCurso
-                         {
-                             id = cu.id,
-                             periodo = cu.periodo,
-                             nombre_materia = cu.nombre_materia,
-                             estado = cu.estado,
-                             fecha_finalizacion = cu.fecha_finalizacion,
-                             idUsuario = cu.idUsuario,
-                             eliminado = cu.eliminado,
-                             clases_sima = cu.clases_sima,
-                             materias = cu.materias,
-                             usuarios = cu.usuarios
+                        };
+                        cursos.Add(c);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
 
-                         }).ToList();
-            
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }           
             return cursos  ;
         }
+        public Mclase getClasePorId(int id)
+        {
 
+            Mclase clase = null;
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Clase_sima_id", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        clase = new Mclase
+                        {
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            comentario = row["comentario"].ToString(),
+                            cursos_id = Convert.ToInt32(row["cursos_id"].ToString()),
+                            evidencia = row["evidencia"].ToString(),
+                            fecha_realizada = DateTime.Parse(row["fecha_realizada"].ToString()),
+                            fecha_registro = DateTime.Parse(row["fecha_registro"].ToString()),
+                            periodo = row["periodo"].ToString(),
+                            tema = row["tema"].ToString(),
+                            usuarios_id = row["usuarios_id"].ToString()
+
+                        };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return clase;
+        }
+        public  List< estudiantes_asistentes> getEstudiantesAsistentes(int id_clase)
+        {
+
+            List<estudiantes_asistentes> estudiantes = new List<estudiantes_asistentes>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Estudiantes_asistentes", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@clase_id", id_clase);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach ( DataRow row in dtr.Tables[0].Rows)
+                    {                        
+                       estudiantes_asistentes estudiante = new estudiantes_asistentes
+                        {
+                            clase_id = Convert.ToInt32(row["clase_id"].ToString()),
+                            estudiante_id = row["estudiante_id"].ToString()                            
+
+                        };
+                        estudiantes.Add(estudiante);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+            }
+
+            return estudiantes;
+        }
        
     }
 }

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Transactions;
 using System.Web;
 using System.Web.WebPages.Html;
 
@@ -57,6 +60,38 @@ namespace WebSima.Models
         public virtual ICollection<cursos> cursos { get; set; }
         public Nullable<byte> eliminado { get; set; }
 
+
+        public int eliminarUsuario(string id){
+           
+            int resultado = 0;
+            try
+            {
+                using (var transaccion = new TransactionScope())
+                {
+                    using (var contestTransaccion = new bd_simaEntitie())
+                    {
+                        String sql = "UPDATE usuarios SET eliminado = 1 WHERE  id= @id";
+                        resultado = contestTransaccion.Database.ExecuteSqlCommand(sql,
+                              new SqlParameter("@id", id)
+                               );
+                        if (resultado > 0)
+                        {
+                            resultado = new MCurso().cerrarCursoPorIdUsuario(contestTransaccion, id);
+                        }
+
+                        contestTransaccion.SaveChanges();
+                        transaccion.Complete();
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+            return resultado;
+
+        }
         public String guardar(usuarios usuario, bd_simaEntitie db)
         {
             String resultado = null;
@@ -119,26 +154,58 @@ namespace WebSima.Models
         /// <param name="db"> conexión BD</param>
         /// <param name="buscar"> cadena por la que se desea buscar</param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static List<MUsuario> getUsuarios(bd_simaEntitie db, String buscar)
+        public  List<MUsuario> getUsuarios(string buscar)
         {
+            List<MUsuario> listausuarios = new List<MUsuario>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Usuarios", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@filtro", buscar.ToUpper());
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        MUsuario u = new MUsuario
+                        {
+                            id = row["id"].ToString(),
+                            nombre = row["nombre"].ToString(),
+                            tipo = row["tipo"].ToString(),
+                            apellidos =row["apellidos"].ToString(), 
+                            celular= row["celular"].ToString(),
+                            contrasena= row["contrasena"].ToString(),
+                            correo= row["correo"].ToString(),
+                            eliminado = Convert.ToByte(row["eliminado"]),
+                            fecha_registro = DateTime.Parse(row["fecha_registro"].ToString())
+
+                        };
+                        
+                        listausuarios.Add(u);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+            }
            
-            var usuario = (from user in db.usuarios
-                           where ((user.nombre + " " + user.apellidos).Contains(buscar) || user.id.StartsWith(buscar)
-                           ) && user.eliminado == 0
-                                
-                                 select new MUsuario
-                                 {
-                                     id = user.id,
-                                     nombre = user.nombre,
-                                     apellidos = user.apellidos,
-                                     correo = user.correo,
-                                     celular = user.celular,
-                                     tipo = user.tipo,
-                                     contrasena = user.contrasena,
-                                     fecha_registro = user.fecha_registro
-                                 }).Take(50);
-            return usuario.ToList();
+           
+            return listausuarios;
 
         }
         /// <summary>
@@ -147,25 +214,55 @@ namespace WebSima.Models
         /// <param name="db"> conexión BD</param>
         /// <param name="buscar"> cadena por la que se desea buscar</param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static List<MUsuario> getUsuariosEliminados(bd_simaEntitie db, int eliminado)
+        public  List<MUsuario> getUsuariosEliminados(int eliminado)
         {
+            List<MUsuario> listausuarios = new List<MUsuario>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Usuarios_eliminado", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@eliminado", eliminado);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        MUsuario u = new MUsuario
+                        {
+                            id = row["id"].ToString(),
+                            nombre = row["nombre"].ToString(),
+                            tipo = row["tipo"].ToString(),
+                            apellidos = row["apellidos"].ToString(),
+                            celular = row["celular"].ToString(),
+                            contrasena = row["contrasena"].ToString(),
+                            correo = row["correo"].ToString(),
+                            eliminado = Convert.ToByte(row["eliminado"]),
+                            fecha_registro = DateTime.Parse(row["fecha_registro"].ToString())
 
-            var usuario = (from user in db.usuarios
-                           where (user.eliminado == eliminado)
+                        };
 
-                           select new MUsuario
-                           {
-                               id = user.id,
-                               nombre = user.nombre,
-                               apellidos = user.apellidos,
-                               correo = user.correo,
-                               celular = user.celular,
-                               tipo = user.tipo,
-                               contrasena = user.contrasena,
-                               fecha_registro = user.fecha_registro
-                           });
-            return usuario.ToList();
+                        listausuarios.Add(u);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+            }
+            return listausuarios;
 
         }
         /// <summary>
@@ -174,24 +271,56 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="buscar"> cadena a buscar</param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static List<MUsuario> getMonitores(bd_simaEntitie db, String buscar)
+        public  List<MUsuario> getMonitores(string buscar)
         {
-            var usuario = (from user in db.usuarios
-                            where ((user.nombre + " " + user.apellidos).Contains(buscar) || user.id.StartsWith(buscar)) &&
-                            user.tipo=="Monitor" && user.eliminado==0
-                            select new MUsuario
-                            {
-                                id = user.id,
-                                nombre = user.nombre,
-                                apellidos = user.apellidos,
-                                correo = user.correo,
-                                celular = user.celular,
-                                tipo = user.tipo,
-                                contrasena = user.contrasena,
-                                fecha_registro = user.fecha_registro                               
-                            }).Take(15);
-            return usuario.ToList();
+
+            List<MUsuario> listausuarios = new List<MUsuario>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Monitores", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@filtro", buscar.ToUpper());
+                    cmd.Parameters.AddWithValue("@tipo", "Monitor");
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        MUsuario u = new MUsuario
+                        {
+                            id = row["id"].ToString(),
+                            nombre = row["nombre"].ToString(),
+                            tipo = row["tipo"].ToString(),
+                            apellidos = row["apellidos"].ToString(),
+                            celular = row["celular"].ToString(),
+                            contrasena = row["contrasena"].ToString(),
+                            correo = row["correo"].ToString(),
+                            eliminado = Convert.ToByte(row["eliminado"]),
+                            fecha_registro = DateTime.Parse(row["fecha_registro"].ToString())
+
+                        };
+
+                        listausuarios.Add(u);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return listausuarios;
         }
         /// <summary>
         /// Esta funcion consulta un usuario por el id
@@ -199,27 +328,53 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static MUsuario getUsuarioId(bd_simaEntitie db, String id)
+       
+        public  MUsuario getUsuarioId(String id)
         {
-            usuarios us = db.usuarios.Find(id);
-            MUsuario usuario = null;
-            if (us != null)
+            MUsuario usuario =null;
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
             {
-                usuario = new MUsuario
+                try
                 {
-                    id = us.id,
-                    nombre = us.nombre,
-                    apellidos = us.apellidos,
-                    celular = us.celular,
-                    contrasena = us.contrasena,
-                    tipo = us.tipo,
-                    correo= us.correo,
-                    fecha_registro= us.fecha_registro,
-                    
-                };
-            }
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Usuario_id", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };                    
+                    cmd.Parameters.AddWithValue("@id", id);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if((dtr.Tables[0].Rows).Count>=1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        usuario = new MUsuario
+                        {
+                            id = row["id"].ToString(),
+                            nombre = row["nombre"].ToString(),
+                            tipo = row["tipo"].ToString(),
+                            apellidos = row["apellidos"].ToString(),
+                            celular = row["celular"].ToString(),
+                            contrasena = row["contrasena"].ToString(),
+                            correo = row["correo"].ToString(),
+                            eliminado = Convert.ToByte(row["eliminado"]),
+                            fecha_registro = DateTime.Parse(row["fecha_registro"].ToString())
 
+                        };                       
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
             return usuario;
 
         }
@@ -228,23 +383,50 @@ namespace WebSima.Models
         /// </summary>
         /// <param name="db"></param>
         /// <returns></returns>
-        public static List<MUsuario> getDatosMonitoresPeriodo(bd_simaEntitie db, String periodo)
+        public  List<MUsuario> getDatosMonitoresPeriodo(string periodo)
         {
-           
 
-                  var datos =
-                  ( from usu in db.usuarios
-                   join cur in db.cursos on usu.id equals cur.idUsuario
-                   where cur.periodo == periodo && cur.eliminado==0
-                   select new MUsuario { 
-                    nombre=usu.nombre,
-                    apellidos=usu.apellidos,
-                    id=usu.id                    
-                   }).Distinct().ToList();
-        
-            
-            
-            return datos.ToList();
+            List<MUsuario> listausuarios = new List<MUsuario>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Dato_monitores_perido", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        MUsuario u = new MUsuario
+                        {
+                            id = row["id"].ToString(),
+                            nombre = row["nombre"].ToString(),                            
+                            apellidos = row["apellidos"].ToString()
+
+                        };
+
+                        listausuarios.Add(u);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return listausuarios;
+          
         }
     }
 }

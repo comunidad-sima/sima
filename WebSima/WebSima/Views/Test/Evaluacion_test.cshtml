@@ -6,9 +6,9 @@
     int id_test = ViewBag.id;
     String perfil = ViewBag.perfil;
     int cantidad = ViewBag.cantidad;
-    String titulo =ViewBag.titleBar ;
+    String titulo = ViewBag.titleBar;
 
-
+    WebSima.Models.MUsuario usuario;
     List<WebSima.Models.MCurso> mcursos =  ViewBag.curos;
     int id_curso= ViewBag.id_curso ;
 }
@@ -39,7 +39,7 @@
                         {
                             <div class="box-header with-border">
                                 <h4 class="margin"><strong> Asignaturas </strong></h4>
-                                <div class="input-group input-group-sm col-sm-4">
+                                <div class="input-group input-group-sm col-sm-6" >
 
                                     <input name="id" type="hidden" value="@id_test" />
                                     <select  class="form-control select2" id="signatura" name="grupo">
@@ -49,7 +49,8 @@
                                         {
                                             <option value="@curso.id"
                                                     @if (curso.id == id_curso) {  @("selected")  }>
-                                                @curso.nombre_materia - @curso.usuarios.nombre @curso.usuarios.apellidos
+                                                @{usuario = WebSima.clases.HelperUsuario.getUsuario(curso.idUsuario);}
+                                                @curso.nombre_materia - @usuario.nombre @usuario.apellidos
                                             </option>
 
 

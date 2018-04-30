@@ -23,7 +23,7 @@ namespace WebSima.Controllers
         public ActionResult Listar(String periodo="2017-2"){
             if (sesion.esAdministrador(db))
             {               
-                return View(MCapacitacion.getCapacitacionesPeriodo(db, periodo));
+                return View(new MCapacitacion().getCapacitacionesPeriodo(db, periodo));
             }
             return null;
         }
@@ -32,7 +32,7 @@ namespace WebSima.Controllers
         {
             if (sesion.esAdministrador(db))
             {
-                ViewBag.periodos = MCapacitacion.getPeriodos(db);
+                ViewBag.periodos = new MCapacitacion().getPeriodos(db);
                 return View();
             }
             else
@@ -48,7 +48,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
 
-                MCapacitacion mCapacitacion = MCapacitacion.getCapacitacionId(db, id);
+                MCapacitacion mCapacitacion = new MCapacitacion().getCapacitacionId(db, id);
                 if (mCapacitacion == null)
                 {
                     return HttpNotFound();

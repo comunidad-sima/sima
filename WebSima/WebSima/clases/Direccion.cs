@@ -8,21 +8,20 @@ namespace WebSima.clases
     public class Direccion
     {
 
-        private static String urlBase = "~/Uploads";
+        private static string urlBase = "~/Uploads";
+        private static string urlCapacitaciones = "/capacitaciones";
+        private static string urlClase = "/clases";
+        private static string urlPlantillas = "/plantillas";
 
-        private static String urlCapacitaciones = "/capacitaciones";
-        private static String urlClase = "/clases";
-        private static String urlPlantillas = "/plantillas";
-
-        public static String getDirCapacitaciones()
+        public static string getDirCapacitaciones()
         {
             return (urlBase + urlCapacitaciones);
         }
-        public static String getDirClases()
+        public static string getDirClases()
         {
             return (urlBase + urlClase);
         }
-        public static String getDirPlatillas()
+        public static string getDirPlatillas()
         {
             return (urlBase + urlPlantillas);
         }

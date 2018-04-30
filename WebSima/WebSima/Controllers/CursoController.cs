@@ -60,7 +60,7 @@ namespace WebSima.Controllers
                 List<MCurso> cursos = new List<MCurso>();
                 try
                 {
-                    cursos = MCurso.getCursos(db, materiaBuscar, periodoBuscar);
+                    cursos =new  MCurso().getCursos(materiaBuscar, periodoBuscar);
                 }
                 catch (Exception)
                 {
@@ -83,11 +83,12 @@ namespace WebSima.Controllers
 
             if (sesion.esAdministrador(db))
             {
-                MCurso cursos = MCurso.getCursoId(db, id);
+                MCurso cursos = new MCurso().getCursoId(id);
                 if (cursos == null)
                 {
                     return HttpNotFound();
                 }
+                ViewBag.usuario = new MUsuario().getUsuarioId(cursos.idUsuario);
                 return View(cursos);
             }
             else
@@ -106,7 +107,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
 
-                ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text"); 
+                ViewBag.materias = new SelectList(new MMateria().getMaterias(db), "Value", "Text"); 
                 return View();
             }
             else
@@ -132,8 +133,8 @@ namespace WebSima.Controllers
                 {
 
                     materias materia = db.materias.Find(curso.nombre_materia);
-                    usuarios usuario = db.usuarios.Find(curso.idUsuario);
-                    bool tieneCurso = MCurso.tieneCurso(db, curso.nombre_materia, periodo, curso.idUsuario);
+                    MUsuario usuario = new MUsuario().getUsuarioId(curso.idUsuario);
+                    bool tieneCurso = curso.tieneCurso(curso.idUsuario, curso.nombre_materia, periodo);
                     if (!tieneCurso)
                     {
                         if (materia != null)
@@ -147,8 +148,7 @@ namespace WebSima.Controllers
                                     idUsuario = curso.idUsuario,
                                     nombre_materia = curso.nombre_materia.ToUpper(),
                                     periodo = periodo,
-                                    eliminado=0,
-                                    usuarios = usuario
+                                    eliminado=0
                                 };
                                 db.cursos.Add(cur);
                                 db.SaveChanges();
@@ -195,12 +195,12 @@ namespace WebSima.Controllers
 
             if (sesion.esAdministrador(db))
             {
-                MCurso cursos = MCurso.getCursoId(db, id);
+                MCurso cursos =new MCurso().getCursoId(id);
                 if (cursos == null)
                 {
                     return HttpNotFound();
                 }
-                ViewBag.materias = new SelectList(MMateria.getMaterias(db), "Value", "Text"); ;
+                ViewBag.materias = new SelectList(new MMateria().getMaterias(db), "Value", "Text"); ;
                 //   ViewBag.cur_idUsuario = new SelectList(db.usuarios, "usu_id", "usu_nombre", cursos.cur_idUsuario);
                 return View(cursos);
             }
@@ -227,10 +227,10 @@ namespace WebSima.Controllers
                     if (ModelState.IsValid)
                     {
                         String materiaAntigua;
-                        materias materia = db.materias.Find(curso.nombre_materia);
-                        usuarios usuario = db.usuarios.Find(curso.idUsuario);
-                        bool tieneCurso = MCurso.tieneCurso(db, curso.nombre_materia, periodo, curso.idUsuario);
-                        cursos c = db.cursos.Find(curso.id);
+                        MMateria materia =new MMateria().getMateriaId(db,curso.nombre_materia);
+                        MUsuario usuario = new MUsuario().getUsuarioId(curso.idUsuario);
+                        bool tieneCurso = curso.tieneCurso(curso.idUsuario, curso.nombre_materia, periodo);
+                        MCurso c = curso.getCursoId(curso.id);
                         materiaAntigua = c.nombre_materia;
 
                         if (materiaAntigua.Equals(curso.nombre_materia) || !tieneCurso)
@@ -239,15 +239,17 @@ namespace WebSima.Controllers
                             {
                                 if (usuario != null)
                                 {
-                                    c.estado = curso.estado;
-                                    c.fecha_finalizacion = curso.fecha_finalizacion;
-                                    c.idUsuario = curso.idUsuario;
-                                    c.nombre_materia = curso.nombre_materia.ToUpper();
+                                    if (curso.actualizar(db, curso) > 0)
+                                    {
 
-                                    db.Entry(c).State = EntityState.Modified;
-                                    db.SaveChanges();
-
-                                    respuesta.RESPUESTA = "OK";
+                                        respuesta.RESPUESTA = "OK";
+                                        respuesta.MENSAJE = "Grupo actualizado.";
+                                    }
+                                    else
+                                    {
+                                        respuesta.RESPUESTA = "ERROR";
+                                        respuesta.MENSAJE = "Grupo no actualizado.";
+                                    }
                                 }
                                 else
                                 {
@@ -321,30 +323,13 @@ namespace WebSima.Controllers
             Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
-                cursos cursos = db.cursos.Find(id);
-                if (cursos != null)
-                {
-                    //if (cursos.clases_sima.Count() == 0)
-                    //{
-                        //db.cursos.Remove(cursos);
-                        cursos.eliminado = 1;
-                        cursos.estado = 0;
-                        db.Entry(cursos).State = EntityState.Modified;
-                        db.SaveChanges();
-                        respuesta.RESPUESTA = "OK";
 
-                    //}
-                    if (cursos.clases_sima.Count() > 0) // else
-                    {
-                        respuesta.RESPUESTA = "ERROR";
-                        respuesta.MENSAJE = "Grupo no se puede eliminar por completo porque tiene clases registradas, solo se marcara como eliminado";
-                    }
-                }
-                else
+                if (new MCurso().eliminar(db, id) > 0)
                 {
-                    respuesta.RESPUESTA = "ERROR";
-                    respuesta.MENSAJE = "Curso no exite.";
+                    respuesta.RESPUESTA = "OK";
+                    respuesta.RESPUESTA = "Grupo eliminado.";
                 }
+
             }
             else
             {
@@ -361,30 +346,21 @@ namespace WebSima.Controllers
         [HttpPost]
         public JsonResult Monitores(String buscar)
         {
-            List<MUsuario> ususriosMonitores = MUsuario.getMonitores(db, buscar);
+            List<MUsuario> ususriosMonitores = new MUsuario().getMonitores(buscar);
             return Json(ususriosMonitores);
         }
         [HttpPost]
         public JsonResult GetUsuario(String id)
         {
-            MUsuario usuario = null;
-            usuarios user = db.usuarios.Find(id);
-            if (user != null && user.eliminado == 0)
+            
+            MUsuario usuario = new MUsuario().getUsuarioId(id);
+            if (usuario != null  )
             {
-                usuario = new MUsuario
-                {
-                    id = user.id,
-                    nombre = user.nombre,
-                    apellidos = user.apellidos,
-                    correo = user.correo,
-                    celular = user.celular,
-                    tipo = user.tipo,
-                    contrasena = user.contrasena,
-                    fecha_registro = user.fecha_registro
-                };
+                if (usuario.eliminado == 0)
+                     usuario=null;
+                else
+                    usuario.contrasena = "";
             }
-
-
             return Json(usuario);
         }
     }

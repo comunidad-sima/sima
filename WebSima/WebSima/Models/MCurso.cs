@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,9 +13,6 @@ namespace WebSima.Models
 {
     public class MCurso
     {
-
-
-
 
         [Display(Name = "Código")]
        
@@ -46,63 +45,112 @@ namespace WebSima.Models
         /// <param name="periodo"></param>
         /// <param name="id_monitor"></param>
         /// <returns></returns>
-          [MethodImpl(MethodImplOptions.Synchronized)]
-          public static List<MCurso> getCursoAcargoActivos(bd_simaEntitie db,  String periodo, String  id_monitor)
+          public  List<MCurso> getCursoAcargoActivos(String periodo, String  id_monitor)
           {
-              try
+              List<MCurso> lista = new List<MCurso>();
+              var dtr = new DataSet();
+              using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
               {
-                  var curos = (from cur in db.cursos
-                               where (cur.periodo == periodo && cur.eliminado == 0 && cur.estado==1 && cur.idUsuario==id_monitor)
-                               select new MCurso
-                               {
-                                   id = cur.id,
-                                   estado = cur.estado,
-                                   fecha_finalizacion = cur.fecha_finalizacion,
-                                   idUsuario = cur.idUsuario,
-                                   nombre_materia = cur.nombre_materia,
-                                   periodo = cur.periodo,
-                                   usuarios = cur.usuarios
+                  try
+                  {
+                      // procedimiento almacenado 
+                      var cmd = new SqlCommand("SP_Curso_acargo_activos", conn)
+                      {
+                          CommandType = CommandType.StoredProcedure
+                      };
+                      //cmd.CommandType = CommandType.StoredProcedure;
+                      cmd.Parameters.AddWithValue("@periodo", periodo);
+                      cmd.Parameters.AddWithValue("@id_monitor", id_monitor);
+                      conn.Open();
+                      var da = new SqlDataAdapter(cmd);
+                      //cmd.ExecuteNonQuery();
+                      da.Fill(dtr);
+                      foreach (DataRow row in dtr.Tables[0].Rows)
+                      {
+                          MCurso c = new MCurso
+                          {
+                              id = Convert.ToInt32(row["id"].ToString()),
+                              estado = Convert.ToByte(row["estado"]),
+                              fecha_finalizacion = DateTime.Parse(row["fecha_finalizacion"].ToString()),
+                              idUsuario = row["idUsuario"].ToString(),
+                              nombre_materia = row["nombre_materia"].ToString(),
+                              periodo = row["periodo"].ToString()
 
-                               });
-                  return curos.ToList();
+                          };
+
+                          lista.Add(c);
+                      }
+                  }
+                  catch (Exception ex)
+                  {
+                      string msg = ex.Message;
+
+                  }
+                  finally
+                  {
+                      conn.Close();
+                  }
               }
-              catch (Exception)
-              {
-                  throw new System.InvalidOperationException("Error al cargar los grupos.");
-              }
+              return lista;
+             
 
           }
         /// <summary>
-        /// Esta funcion consulta los curso de un periodo y que el nombre inicie con el pramatro materia
+        /// Esta funcion consulta los curso de un periodo  que el nombre inicie con el paramatro materia
         /// </summary>
         /// <param name="db"></param>
         /// <param name="materia"></param>
         /// <param name="periodo"></param>
         /// <returns></returns>
-         [MethodImpl(MethodImplOptions.Synchronized)]
-        public static  List<MCurso> getCursos(bd_simaEntitie db, String materia, String periodo) 
+        public   List<MCurso> getCursos(string materia, string periodo) 
         {
-            try
+            List<MCurso> cursos = new List<MCurso>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
             {
-                var curos = (from cur in db.cursos
-                             where (cur.nombre_materia.StartsWith(materia)) && cur.periodo == periodo && cur.eliminado==0
-                             select new MCurso
-                             {
-                                 id = cur.id,
-                                 estado = cur.estado,
-                                 fecha_finalizacion = cur.fecha_finalizacion,
-                                 idUsuario = cur.idUsuario,
-                                 nombre_materia = cur.nombre_materia,
-                                 periodo = cur.periodo,
-                                 usuarios = cur.usuarios
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Cursos", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@materia", materia);
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
 
-                             });
-                return curos.ToList();
+                        MCurso curso = new MCurso
+                        {
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            estado = Convert.ToByte(row["estado"]),
+                            fecha_finalizacion = DateTime.Parse(row["fecha_finalizacion"].ToString()),
+                            idUsuario = row["idUsuario"].ToString(),
+                            nombre_materia = row["nombre_materia"].ToString(),
+                            periodo = row["periodo"].ToString()
+
+                        };
+                        cursos.Add(curso);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    throw new System.InvalidOperationException("Error al cargar los grupos. " + msg);
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
-            catch (Exception)
-            {
-                throw new System.InvalidOperationException("Error al cargar los grupos.");
-            }         
+            return cursos;
+
+
 
         }
         /// <summary>
@@ -112,30 +160,55 @@ namespace WebSima.Models
         /// <param name="materia"></param>
         /// <param name="periodo"></param>
         /// <returns></returns>
-         [MethodImpl(MethodImplOptions.Synchronized)]
-         public static List<MCurso> getCursoMateria(bd_simaEntitie db, String materia, String periodo)
+         public  List<MCurso> getCursoMateria(string materia, string periodo)
          {
-             try
-             {
-                 var curos = (from cur in db.cursos
-                              where (cur.nombre_materia == materia && cur.periodo == periodo && cur.eliminado == 0)
-                              select new MCurso
-                              {
-                                  id = cur.id,
-                                  estado = cur.estado,
-                                  fecha_finalizacion = cur.fecha_finalizacion,
-                                  idUsuario = cur.idUsuario,
-                                  nombre_materia = cur.nombre_materia,
-                                  periodo = cur.periodo,
-                                  usuarios = cur.usuarios
 
-                              });
-                 return curos.ToList();
-             }
-             catch (Exception)
+             List<MCurso> cursos = new List<MCurso>();
+             var dtr = new DataSet();
+             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
              {
-                 throw new System.InvalidOperationException("Error al cargar los grupos.");
+                 try
+                 {
+                     // procedimiento almacenado 
+                     var cmd = new SqlCommand("SP_Curso_materia", conn)
+                     {
+                         CommandType = CommandType.StoredProcedure
+                     };
+                     cmd.Parameters.AddWithValue("@materia", materia);
+                     cmd.Parameters.AddWithValue("@periodo", periodo);
+                     conn.Open();
+                     var da = new SqlDataAdapter(cmd);
+                     //cmd.ExecuteNonQuery();
+                     da.Fill(dtr);
+                     foreach (DataRow row in dtr.Tables[0].Rows)                    
+                     {
+
+                        MCurso curso = new MCurso
+                         {
+                             id = Convert.ToInt32(row["id"].ToString()),
+                             estado = Convert.ToByte(row["estado"]),
+                             fecha_finalizacion = DateTime.Parse(row["fecha_finalizacion"].ToString()),
+                             idUsuario = row["idUsuario"].ToString(),
+                             nombre_materia = row["nombre_materia"].ToString(),
+                             periodo = row["periodo"].ToString()
+
+                         };
+                        cursos.Add(curso);
+                     }
+                 }
+                 catch (Exception ex)
+                 {
+                     string msg = ex.Message;
+                     throw new System.InvalidOperationException("Error al cargar los grupos. "+msg);
+
+                 }
+                 finally
+                 {
+                     conn.Close();
+                 }
              }
+             return cursos ;
+
 
          }
         /// <summary>
@@ -144,26 +217,53 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static MCurso getCursoId(bd_simaEntitie db, int id)
+        public  MCurso getCursoId(int id)
         {
-            cursos cur = db.cursos.Find(id);
+           
             MCurso curso = null;
-            if (cur != null)
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
             {
-                curso = new MCurso
+                try
                 {
-                    estado= cur.estado,
-                    fecha_finalizacion=cur.fecha_finalizacion,
-                    id=cur.id,
-                    idUsuario=cur.idUsuario,
-                    nombre_materia= cur.nombre_materia,
-                    periodo= cur.periodo,
-                    usuarios= cur.usuarios                   
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Curso_id", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@id", id);
 
-                };
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        curso = new MCurso
+                        {
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            estado = Convert.ToByte(row["estado"]),
+                            fecha_finalizacion = DateTime.Parse(row["fecha_finalizacion"].ToString()),
+                            idUsuario = row["idUsuario"].ToString(),
+                            nombre_materia = row["nombre_materia"].ToString(),
+                            periodo = row["periodo"].ToString()
+
+                        };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
+
+
             return curso;
 
         }
@@ -175,61 +275,93 @@ namespace WebSima.Models
         /// <param name="periodo"></param>
         /// <param name="idMonitor"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static bool tieneCurso(bd_simaEntitie db, String materia, String periodo, String idMonitor){
+        public  bool tieneCurso(string idMonitor,string materia="", string periodo=""){
             bool tieneCurso = false;
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Tiene_curso", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    cmd.Parameters.AddWithValue("@materia", materia);
+                    cmd.Parameters.AddWithValue("@id_usuario", idMonitor);
 
-            var cursos = (from cur in db.cursos
-                          where (cur.nombre_materia == materia && cur.periodo == periodo && cur.idUsuario == idMonitor )
-                              ||(cur.nombre_materia == materia && cur.idUsuario == idMonitor && cur.estado==1 )
-                           select cur).Select(c => c.id);
-            if (cursos.ToList().Count() > 0)
-                tieneCurso = true;
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        tieneCurso = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+
                               
             return tieneCurso;
         }
-        /*// <summary>
-        /// este método verifica si un monitor tiene una materia a cargo
+
+        /// <summary>
+        /// esta funcion consulta si un monitor tiene cursos activos
         /// </summary>
         /// <param name="db"></param>
         /// <param name="materia"></param>
         /// <param name="periodo"></param>
         /// <param name="idMonitor"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static bool tieneMateriam(bd_simaEntities db, String materia, String periodo, String idMonitor,int estato=1)
+        public bool tieneCurso_activo(String idMonitor)
         {
             bool tieneCurso = false;
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Tiene_curso_activo", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    
+                    cmd.Parameters.AddWithValue("@id_usuario", idMonitor);
 
-            var cursos = (from cur in db.cursos
-                          where (cur.cur_materia == materia && cur.cur_estado == estato && cur.cur_periodo == periodo && cur.cur_idUsuario == idMonitor)
-                          select cur).Select(c => c.cur_materia).ToList();
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        tieneCurso = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
 
-            if (cursos.Count() > 0)
-                tieneCurso = true;
-
-            return tieneCurso;
-        }*/
-        /// <summary>
-        /// Esta funcion consulta si un monitor tiene  cursos acargo activo
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="idMonitor"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static bool tieneCursosAcargo(bd_simaEntitie db,  String idMonitor)
-        {
-            bool tieneCurso = false;
-
-            var cursos = (from cur in db.cursos
-                          where (cur.estado == 1 && cur.idUsuario == idMonitor && cur.eliminado==0)
-                          select cur).Select(c => c.nombre_materia).ToList();
-
-            if (cursos.Count() > 0)
-                tieneCurso = true;
-
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
             return tieneCurso;
         }
+        
         /// <summary>
         /// Esta funcion consulta el id de un curso a partir de la materia, periodo e id del monito
         /// </summary>
@@ -238,44 +370,142 @@ namespace WebSima.Models
         /// <param name="periodo"></param>
         /// <param name="idMonitor"></param>
         /// <returns></returns>
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static int getIdCurso(bd_simaEntitie db,String materia,String periodo, String idMonitor)
+        public  int getIdCurso(String materia,String periodo, String idMonitor)
         {
-            int id = -1;
-            List<cursos> curso = db.cursos.Where(c => c.nombre_materia == materia && c.periodo == periodo && c.idUsuario == idMonitor).ToList();
-            if(curso.Count()>0)
-              id = curso.ElementAt(0).id;
+
+
+            int id = -1;          
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Curso_por_materia_periodo_idusuario", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@materia", materia);
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    cmd.Parameters.AddWithValue("@id_monitor", idMonitor);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        id = Convert.ToInt32(row["id"].ToString());                        
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
             return id;
         
         }
         /// <summary>
-        /// Esta funcion busca los nombre de las materias que tien un monitor acargo en un periodo mientras que el curso esté abierto
+        /// Esta funcion busca los nombre de las materias que tien un monitor acargo en un periodo, si todo es 1 retorna todos los nombre de las asignaturas de lo contrario(0) retorna  el nombre de las asignaturas que el grupo este abierto
         /// </summary>
         /// <param name="db"></param>
         /// <param name="id_usuario"></param>
         /// <param name="periodo"></param>
-        /// <param name="estado"></param>
+        /// <param name="todo">indica si se retornan todas los nombre de las materia o solo los de los curso abiertos </param>
         /// <returns></returns>
-         [MethodImpl(MethodImplOptions.Synchronized)]
-        public static List<String> getNombreMateriaMonitorDeCursos(bd_simaEntitie db, String id_usuario, String periodo, int estado = 1)
+        public  List<String> getNombreMateriaMonitorCursos(string id_usuario, string periodo,int todo)
         {
-            List<String> materias = db.cursos.Where(x => x.idUsuario == id_usuario && x.periodo == periodo && x.estado == estado && x.eliminado==0).Select(x => x.nombre_materia).ToList();
+
+
+            List<string> materias = new List<string>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Materia_monitor_cargo", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    cmd.Parameters.AddWithValue("@id_monitor", id_usuario);
+                    cmd.Parameters.AddWithValue("@todo", todo);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        string u = row["nombre_materia"].ToString();
+                        materias.Add(u);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
             return materias;
+          
         }
         /// <summary>
-        /// Esta funcion consulta los nombres de las materia que se le a asigado a un monitor en un periodo
+        /// Esta funcion consulta los nombres de las materia que se le a asignado a un monitor en un periodo
         /// </summary>
         /// <param name="db"></param>
         /// <param name="id_usuario"></param>
         /// <param name="periodo"></param>
         /// <returns></returns>
-         public static List<String> getMateriasMonitorAcargo(bd_simaEntitie db, String id_usuario, String periodo)
+         //public  List<String> getMateriasMonitorAcargo(bd_simaEntitie db, String id_usuario, String periodo)
+         //{
+         //    List<String> materias = db.cursos.Where(x => x.idUsuario == id_usuario && x.periodo == periodo && x.eliminado==0).Select(x => x.nombre_materia).ToList();
+         //    return materias;
+         //}
+         public int cerrarCursoPorIdUsuario(bd_simaEntitie db,string id)
          {
-             List<String> materias = db.cursos.Where(x => x.idUsuario == id_usuario && x.periodo == periodo && x.eliminado==0).Select(x => x.nombre_materia).ToList();
-             return materias;
-         }
+             String sql = "UPDATE cursos SET estado = 0 WHERE  idUsuario= @id";
+            int  eliminado = db.Database.ExecuteSqlCommand(sql,
+                   new SqlParameter("@id", id)
+                    );
 
+            return eliminado;
+         }
+         public int eliminar(bd_simaEntitie db, int id_curso)
+         {
+             String sql = "UPDATE cursos SET estado = 0,eliminado = 1 WHERE  id= @id";
+             int eliminado = db.Database.ExecuteSqlCommand(sql,
+                    new SqlParameter("@id", id_curso)
+                     );
+
+             return eliminado;
+         }
+         public int actualizar(bd_simaEntitie db, MCurso curso)
+         {
+             String sql = "UPDATE cursos SET estado = @estado,fecha_finalizacion=@fecha_finalizacion " +
+                 ",idUsuario=@idUsuario ,nombre_materia=@nombre_materia WHERE  id= @id";
+             int eliminado = db.Database.ExecuteSqlCommand(sql,
+                    new SqlParameter("@estado", curso.estado),
+                    new SqlParameter("@fecha_finalizacion", curso.fecha_finalizacion),
+                    new SqlParameter("@idUsuario", curso.idUsuario),
+                    new SqlParameter("@nombre_materia", curso.nombre_materia),
+                    new SqlParameter("@id", curso.id)
+                     );
+             
+
+             return eliminado;
+         }
+         
         
     }
 }

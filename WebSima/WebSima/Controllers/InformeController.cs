@@ -58,7 +58,7 @@ namespace WebSima.Controllers
              List<String[]> datos= new List<string[]>();
              if (!materia.Equals("Seleccione asignatura"))
              {
-                 datos=info.ProcedimientoPrueba(materia, periodo);
+                 datos=info.consultarAsistencia(materia, periodo);
                  //datos = info.consultarAsistencia(materia,periodo);
                  
 
@@ -69,8 +69,8 @@ namespace WebSima.Controllers
                      datos_2 = ConsumidorAppi.getNotaEstudianteMateria(periodo, materia, idEstudiantes);
                  }
              }
-            ViewBag.periodos = Mclase.getPeriodosRegistradosDeClase(db);
-            ViewBag.materias = new SelectList(MMateria.getMaterias_registro_grupos( db,periodo), "Value", "Text");
+            ViewBag.periodos = new Mclase().getPeriodosRegistradosDeClase(db);
+            ViewBag.materias = new SelectList(new MMateria().getMaterias_registro_grupos( db,periodo), "Value", "Text");
             ViewBag.asistencia = datos;
             ViewBag.datos_estudiante = datos_2;
             ViewBag.asignatura = materia;

@@ -45,8 +45,7 @@ namespace WebSima.Models
             }
             return resultado;
         }
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static List<String> getPeriodos(bd_simaEntitie db)
+        public  List<String> getPeriodos(bd_simaEntitie db)
         {
             return db.Database.SqlQuery<String>("select DISTINCT periodo from capacitaciones").ToList();
         }
@@ -54,8 +53,7 @@ namespace WebSima.Models
         /**
          * busca las capacitaciones de un periodo
          */
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public  static  List<MCapacitacion> getCapacitacionesPeriodo(bd_simaEntitie db,String periodo)
+        public    List<MCapacitacion> getCapacitacionesPeriodo(bd_simaEntitie db,String periodo)
         {
 
             var capacitaciones =
@@ -75,8 +73,8 @@ namespace WebSima.Models
 
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public static MCapacitacion getCapacitacionId(bd_simaEntitie db, int id)
+      
+        public  MCapacitacion getCapacitacionId(bd_simaEntitie db, int id)
         {
             capacitaciones cap = db.capacitaciones.Find(id);
             MCapacitacion capacitacion=null;

@@ -166,7 +166,7 @@ namespace WebSima.Models
             return valido;
         }
         
-        public void eliminaCalificaciones(bd_simaEntitie db,String id_docente,String programa,String grupo,String materia){
+        public void eliminaCalificaciones(bd_simaEntitie db,string id_docente,string programa,string grupo,string materia){
 
             var calificacion = (from c in db.calificaciones_periodo where(c.grupo==grupo && c.programa==programa &&
                                     c.asignatura==materia && c.id_docente==id_docente) select c);

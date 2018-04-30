@@ -30,8 +30,8 @@ namespace WebSima.Controllers
 
                 ViewBag.materiaSeleccionada = materia;
                 // var clases_sima = db.clases_sima.Include(c => c.cursos).Include(c => c.usuarios);
-                ViewBag.materiasMonitor = MCurso.getNombreMateriaMonitorDeCursos(db, sesion.getIdUsuario(), periodo, 1);
-                return View(Mclase.getClasesMonitorPerido(db, periodo, sesion.getIdUsuario(), materia));
+                ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos(sesion.getIdUsuario(), periodo, 0);
+                return View(new Mclase().getClasesMonitorPerido(db, periodo, sesion.getIdUsuario(), materia));
             }
             else
             {
@@ -44,19 +44,19 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                 if (idMonitor.Equals("")) materia = "";
-
+                Mclase auxClase = new Mclase();
                 ViewBag.materiaSeleccionada = materia;
                 ViewBag.periodoSeleccionada = periodoBuscar;
                 ViewBag.idMonitorSeleccionado = idMonitor;
-                ViewBag.periodos = Mclase.getPeriodosRegistradosDeClase(db);
-                ViewBag.datosMoniotres = MUsuario.getDatosMonitoresPeriodo(db, periodoBuscar);
+                ViewBag.periodos = auxClase.getPeriodosRegistradosDeClase(db);
+                ViewBag.datosMoniotres = new MUsuario().getDatosMonitoresPeriodo(periodoBuscar);
 
-                ViewBag.materiasMonitor = MCurso.getMateriasMonitorAcargo(db, idMonitor, periodo);
+                ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos( idMonitor, periodo, 1);
 
                 ViewBag.peridoSeleccionado = periodoBuscar;
                 ViewBag.monitorSeleccionado = idMonitor;
 
-                return View(Mclase.getClasesMonitorPerido(db, periodo, idMonitor, materia));
+                return View(auxClase.getClasesMonitorPerido(db, periodo, idMonitor, materia));
             }
             else
             {
@@ -70,19 +70,19 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                 if (idMonitor.Equals("")) materia = "";
-
+                Mclase auxClase = new Mclase();
                 ViewBag.materiaSeleccionada = materia;
                 ViewBag.periodoSeleccionada = periodoBuscar;
                 ViewBag.idMonitorSeleccionado = idMonitor;
-                ViewBag.periodos = Mclase.getPeriodosRegistradosDeClase(db);
-                ViewBag.datosMoniotres = MUsuario.getDatosMonitoresPeriodo(db, periodoBuscar);
+                ViewBag.periodos = auxClase.getPeriodosRegistradosDeClase(db);
+                ViewBag.datosMoniotres = new MUsuario().getDatosMonitoresPeriodo(periodoBuscar);
 
-                ViewBag.materiasMonitor = MCurso.getMateriasMonitorAcargo(db, idMonitor, periodo);
+                ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos(idMonitor, periodo,1);
 
                 ViewBag.peridoSeleccionado = periodoBuscar;
                 ViewBag.monitorSeleccionado = idMonitor;
 
-                return View(Mclase.getClasesMonitorPerido(db, periodo, idMonitor, materia));
+                return View(auxClase.getClasesMonitorPerido(db, periodo, idMonitor, materia));
             }
             else
             {
@@ -98,21 +98,25 @@ namespace WebSima.Controllers
             String periodo = MConfiguracionApp.getPeridoActual(db);
             if (!sesion.getIdUsuario().Equals(""))
             {
+                Mclase aux = new Mclase();
                 ViewBag.perfil = sesion.getIPerfilUsusrio();
-                clases_sima clases_sima = db.clases_sima.Find(id);
-                if (clases_sima == null)
+                Mclase clase =aux.getClasePorId(id);
+                if (clase == null)
                 {
                     return HttpNotFound();
                 }
-                List<String> idEstudiantes = clases_sima.estudiantes_asistentes.Select(x => x.estudiante_id).ToList();
+                List<estudiantes_asistentes> estudiantesAsistentes = aux.getEstudiantesAsistentes(id);
+                List<String> idEstudiantes = estudiantesAsistentes.Select(x => x.estudiante_id).ToList();
                 
                 List<EstudianteMateria> estudiantes = null;
                 if (idEstudiantes.Count() > 0)
                 {
-                   estudiantes= ConsumidorAppi.getDatosEstudiantesMateria(periodo, clases_sima.cursos.nombre_materia, idEstudiantes);
+                    estudiantes = ConsumidorAppi.getDatosEstudiantesMateria(periodo, new  MMateria().getNombreMateriaPorIDCurso(clase.cursos_id), idEstudiantes);
                 }
                 ViewBag.estudiantes = estudiantes;
-                return View(clases_sima);
+                ViewBag.estudiantesAsistentes = estudiantesAsistentes;
+                ViewBag.usuario = new MUsuario().getUsuarioId(clase.usuarios_id);
+                return View(clase);
             }
             else
             {
@@ -130,9 +134,9 @@ namespace WebSima.Controllers
             {
 
                 ViewBag.materiasMonitor = null;
-                
+                MCurso auxCurso = new MCurso();
                     String id_usuario = sesion.getIdUsuario();
-                    var tienMateria = MCurso.tieneCurso(db, materia, periodo, id_usuario);
+                    var tienMateria = auxCurso.tieneCurso(id_usuario,materia, periodo);
                     if (tienMateria)
                     {
                         List<grupos_acargo> grupos_acargo = (new MGrupos_acargo().getGrupuposPeridoMateria(db, id_usuario, periodo, materia));
@@ -153,12 +157,10 @@ namespace WebSima.Controllers
                         ViewBag.mensajeError = "Asignatura '" + materia + "' No válida";
                         materia = "";
                     }
-                    // ViewBag.cla_cursos_id = new SelectList(db.cursos, "cur_id", "cur_periodo");
-                    // ViewBag.cla_usuarios_id = new SelectList(db.usuarios, "usu_id", "usu_nombre");
-                    ViewBag.materiasMonitor = MCurso.getNombreMateriaMonitorDeCursos(db, id_usuario, periodo, 1);
+
+                    ViewBag.materiasMonitor = auxCurso.getNombreMateriaMonitorCursos(id_usuario, periodo, 0);
                     ViewBag.materiaSeleccionada = materia;
-                    return View();
-                
+                    return View();               
                
             }
             else
@@ -179,7 +181,7 @@ namespace WebSima.Controllers
             {
                 try
                 {
-                    
+                    MCurso auxCurso = new MCurso();
 
                         if (ModelState.IsValid)
                         {
@@ -187,7 +189,7 @@ namespace WebSima.Controllers
                             String materia = sesion.getMateria();
                             String idMonitor = sesion.getIdUsuario();
                             // se verifica que tenga la materia a cargo para evitar que se cambie el monbre de la materia en el select
-                            var tienMateria = MCurso.tieneCurso(db, materia, periodo, idMonitor);
+                            var tienMateria = auxCurso.tieneCurso(idMonitor,materia, periodo);
                             if (tienMateria)
                             {
                                 // se guardan los ficheros
@@ -203,7 +205,7 @@ namespace WebSima.Controllers
                                             // se obtien la fecha actual
                                             DateTime fechaRegistro = DateTime.Now;
                                             // se obtien el id del grupo a partir de la materia y el id del monitor  y perido 
-                                            int idCuro = MCurso.getIdCurso(contestTransaccion, materia, periodo, idMonitor);
+                                            int idCuro = auxCurso.getIdCurso(materia, periodo, idMonitor);
                                             if (idCuro != -1)
                                             {
                                                 clases_sima clase_ = new clases_sima

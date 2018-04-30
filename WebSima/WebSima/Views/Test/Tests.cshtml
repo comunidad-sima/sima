@@ -6,6 +6,7 @@
     String mensaje = ViewBag.mensaje;
     int cantidadTest = 0;
     String perfil = ViewBag.perfil;
+    WebSima.Models.MUsuario usuario;
     
 }
 
@@ -64,7 +65,8 @@
                                                         @test.id
                                                     </td>
                                                     <td>
-                                                        @curso.usuarios.nombre @curso.usuarios.apellidos
+                                                        @{usuario = WebSima.clases.HelperUsuario.getUsuario(curso.idUsuario);}
+                                                        @usuario.nombre @usuario.apellidos
                                                     </td>
                                                     <td>
                                                         @curso.nombre_materia

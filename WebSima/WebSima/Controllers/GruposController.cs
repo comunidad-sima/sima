@@ -26,7 +26,7 @@ namespace WebSima.Controllers
             String periodo = MConfiguracionApp.getPeridoActual(db);
             String idUsuario=sesion.getIdUsuario();
             List<List<AsignaturaGrupo>> datos = new List<List<AsignaturaGrupo>>();
-            List<String> materias_ = MCurso.getNombreMateriaMonitorDeCursos(db, idUsuario, periodo, 1);
+            List<String> materias_ = new MCurso().getNombreMateriaMonitorCursos(idUsuario, periodo, 0);
 
             List<AsignaturaGrupo> datos_2 = null;
             // se consultan los grupos de cada materia
@@ -109,7 +109,7 @@ namespace WebSima.Controllers
                             {
                                 carrera_idCurso = element.Split('|');
                                 String materiatem = carrera_idCurso[2];
-                                idCuro = MCurso.getIdCurso(db, materiatem, periodo, idMonitor);
+                                idCuro = new MCurso().getIdCurso(materiatem, periodo, idMonitor);
 
                                 grupos_acargo gruposAcargos = new grupos_acargo();
                                 gruposAcargos.idUsuario = idMonitor;

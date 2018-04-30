@@ -34,7 +34,7 @@ namespace WebSima.Controllers
             if (!id.Equals(""))
             {
                 Rutina.Rutinas();
-                List<MTest> mtest_disponibles = (new MTest()).getTest_abiertos(db,0,0);
+                List<MTest> mtest_disponibles = (new MTest()).getTestPeriodo("", 0, 0);
                 mtest_disponibles = (from mt in mtest_disponibles
                                      where (DateTime.Compare(DateTime.Now, mt.fecha_inicio) >= 0 && mt.ferfil_usuario.Equals("Estudiante"))
                                     select mt).ToList();
@@ -42,7 +42,7 @@ namespace WebSima.Controllers
                 {
                     String periodo = MConfiguracionApp.getPeridoActual(db);
                     Mclase mclase = new Mclase();
-                    int asistencia = mclase.getCantidadClaseAsistidaEstudianteId(db, periodo, id);
+                    int asistencia = mclase.getCantidadClaseAsistidaEstudianteId(periodo, id);
                     if (asistencia > 0)
                     {
                         EstudianteMateria estudiante = ConsumidorAppi.getEstudiantePorID(periodo, id);
@@ -86,7 +86,7 @@ namespace WebSima.Controllers
             try
             {
                 Rutina.Rutinas();
-                usuarios u = db.usuarios.Find(id);
+                MUsuario u = new MUsuario().getUsuarioId(id);
                 //String co = Seguridad.Encriptar("Cecar123");
                 if (u != null)
                 {
@@ -102,7 +102,7 @@ namespace WebSima.Controllers
                         }
                         else if (u.tipo.Equals("Monitor"))
                         {
-                            if (MCurso.tieneCursosAcargo(db, id))
+                            if (new MCurso().tieneCurso_activo(id))
                             {
                                 return Redirect("~/Clase/Index");
                             }

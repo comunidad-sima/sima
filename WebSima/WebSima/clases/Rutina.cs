@@ -19,7 +19,7 @@ namespace WebSima.clases
             where (c.estado_cierre == 0)
             select c;
             foreach (Test t in query) {
-                if (DateTime.Compare(DateTime.Now, t.fecha_fin) >0)
+                if (DateTime.Compare(DateTime.Now, t.fecha_fin) >0 || t.eliminado==1)
                 {
                     t.estado_cierre = 1;
                 }
@@ -40,7 +40,7 @@ namespace WebSima.clases
                         select c;
             foreach (cursos cur in query)
             {
-                if (DateTime.Compare(DateTime.Now, cur.fecha_finalizacion) > 0)
+                if (DateTime.Compare(DateTime.Now, cur.fecha_finalizacion) > 0 || cur.eliminado==1)
                 {
                     cur.estado = 0;
                 }

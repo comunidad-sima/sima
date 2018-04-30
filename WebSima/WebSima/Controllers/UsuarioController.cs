@@ -33,7 +33,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                
-                return View(MUsuario.getUsuarios(db, buscar));
+                return View(new MUsuario().getUsuarios(buscar));
             }
             else
             {
@@ -76,7 +76,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
 
-                return View(MUsuario.getUsuariosEliminados(db,1));
+                return View(new MUsuario().getUsuariosEliminados(1));
             }
             else
             {
@@ -91,7 +91,7 @@ namespace WebSima.Controllers
         {
             if (sesion.esAdministrador(db))
             {
-                MUsuario usuario = MUsuario.getUsuarioId(db, id);
+                MUsuario usuario = new MUsuario().getUsuarioId(id);
                 if (usuario == null)
                 {
                     return HttpNotFound();
@@ -133,7 +133,7 @@ namespace WebSima.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    usuarios usu = db.usuarios.Find(usuario.id);
+                    MUsuario usu = usuario.getUsuarioId(usuario.id);
                     if (usu == null)
                     {
                         DateTime fecha = DateTime.Now;
@@ -195,7 +195,7 @@ namespace WebSima.Controllers
         {
             if (sesion.esAdministrador(db))
             {
-            MUsuario usuario = MUsuario.getUsuarioId(db, id);
+            MUsuario usuario = new MUsuario().getUsuarioId(id);
             if (usuario == null)
             {
                 return HttpNotFound();
@@ -220,10 +220,10 @@ namespace WebSima.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    usuarios exiteUsuario = null;
+                    MUsuario exiteUsuario = null;
                     // se comprueba si cambia el id y si el nuevo id exiete
                     if (!usuario.id.Equals(idAntiguo))
-                        exiteUsuario = db.usuarios.Find(usuario.id);
+                        exiteUsuario = usuario.getUsuarioId(usuario.id);
 
                     // si el usuario no exiete se actualiza con su nuevo datos e id
                     if (exiteUsuario == null)
@@ -260,29 +260,7 @@ namespace WebSima.Controllers
             return Json(respuesta);
         }
 
-        //
-        // GET: /Usuario/Delete/5
-
-       /* public ActionResult Delete(String id = "0")
-        {
-            if (sesion.esUsuarioValido(db, "Administrador"))
-            {
-                MUsuario usuario = MUsuario.getUsuarioId(db, id);
-                if (usuario == null)
-                {
-                    return HttpNotFound();
-                }
-                return View(usuario);
-            }
-            else
-            {
-                return Redirect("~/Inicio/Login");
-            }
-        }*/
-
-        //
-        // POST: /Usuario/Delete/5
-
+       
         [HttpPost]
        // [ValidateAntiForgeryToken]
         public JsonResult Delete(String id)
@@ -291,31 +269,13 @@ namespace WebSima.Controllers
 
             if (sesion.esAdministrador(db))
             {
-                usuarios usuarios = db.usuarios.Find(id);
-                if (usuarios != null)
+                MUsuario auxUsuario = new MUsuario();
+                if (auxUsuario.eliminarUsuario(id)>0)
                 {
-                    //if (usuarios.cursos.Count() == 0)
-                    //{
-                        usuarios.eliminado = 1;
-                        //db.usuarios.Remove(usuarios);
-                        db.Entry(usuarios).State = EntityState.Modified;
-                        db.SaveChanges();
 
-                        ICollection<cursos> cursos = usuarios.cursos;
-                        foreach (cursos c in cursos)
-                        {
-                            c.estado = 0;
-                           // c.eliminado = 1;
-                            db.Entry(c).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    //    respuesta.RESPUESTA = "OK";
-                    //}
-                    //else
-                    //{
-                    //    respuesta.RESPUESTA = "ERROR";
-                    //    respuesta.MENSAJE = "Usuario no se puede eliminar porque tiene grupo a cargo.";
-                    //}
+                    respuesta.RESPUESTA = "OK";
+                    respuesta.MENSAJE = "Usuario eliminado.";
+                    
                     
                 }
                 else

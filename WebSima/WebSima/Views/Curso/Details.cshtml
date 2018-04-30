@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Detalles";
+    WebSima.Models.MUsuario usuario = ViewBag.usuario;
 }
 <ol class="breadcrumb">
     <li class="breadcrumb-item ">Home</li>
@@ -29,7 +30,7 @@
                 </dd>
 
                 <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Encargado:</dt>
-                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.usuarios.nombre @Model.usuarios.apellidos</dd>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@usuario.nombre @usuario.apellidos</dd>
 
                 <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Identificacion:</dt>
                 <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.idUsuario</dd>

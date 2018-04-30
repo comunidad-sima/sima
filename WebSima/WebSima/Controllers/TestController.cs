@@ -20,11 +20,11 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                 MTest mtAuxiliar =new MTest();
-                MTest mtest = (mtAuxiliar.getTestPorId(db, id));
+                MTest mtest = (mtAuxiliar.getTestPorId(id));
                 if (mtest == null)
                     return Historial_test();
 
-                List<MPreguntas_test> preguntas_test = mtAuxiliar.getPreguntas_test(db,id);
+                List<MPreguntas_test> preguntas_test = mtAuxiliar.getPreguntas_test(id);
                 ViewBag.preguntas=preguntas_test;
                 return View(mtest);
 
@@ -46,24 +46,16 @@ namespace WebSima.Controllers
             Respuesta respuesta = new Respuesta();
             if (sesion.esAdministrador(db))
             {
-                Test test = db.Test.Find(id);
-                if (test != null)
+                if (new MTest().eliminar_test(db, id) > 0)
                 {
-                    //if (cursos.clases_sima.Count() == 0)
-                    //{
-                    //db.cursos.Remove(cursos);
-                    test.eliminado = 1;
-                    test.estado_cierre = 1;
-                    db.Entry(test).State = EntityState.Modified;
-                    db.SaveChanges();
                     respuesta.RESPUESTA = "OK";
-
+                    respuesta.MENSAJE = "Test eliminado.";
                 }
                 else
                 {
                     respuesta.RESPUESTA = "ERROR";
-                    respuesta.MENSAJE = "Test no exite.";
-                }
+                    respuesta.MENSAJE = "Test no eliminado.";
+                }                
             }
             else
             {
@@ -83,21 +75,21 @@ namespace WebSima.Controllers
                 String periodo = MConfiguracionApp.getPeridoActual(db);
                 // se consulta los grupos donde el estudiante a dado clase
                 if(sesion.getIPerfilUsusrio().Equals("Estudiante"))
-                         mcursos = mclase.getCursos_por_clase(db, periodo, sesion.getIdUsuario());
+                         mcursos = mclase.getCursos_por_clase(periodo, sesion.getIdUsuario());
                 else
                 {
-                    List<String> materiasDocente = new List<string>();
+                    List<string> materiasDocente = new List<string>();
                     materiasDocente.Add("MATEMATICA BASICA");
                     materiasDocente.Add("CALCULO I");
                     mcursos= new List<MCurso> ();
                     foreach (String item in materiasDocente)
                     {
-                       mcursos = mcursos.Union(MCurso.getCursoMateria(db, item, periodo)).ToList();
+                       mcursos = mcursos.Union(new MCurso().getCursoMateria(item, periodo)).ToList();
                     }
                 }
                 // DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss-ff")
                 DateTime fechaHoya = DateTime.Now;
-                List<MTest> mtests = new MTest().getTest_abiertos(db, 0, 0);
+                List<MTest> mtests = new MTest().getTestPeriodo("", 0, 0);// se consultan los test abiertos
                 // se consultan solo los test de los monitores 
                 mtests = (from c in mtests
                           where (DateTime.Compare(DateTime.Now, c.fecha_inicio)>=0 && c.periodo == periodo && c.eliminado == 0 && c.ferfil_usuario == sesion.getIPerfilUsusrio())
@@ -121,12 +113,12 @@ namespace WebSima.Controllers
 
                 List<MTest> tests = new List<MTest>();
                 if (periodo.Equals("-1"))
-                    tests = (new MTest().getTest_abiertos(db, 0, 0));
+                    tests = (new MTest().getTestPeriodo("",0, 0));// se consultan los tests abiertos 
                 else
                 {
                     if (periodo.Equals(""))
                         periodo = MConfiguracionApp.getPeridoActual(db);
-                    tests = (new MTest().getTestPeriodo(db, periodo, 1, 0));
+                    tests = (new MTest().getTestPeriodo(periodo, 1, 0));
                 }
 
                 return View("Listar_test", tests);
@@ -142,7 +134,7 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                 MPreguntas_test pre = new MPreguntas_test();
-                return View(pre.getPreguntas(db, 0));
+                return View(pre.getPreguntas(0));
             }
             return null;
         }
@@ -207,7 +199,7 @@ namespace WebSima.Controllers
         {
             if (sesion.esAdministrador(db))
             {
-                List<MPreguntas_test> preguntas = (new MPreguntas_test()).getPreguntas_test(db, 0);
+                List<MPreguntas_test> preguntas = (new MPreguntas_test()).getPreguntas(0);
                 ViewBag.preguntas = preguntas;
                 return View("Crear_test");
             }
@@ -241,7 +233,7 @@ namespace WebSima.Controllers
                     test_.ferfil_usuario = Mtest.ferfil_usuario;
 
 
-                    bool respuesta_guardado = Mtest.guardar_Test(db, test_, id_preguntas);
+                    bool respuesta_guardado = Mtest.guardar_Test(test_, id_preguntas);
                     if (respuesta_guardado)
                     {
                         respuesta.RESPUESTA = "OK";
@@ -288,10 +280,10 @@ namespace WebSima.Controllers
             if (sesion.esAdministrador(db))
             {
                 MTest mtstAux = new MTest();
-                 List<MPreguntas_test> preguntas = (new MPreguntas_test()).getPreguntas_test(db, 0);
+                 List<MPreguntas_test> preguntas = (new MPreguntas_test()).getPreguntas(0);
                 ViewBag.preguntas = preguntas;
-                MTest mtst = (mtstAux.getTestPorId(db, id));
-               List<MPreguntas_test> preguntaTest= mtstAux.getPreguntas_test(db, id);
+                MTest mtst = (mtstAux.getTestPorId(id));
+               List<MPreguntas_test> preguntaTest= mtstAux.getPreguntas_test(id);
                ViewBag.preguntas = preguntas;
                ViewBag.preguntaTest = preguntaTest;
                 return View(mtst);
@@ -322,10 +314,10 @@ namespace WebSima.Controllers
                     // es una lista[idPregunta, puntos]
                     List<String[]> puntosAll = mtAux.getPreguntaPuntosTotal(id, grupo);
                     List<String[]> comentarioPregunta = mtAux.getCometariosPreguntasAbiertaTest(id, grupo);
-                    List<MPreguntas_test> preguntasAll = mtAux.getPreguntas_test(db, id).OrderBy(x => x.id).ToList();
+                    List<MPreguntas_test> preguntasAll = mtAux.getPreguntas_test(id).OrderBy(x => x.id).ToList();
                     int cantidad = mtAux.ContarCantidaUasuarioRespondenTest(id, grupo);
                     Test test = db.Test.Find(id);
-                    List<MCurso> mcursos = MCurso.getCursos(db, "", test.periodo);
+                    List<MCurso> mcursos =new  MCurso().getCursos("", test.periodo);
                     ViewBag.preguntasTest = preguntasAll;
                     ViewBag.puntoPreguntas = puntosAll;
                     ViewBag.comentarioPreguntas = comentarioPregunta;
@@ -375,7 +367,7 @@ namespace WebSima.Controllers
             List<MPreguntas_test> preguntas = null;
             MTest test = new MTest();
             //  se consultas las pregunta asignadas al test 
-            preguntas = (test).getPreguntas_test_a_resonder(db, Convert.ToInt32(sesion.getId_test_responder()));
+            preguntas = (test).getPreguntas_test_a_responder(db,Convert.ToInt32(sesion.getId_test_responder()));
             // se resta uno por el toke de validacion
             if (preguntas.Count() == Request.Form.Count-1)
             {
@@ -460,7 +452,7 @@ namespace WebSima.Controllers
                     int id_curso = Convert.ToInt32(curso);
                     String peridio = MConfiguracionApp.getPeridoActual(db);
                     MTest mtestAux = new MTest();
-                    MTest testResponder = mtestAux.getTestPorId(db, id_test);
+                    MTest testResponder = mtestAux.getTestPorId(id_test);
 
                     // se verifica q el perfil es el correcto y que el teste no este cerrado
                     if (testResponder.ferfil_usuario.Equals(sesion.getIPerfilUsusrio()) &&
@@ -472,7 +464,7 @@ namespace WebSima.Controllers
                             bool respondio = mtestAux.isRespondioTest(id_curso, id_test);
                             if (!respondio)
                             {
-                                MTest mtest = (mtestAux.getTestPorId(db, id_test));
+                                MTest mtest = (mtestAux.getTestPorId(id_test));
                                 if (DateTime.Compare(DateTime.Now, mtest.fecha_inicio) >= 0)
                                 {
                                     sesion.setId_test_responder(id_test);
@@ -480,7 +472,7 @@ namespace WebSima.Controllers
                                     List<MPreguntas_test> preguntas = null;
                                     if (mtest != null)
                                     {
-                                        preguntas = mtest.getPreguntas_test_a_resonder(db, mtest.id);
+                                        preguntas = mtest.getPreguntas_test_a_responder(db, mtest.id);
                                     }
                                     ViewBag.test = mtest;
                                     ViewBag.preguntas = preguntas;
@@ -522,12 +514,11 @@ namespace WebSima.Controllers
             {
                 try
                 {
-
                     int id_test = Convert.ToInt32(test);
                     int id_curso = Convert.ToInt32(curso);
                     String peridio = MConfiguracionApp.getPeridoActual(db);
                     MTest mtestAux = new MTest();
-                    MTest testResponder = mtestAux.getTestPorId(db, id_test);
+                    MTest testResponder = mtestAux.getTestPorId(id_test);
 
                     // se verifica q el perfil se el correcto y que el teste no este cerrado
                     if (testResponder.ferfil_usuario.Equals(sesion.getIPerfilUsusrio()) && 
@@ -535,14 +526,14 @@ namespace WebSima.Controllers
                         testResponder.periodo.Equals(peridio))
                     {
                         // se verifica q haya asistido al menos a una calse del curso
-                        if (new Mclase().getClaseAsistedaEstudianteEnGrupo(db, id_curso, sesion.getIdUsuario()) > 0)
+                        if (new Mclase().getClaseAsistedaEstudianteEnGrupo(id_curso, sesion.getIdUsuario()) > 0)
                         {
                             // se verfica si ya el estudiante ha respondeido el test
                             bool respondio = mtestAux.isRespondioTest(id_curso, id_test);
                             if (!respondio)
                             {
                                 //DateTime.Compare(DateTime.Now, c.fecha_inicio)>=0 &&
-                                MTest mtest = (mtestAux.getTestPorId(db, id_test));
+                                MTest mtest = (mtestAux.getTestPorId(id_test));
                                 if (DateTime.Compare(DateTime.Now, mtest.fecha_inicio) >= 0)
                                 {
                                     sesion.setId_test_responder(id_test);
@@ -550,7 +541,7 @@ namespace WebSima.Controllers
                                     List<MPreguntas_test> preguntas = null;
                                     if (mtest != null)
                                     {
-                                        preguntas = mtest.getPreguntas_test_a_resonder(db, mtest.id);
+                                        preguntas = mtest.getPreguntas_test_a_responder(db,mtest.id);
                                     }
                                     ViewBag.test = mtest;
                                     ViewBag.preguntas = preguntas;
@@ -600,20 +591,15 @@ namespace WebSima.Controllers
 
             if (sesion.esAdministrador(db))
             {
-                preguntas_test pregnta = db.preguntas_test.Find(id);
-                if (pregnta != null)
-                {
-                    pregnta.eliminado = 1;
-                    db.Entry(pregnta).State = EntityState.Modified;
-                    db.SaveChanges();
+                int respusta = new MTest().eliminarPregunta(db, id);
+                if (respusta>0)
+                {                   
                     respuesta.RESPUESTA = "OK";
                     respuesta.MENSAJE = "Pregunta eliminada exite.";
 
-                }
-                else
-                {
+                }else{
                     respuesta.RESPUESTA = "ERROR";
-                    respuesta.MENSAJE = "Pregunta no exite.";
+                    respuesta.MENSAJE = "Pregunta no eliminada.";
                 }
             }
             else
@@ -627,10 +613,10 @@ namespace WebSima.Controllers
             if (sesion.esMonitor(db))
             {
                 List<MTest> tests = new List<MTest>();
-                List<MCurso> cursos = MCurso.getCursoAcargoActivos(db, MConfiguracionApp.getPeridoActual(db), sesion.getIdUsuario());
+                List<MCurso> cursos =new  MCurso().getCursoAcargoActivos(MConfiguracionApp.getPeridoActual(db), sesion.getIdUsuario());
 
-                tests = tests.Union((new MTest().getTest_abiertos(db, 0, 0))).ToList();
-                tests = tests.Union((new MTest().getTest_abiertos(db, 1, 0))).ToList();
+                tests = tests.Union((new MTest().getTestPeriodo("", 0, 0))).ToList();
+                tests = tests.Union((new MTest().getTestPeriodo("", 1, 0))).ToList();
                 tests = (from t in tests where (DateTime.Compare(DateTime.Now, t.fecha_inicio) >= 0 && t.periodo == MConfiguracionApp.getPeridoActual(db)) select t).ToList();
 
 
@@ -645,7 +631,7 @@ namespace WebSima.Controllers
         {
             if (sesion.esAdministrador(db))
             {
-                MPreguntas_test pregunta = (new MPreguntas_test()).getPreguntaId(db, id);
+                MPreguntas_test pregunta = (new MPreguntas_test()).getPreguntaId(id);
                 if (pregunta == null)
                 {
                     return HttpNotFound();
@@ -668,8 +654,8 @@ namespace WebSima.Controllers
                
                 if (ModelState.IsValid)
                 {
-                   bool actualizado= new MPreguntas_test().actualizar_pregunta(db, pregunta);
-                   if (!actualizado)
+                   int actualizado= new MPreguntas_test().actualizar_pregunta(db, pregunta);
+                   if (actualizado<=0)
                    {
                        respuesta.RESPUESTA = "ERROR";
                        respuesta.MENSAJE = "Error en la actualización.";
@@ -705,17 +691,15 @@ namespace WebSima.Controllers
             else if (sesion.esAdministrador(db))
             {
                 if (ModelState.IsValid)
-                {
-                    
-                    
+                {                  
 
 
-                    bool respuesta_guardado = Mtest.actualizar_test(db, Mtest);
-                    if (respuesta_guardado)
+                    int respuesta_guardado = Mtest.actualizar_test(db,Mtest);
+                    if (respuesta_guardado>0)
                     {
                         respuesta.RESPUESTA = "OK";
                         respuesta.MENSAJE = "Test actualizado correctamente.";
-                        bool pregunta_save = Mtest.guardar_Test(db, null, id_preguntas, Mtest.id);
+                        bool pregunta_save = Mtest.guardar_Test(null, id_preguntas, Mtest.id);
                         if (!pregunta_save)
                         {
                             respuesta.RESPUESTA = "NO_PREGUNTA";

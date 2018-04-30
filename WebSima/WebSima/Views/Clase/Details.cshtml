@@ -1,9 +1,11 @@
-﻿@model WebSima.Models.clases_sima
+﻿@model WebSima.Models.Mclase
 
 @{
     String perfil = ViewBag.perfil;
     ViewBag.Title = "Detalles";
     List<WebSima.Models.WebApi.EstudianteMateria> estudiantes = ViewBag.estudiantes;
+     List<WebSima.Models.estudiantes_asistentes>estudiantesAsistentes=ViewBag.estudiantesAsistentes ;
+     WebSima.Models.MUsuario usuario = ViewBag.usuario;
     
     if (perfil.Equals("Monitor"))
     {
@@ -31,9 +33,9 @@
                 <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.id</dd>
 
                 <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Identicación:</dt>
-                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.usuarios.celular</dd>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@usuario.id</dd>
                 <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Nombre:</dt>
-                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.usuarios.nombre @Model.usuarios.apellidos</dd>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@usuario.nombre @usuario.apellidos</dd>
                 <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Periodo:</dt>
                 <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.periodo</dd>              
 
@@ -54,7 +56,7 @@
                     }
                 </dd>
                 <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Estudiantes:</dt>
-                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@Model.estudiantes_asistentes.Count()</dd>
+                <dd class="col-12 col-sm-6 col-md-7 col-lg-9">@estudiantesAsistentes.Count()</dd>
                 <dt class="col-12 col-sm-6 col-md-5 col-lg-3">Tema:</dt>
                 <dd class="col-12 col-sm-6 col-md-7 col-lg-9"><p>@Model.tema</p></dd>
 
@@ -72,7 +74,7 @@
                     Identificación
                 </th>
                 <th>
-                    nombre
+                    Mombre
                 </th>
             </tr>
         </thead>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.EntityClient;
@@ -44,7 +45,7 @@ namespace WebSima.Models
         /// <param name="test"> obj con los datos del test </param>
         /// <param name="id_preguntas">yds de las preguntas asignadas al test</param>
         /// <returns></returns>
-        public bool guardar_Test(bd_simaEntitie db, Test test, int[] id_preguntas, int id_test_actualizar=-1)
+        public bool guardar_Test(Test test, int[] id_preguntas, int id_test_actualizar=-1)
         {
             bool guardado = true;
             try
@@ -55,24 +56,19 @@ namespace WebSima.Models
                     {
                         if (id_test_actualizar==-1)
                         {
-                            db.Test.Add(test);
-                            db.SaveChanges();
-                            add_pregunta_test(db, id_preguntas, test.id);
+                            contestTransaccion.Test.Add(test);
+                            contestTransaccion.SaveChanges();
+                            add_pregunta_test(contestTransaccion, id_preguntas, test.id);
                         }
                         else
                         {
-                            List<pregunta_test_responder> preguntas = (from pre in db.pregunta_test_responder
-                                                                       where (pre.id_test == id_test_actualizar)
-                                                                       select pre).ToList();
-                            foreach (var pregunta in preguntas)
-                            {
-                                db.pregunta_test_responder.Remove(pregunta);
-                            }
-                            add_pregunta_test(db, id_preguntas, id_test_actualizar);
+
+                            int respo = eliminarPreguntaResponder(contestTransaccion, id_test_actualizar);
+                            add_pregunta_test(contestTransaccion, id_preguntas, id_test_actualizar);
                             
                             
                         }
-                       db.SaveChanges();
+                        contestTransaccion.SaveChanges();
                        transaccion.Complete();
                     }
                 }
@@ -147,25 +143,56 @@ namespace WebSima.Models
         /// <param name="estado_cierre"> el estado del test cerrado o abierto 0 o 1</param>
         /// <param name="eliminado"> el estado de eliminacion del test eliminado o no ,0 o 1</param>
         /// <returns></returns>
-        public List<MTest> getTestPeriodo(bd_simaEntitie db, string periodo, int estado_cierre=0, int eliminado =0){
-            List<MTest> test = null;
+        public List<MTest> getTestPeriodo(string periodo, int estado_cierre=0, int eliminado =0){
+            List<MTest> tests = new List<MTest>();
 
-            test = (from p in db.Test
-                      where (periodo.Equals(p.periodo) && p.eliminado == eliminado && p.estado_cierre == estado_cierre)
-                      select new MTest
-                      {
-                          id=p.id,
-                          eliminado=p.eliminado,
-                          estado_cierre=p.estado_cierre,
-                          fecha_fin=p.fecha_fin,
-                          fecha_inicio=p.fecha_inicio,
-                          ferfil_usuario=p.ferfil_usuario,
-                          id_usuario_creado=p.id_usuario_creado,
-                          periodo=p.periodo,
-                          pregunta_test_responder=p.pregunta_test_responder,
-                          usuarios=p.usuarios
-                      }).ToList();
-            return test;
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Test_periodo", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    cmd.Parameters.AddWithValue("@estado_cierre", estado_cierre);
+                    cmd.Parameters.AddWithValue("@eliminado", eliminado);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                       
+                        MTest t = new MTest
+                        {
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            eliminado = Convert.ToByte(row["eliminado"].ToString()),
+                            estado_cierre = Convert.ToByte(row["estado_cierre"].ToString()),
+                            fecha_fin = DateTime.Parse(row["fecha_fin"].ToString()),
+                            fecha_inicio = DateTime.Parse(row["fecha_inicio"].ToString()),
+                            ferfil_usuario = row["ferfil_usuario"].ToString(),
+                            id_usuario_creado = row["id_usuario_creado"].ToString(),
+                            periodo = row["periodo"].ToString()
+
+                        };
+                        tests.Add(t);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return tests;
 
         }
         /// <summary>
@@ -175,59 +202,55 @@ namespace WebSima.Models
         /// <param name="id_test">id del test a consultar </param>
         /// <returns></returns>
 
-        public MTest getTestPorId(bd_simaEntitie db, int id_test)
+        public MTest getTestPorId(int id_test)
         {
             MTest Mtest = null;
-            Test test = db.Test.Find(id_test);
-            if (null != test)
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
             {
-                Mtest = new MTest
-                       {
-                           id = test.id,
-                           eliminado = test.eliminado,
-                           estado_cierre = test.estado_cierre,
-                           fecha_fin = test.fecha_fin,
-                           fecha_inicio = test.fecha_inicio,
-                           ferfil_usuario = test.ferfil_usuario,
-                           id_usuario_creado = test.id_usuario_creado,
-                           periodo = test.periodo,
-                           pregunta_test_responder = test.pregunta_test_responder,
-                           usuarios = test.usuarios
-                       };
-            }
-
-            return Mtest;
-
-        
-        }
-        /// <summary>
-        /// Consulta los test que no estan cerrados
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="estado_cierre"> el estado del test cerrado o abierto (0 o 1)</param>
-        /// <param name="eliminado"> el estado de eliminacion del test eliminado o no (0 o 1)</param>
-        /// <returns></returns>
-        public List<MTest> getTest_abiertos(bd_simaEntitie db, int estado_cierre, int eliminado )
-        {
-            List<MTest> test = null;
-
-            test = (from p in db.Test
-                    where (p.eliminado == eliminado && p.estado_cierre == estado_cierre)
-                    select new MTest
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Test", conn)
                     {
-                        id = p.id,
-                        eliminado = p.eliminado,
-                        estado_cierre = p.estado_cierre,
-                        fecha_fin = p.fecha_fin,
-                        fecha_inicio = p.fecha_inicio,
-                        ferfil_usuario = p.ferfil_usuario,
-                        id_usuario_creado = p.id_usuario_creado,
-                        periodo = p.periodo,
-                        pregunta_test_responder = p.pregunta_test_responder,
-                        usuarios = p.usuarios
-                    }).ToList();
-            return test;
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id_test", id_test);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                    {
+                        DataRow row = dtr.Tables[0].Rows[0];
+                        Mtest = new MTest
+                        {
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            eliminado= Convert.ToByte(row["eliminado"].ToString()),
+                            estado_cierre = Convert.ToByte(row["estado_cierre"].ToString()),
+                            fecha_fin= DateTime.Parse(row["fecha_fin"].ToString()),
+                            fecha_inicio= DateTime.Parse(row["fecha_inicio"].ToString()),
+                            ferfil_usuario= row["ferfil_usuario"].ToString(),
+                            id_usuario_creado=row["id_usuario_creado"].ToString(),
+                            periodo = row["periodo"].ToString()                           
+                            
+                        };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return Mtest;        
         }
+        
         /// <summary>
         /// se consulta id de la relacion entre la preguntas y el rest 
         /// </summary>
@@ -252,25 +275,14 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="id_test"></param>
         /// <returns></returns>
-        public List<MPreguntas_test> getPreguntas_test_a_resonder(bd_simaEntitie db, int id_test)
+        public List<MPreguntas_test> getPreguntas_test_a_responder(bd_simaEntitie db, int id_test)
         {
-            List<MPreguntas_test> preguntas = null;
+            List<MPreguntas_test> preguntas = new List<MPreguntas_test>();
 
-            preguntas = (from t in db.Test
-                         join pr in db.pregunta_test_responder on t.id equals pr.id_test
-                         join p in db.preguntas_test on pr.id_pregunta_test equals p.id
-                         where (t.id == id_test && p.eliminado==0)
-                         orderby (p.tipo) descending
-                         select new MPreguntas_test
-                         {
-                             eliminado = p.eliminado,
-                             id = p.id,
-                             Pregunata = p.Pregunata,
-                             tipo = p.tipo,
-                             pregunta_test_responder = p.pregunta_test_responder
-                         }).ToList();
+            preguntas = getPreguntas_test(id_test);
+            preguntas = (from p in preguntas where (p.eliminado == 0) select p).ToList();
 
-            return preguntas;
+            return preguntas.OrderByDescending(x=>x.tipo).ToList();
         }
 
         /// <summary>
@@ -279,25 +291,51 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="id_test"></param>
         /// <returns></returns>
-        public List<MPreguntas_test> getPreguntas_test(bd_simaEntitie db, int id_test)
+        public List<MPreguntas_test> getPreguntas_test(int id_test)
         {
-            List<MPreguntas_test> preguntas = null;
+            List<MPreguntas_test> preguntas = new List<MPreguntas_test>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado consultarAsistencia
+                    var cmd = new SqlCommand("SP_Pregunta_Test", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id_test", id_test);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
 
-            preguntas = (from t in db.Test
-                         join pr in db.pregunta_test_responder on t.id equals pr.id_test
-                         join p in db.preguntas_test on pr.id_pregunta_test equals p.id
-                         where (t.id == id_test )
-                         orderby (p.tipo) descending
-                         select new MPreguntas_test
-                         {
-                             eliminado = p.eliminado,
-                             id = p.id,
-                             Pregunata = p.Pregunata,
-                             tipo = p.tipo,
-                             pregunta_test_responder = p.pregunta_test_responder
-                         }).ToList();
+                        MPreguntas_test p = new MPreguntas_test
+                        {
+                            eliminado = Convert.ToByte(row["eliminado"].ToString()),
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            Pregunata = row["Pregunata"].ToString(),
+                            tipo = row["tipo"].ToString()
+                        };                      
+                        preguntas.Add(p);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
 
-            return preguntas;
+            }
+
+
+            return preguntas.OrderByDescending(m => m.tipo).ToList(); ;
         }
         /// <summary>
         /// consulta si el ususrio ya respondio el test de un curso o monitor
@@ -307,99 +345,91 @@ namespace WebSima.Models
         /// <returns></returns>
         public  bool isRespondioTest( int id_curso, int id_test )
         {
-            bd_simaEntitie db = new bd_simaEntitie();
-            Sesion sesion= new Sesion();
+
+
+            Sesion sesion = new Sesion();
             String id_usuario_ = sesion.getIdUsuario();
-            bool respondio=false;
-        
-            var respuesta= (from t in db.Test
-                         join p in db.pregunta_test_responder on t.id equals p.id_test
-                            join r in db.respuestas on p.id equals r.id_preguntas_test_respustas
-                         where (t.id == id_test && r.id_persona==id_usuario_ && r.id_curso==id_curso)                         
-                         select  r).ToList();
+            bool respuesta = false;
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Respondio_test", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@id_usuario", id_usuario_);
+                    cmd.Parameters.AddWithValue("@id_curso", id_curso);
+                    cmd.Parameters.AddWithValue("@id_test", id_test);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1)
+                        respuesta = true;
+                    
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
 
-
-            if (respuesta.Count()> 0)
-                respondio = true;
-
-            return respondio;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return respuesta;
+            
        
         }
+        
         /// <summary>
-        /// Consulta la cantidad de test que ha respondido un usuario en un periodo
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="id_usuario"></param>
-        /// <param name="periodo_"></param>
-        /// <returns>vector 2 posisiciones. id pregunta, puntaje</returns>
-        public int contarTestRespondidoPeriodo(bd_simaEntitie db, String id_usuario,String periodo_)
-        {
-            //select Distinct(t.id) from Test t , respuestas r , pregunta_test_responder p 
- //where ( t.id= p.id_test and p.id = r.id_preguntas_test_respustas and r.id_persona ='1000248961' and t.periodo='2017-2' )
-            var respuesta = (from t in db.Test
-                             join p in db.pregunta_test_responder on t.id equals p.id_test
-                             join r in db.respuestas on p.id equals r.id_preguntas_test_respustas
-                             where (t.id==p.id_test && p.id== r.id_preguntas_test_respustas
-                             && r.id_persona== id_usuario && periodo_== t.periodo)
-                             select t).Distinct();
-            return respuesta.Count();
-        }
-        /// <summary>
-        /// Se consulta las preguntas de un tes con el puntos obtenediso por los votantes de tipo cerrada
+        /// Se consulta las preguntas de un test con los puntos obtenidos por los votantes de tipo cerrada
         /// </summary>
         /// <param name="id_test"></param>
         /// <returns></returns>
         public List<String[]> getPreguntaPuntosTotal(int id_test, int id_curso=-1)
         {
-            String sql;
-            if(id_curso>0)
-             sql = @"select  p.id_pregunta_test,  SUM(r.punto) from bd_simaEntitie.Test as t, " +
-                "bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
-                "where(t.id=p.id_test and p.id = r.id_preguntas_test_respustas and "+
-                " p.id_pregunta_test =pt.id and t.id= @id_test and r.id_curso= @id_curso and pt.tipo= 'Cerrada' ) " +
-                "GROUP BY  p.id_pregunta_test";
-            else
-                sql = @"select  p.id_pregunta_test,  SUM(r.punto) from bd_simaEntitie.Test as t, " +
-                "bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
-                "where(t.id=p.id_test and p.id = r.id_preguntas_test_respustas and " +
-                " p.id_pregunta_test =pt.id and t.id= @id_test  and pt.tipo= 'Cerrada' ) " +
-                "GROUP BY  p.id_pregunta_test";
 
             List<String[]> puntos = new List<String[]>();
-            using (EntityConnection conn = new EntityConnection("name=bd_simaEntitie"))
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
             {
-                conn.Open();
-
-                using (EntityCommand cmd = new EntityCommand(sql, conn))
+                try
                 {
-                    // Create two parameters and add them to 
-                    // the EntityCommand's Parameters collection 
-                    EntityParameter param1 = new EntityParameter();
-                    param1.ParameterName = "id_test";
-                    param1.Value = id_test;
-                    cmd.Parameters.Add(param1); ;
-                    if (id_curso > 0)
+                    // procedimiento almacenado consultarAsistencia
+                    var cmd = new SqlCommand("SP_Pregunta_Puntos_Total", conn)
                     {
-                        EntityParameter param2 = new EntityParameter();
-                        param2.ParameterName = "id_curso";
-                        param2.Value = id_curso;
-                        cmd.Parameters.Add(param2); ;
-                    }
-                    
-                    using (DbDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id_curso", id_curso);
+                    cmd.Parameters.AddWithValue("@id_test", id_test);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
                     {
-
-                        while (rdr.Read())
-                        {
-                            String[] dato = new String[2];
-                            dato[0] = "" + rdr.GetInt32(0);
-                            dato[1] = ""+ rdr.GetInt32(1);
-                            puntos.Add(dato);
-
-                        }
+                       
+                        String[] dato = new String[2];
+                        dato[0] = row["id_pregunta_test"].ToString();
+                        dato[1] = row["puntos"].ToString();
+                        puntos.Add(dato);
                     }
                 }
-                conn.Close();
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
             }
             return puntos.OrderBy(m => m[0]).ToList();
         
@@ -411,62 +441,53 @@ namespace WebSima.Models
         /// <returns></returns>
         public List<String[]> getCometariosPreguntasAbiertaTest(int id_test, int id_curso=-1)
         {
-            String sql;
-            if(id_curso>0)
-            sql = @"select  p.id_pregunta_test,  r.observacion from bd_simaEntitie.Test as t," +
-                " bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
-                " where(t.id=p.id_test and p.id=r.id_preguntas_test_respustas and "+
-                " p.id_pregunta_test =pt.id and t.id= @id_test  and r.id_curso= @id_curso and pt.tipo='Abierta' ) ";
-            else
-                sql = @"select  p.id_pregunta_test,  r.observacion from bd_simaEntitie.Test as t," +
-               " bd_simaEntitie.pregunta_test_responder as p, bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt " +
-               " where(t.id=p.id_test and p.id=r.id_preguntas_test_respustas and " +
-               " p.id_pregunta_test =pt.id and t.id= @id_test  and pt.tipo='Abierta'  ) "; 
 
+            var dtr = new DataSet();
             List<String[]> puntos = new List<String[]>();
-            using (EntityConnection conn = new EntityConnection("name=bd_simaEntitie"))
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
             {
-                conn.Open();
-
-                using (EntityCommand cmd = new EntityCommand(sql, conn))
+                try
                 {
-                    // Create two parameters and add them to 
-                    // the EntityCommand's Parameters collection 
-                    EntityParameter param1 = new EntityParameter();
-                    param1.ParameterName = "id_test";
-                    param1.Value = id_test;
-                    cmd.Parameters.Add(param1); ;
-                    if (id_curso > 0)
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Cometarios_Preguntas_Abierta_Test", conn)
                     {
-                        EntityParameter param2 = new EntityParameter();
-                        param2.ParameterName = "id_curso";
-                        param2.Value = id_curso;
-                        cmd.Parameters.Add(param2); ;
-                    }
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    // si id curso es negagativo  se consulta en general, si es diferente de 0 se filtra por el curso
 
-
-                    using (DbDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
+                    cmd.Parameters.AddWithValue("@id_test", id_test);
+                    cmd.Parameters.AddWithValue("@id_curso", id_curso);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
                     {
-
-                        while (rdr.Read())
+                        String[] dato = new String[2];
+                        dato[0] = row["id_pregunta_test"].ToString();
+                        try
                         {
-                            String[] dato = new String[2];
-                            dato[0] = "" + rdr.GetInt32(0);
-                            try
-                            {
-                                dato[1] = rdr.GetString(1);
-                            }
-                            catch (Exception)
-                            {
-                                dato[1] = "";
-                            }
-                            puntos.Add(dato);
-
+                            dato[1] = row["observacion"].ToString();
                         }
+                        catch (Exception)
+                        {
+                            dato[1] = "";
+                        }
+                        puntos.Add(dato);
                     }
+
                 }
-                conn.Close();
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
+            
             return puntos.OrderBy(m => m[0]).ToList();
 
         }
@@ -478,70 +499,92 @@ namespace WebSima.Models
         /// <returns></returns>
         public int ContarCantidaUasuarioRespondenTest(int id_test, int id_curso = -1)
         {
-            String sql;
-            // si id curso es negagativo  se consulta en general, si es diferente de 0 se filtra por el curso
-            if (id_curso > 0)
-                sql = @"select  DISTINCT(r.id_persona) from bd_simaEntitie.Test as t, bd_simaEntitie.pregunta_test_responder as p, " +
-                    "bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt  where(t.id=p.id_test and " +
-                    "p.id=r.id_preguntas_test_respustas and p.id_pregunta_test =pt.id and t.id= @id_test  and r.id_curso= @id_curso )";
-           
-            else
-                sql = @"select  DISTINCT(r.id_persona) from bd_simaEntitie.Test as t, bd_simaEntitie.pregunta_test_responder as p, " +
-                    "bd_simaEntitie.respuestas as r , bd_simaEntitie.preguntas_test as pt  where(t.id=p.id_test and " +
-                    "p.id=r.id_preguntas_test_respustas and p.id_pregunta_test =pt.id and t.id= @id_test)";
-
+            var dtr = new DataSet();
             int cantidad = 0;
-            using (EntityConnection conn = new EntityConnection("name=bd_simaEntitie"))
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
             {
-                conn.Open();
-                using (EntityCommand cmd = new EntityCommand(sql, conn))
+                try
                 {
-                    // Create two parameters and add them to 
-                    // the EntityCommand's Parameters collection 
-                    EntityParameter param1 = new EntityParameter();
-                    param1.ParameterName = "id_test";
-                    param1.Value = id_test;
-                    cmd.Parameters.Add(param1); ;
-                    if (id_curso > 0)
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Cantida_Uasuario_Responden_Test", conn)
                     {
-                        EntityParameter param2 = new EntityParameter();
-                        param2.ParameterName = "id_curso";
-                        param2.Value = id_curso;
-                        cmd.Parameters.Add(param2); ;
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    // si id curso es negagativo  se consulta en general, si es diferente de 0 se filtra por el curso
+
+                    cmd.Parameters.AddWithValue("@id_test", id_test);
+                    cmd.Parameters.AddWithValue("@id_curso", id_curso);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    if ((dtr.Tables[0].Rows).Count >= 1){
+                         DataRow row = dtr.Tables[0].Rows[0];
+                         cantidad = Convert.ToByte(row["cantidad"]);
                     }
-                    using (DbDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
-                    {                       
-                        while (rdr.Read())
-                         cantidad++;
-                    }
+
                 }
-                conn.Close();
-            }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }            
             return cantidad;
 
         }
-        public bool actualizar_test(bd_simaEntitie db, MTest test)
+        public int eliminar_test(bd_simaEntitie db, int id_test)
         {
-            bool actualizado = false;
-            try
-            {
-                Test test_ = db.Test.Find(test.id);
-                test_.eliminado = 0;
-                test_.estado_cierre = 0;
-                test_.fecha_fin = test.fecha_fin;
-                test_.fecha_inicio = test.fecha_inicio;
-                test_.periodo = MConfiguracionApp.getPeridoActual(db);
-                test_.ferfil_usuario = test.ferfil_usuario;
-                test_.id = test.id;
-                db.Entry(test_).State = EntityState.Modified;
-                db.SaveChanges();
-                actualizado = true;
-            }
-            catch (Exception)
-            {
+            int eliminado = 0;
+           
+            String sql = "UPDATE Test SET estado_cierre = 1,eliminado = 1 WHERE  id= @id";
+            eliminado = db.Database.ExecuteSqlCommand(sql,
+                   new SqlParameter("@id", id_test)
+                    );
+            return eliminado;
+        }
+        public int actualizar_test(bd_simaEntitie db,MTest test)
+        {
+           
+            String sql = "UPDATE Test SET eliminado=@eliminado,estado_cierre=@estado_cierre,"
+            +"fecha_fin=@fecha_fin ,fecha_inicio=@fecha_inicio ,periodo=@periodo,"+
+            "ferfil_usuario=@ferfil_usuario WHERE  id= @id";
+            int eliminado = db.Database.ExecuteSqlCommand(sql,
+                   new SqlParameter("@eliminado", false),
+                   new SqlParameter("@estado_cierre", false),
+                   new SqlParameter("@fecha_fin", test.fecha_fin),
+                   new SqlParameter("@fecha_inicio", test.fecha_inicio),
+                   new SqlParameter("@periodo", MConfiguracionApp.getPeridoActual(db)),
+                   new SqlParameter("@ferfil_usuario", test.ferfil_usuario),
+                   new SqlParameter("@id", test.id)
+                    );        
+            
+            return eliminado;
 
-            }
-            return actualizado;
+        }
+        public int eliminarPreguntaResponder(bd_simaEntitie db, int id_test)
+        {
+
+            String sql = "DELETE FROM pregunta_test_responder WHERE  id_test=@id_test";
+            int eliminado = db.Database.ExecuteSqlCommand(sql,
+                   new SqlParameter("@id_test", id_test)
+                    );
+
+            return eliminado;
+
+        }
+        public int eliminarPregunta(bd_simaEntitie db, int id_pregunta)
+        {
+            String sql = "UPDATE preguntas_test SET eliminado=1 WHERE  id=@id_test";
+            int eliminado = db.Database.ExecuteSqlCommand(sql,
+                   new SqlParameter("@id_test", id_pregunta)
+                    );
+
+            return eliminado;
 
         }
 
