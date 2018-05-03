@@ -82,7 +82,7 @@
                     <div class="box-body">
                         <div class="col-sm-12">
                             <!-- /.col -->
-                            <h4>Detallaes de las preguntas</h4>
+                            <h4>Detalles de las preguntas</h4>
 
                             <ul class="chart-legend clearfix">
                                 @foreach (var pregunta in preguntasAll)
@@ -110,26 +110,17 @@
                                                 @coemtario[0]
                                             </td>
                                             <td>@coemtario[1]</td>
-
                                         </tr>
                                     }
                                 </tbody>
                             </table>
-
-
                         </div>
-
                         <!-- /.row -->
                     </div>
                     <!-- /.box-body -->
-
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -147,9 +138,6 @@
 
         preguntas.push("");      
         valorPregunta.push(0);
-
-
-
         var contenedor = document.getElementById('bar-chart-test').getContext('2d');
         var chart = new Chart(contenedor, {
             // The type of chart we want to create
@@ -167,14 +155,8 @@
                 }]
             },
 
-            // Configuration options go here
             options: {}
         });
-
-
-
-        //BAR CHART
-
-        // generaChartBarra(contenedor, datos, '#00a65a', "Pregunta", "test de satisfaccion")
+             
     });
     </script>

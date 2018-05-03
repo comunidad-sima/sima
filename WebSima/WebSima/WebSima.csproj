@@ -5138,6 +5138,7 @@
     <Content Include="Content\imagenes\logocecar.png" />
     <Content Include="Global.asax" />
     <Content Include="ClassDiagram1.cd" />
+    <Content Include="Scripts\carga_dato_chart_pie.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.form.min.js" />
@@ -5175,7 +5176,6 @@
   <ItemGroup>
     <Folder Include="App_Start\App_Data\" />
     <Folder Include="Content\themes\" />
-    <Folder Include="Views\Charts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

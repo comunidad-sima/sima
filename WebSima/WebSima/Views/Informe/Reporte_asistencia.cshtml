@@ -71,13 +71,9 @@
             <div class=" box-body " style="border: 1px solid #e0e0e0; ">
 
                 <div class="box-tools pull-right">
-
-
                 </div>
-
-
                 <div class="col-sm-12 table-responsive">
-                    <table class="table tablaPaginacion table-bordered table-hover">
+                    <table id="table1-nota" class="table tablaPaginacion table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th></th>
@@ -88,19 +84,20 @@
                                 <th>NOTA-2</th>
                                 <th>DEFINITIVA</th>
 
-                                <th>ASISTENCIA</th>
+                                <th>ASISTENCIA MONITORIA</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @{
-                                int i = 1;
-                                if (asistencia != null && datos_estudiante!=null)
-                                {
-                                    foreach (String[] item in asistencia)
+                            
+                                @{
+                                    int i = 1;
+                                    if (asistencia != null && datos_estudiante != null)
                                     {
-                                        var estudiante = (from e in datos_estudiante where (e.num_identificacion.Equals(item[1])) select (e)).ToList();
-                                        // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
-                                        <tr>
+                                        foreach (String[] item in asistencia)
+                                        {
+                                            var estudiante = (from e in datos_estudiante where (e.num_identificacion.Equals(item[1])) select (e)).ToList();
+                                            // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
+                                          <tr>
                                             <td>@(i++)</td>
                                             <td>@item[1]</td>
                                             <td>
@@ -114,11 +111,9 @@
                                                     @mesanje;
                                                 }
 
-
                                             </td>
 
                                             <td>
-
                                                 @if (estudiante.Count() > 0)
                                                 {
                                                     @estudiante[0].nom_prog_matricula_estudiante
@@ -140,7 +135,6 @@
                                                     <div class="text-red">0,0</div>
                                                 }
 
-
                                             </td>
                                             <td class="text-center">
                                                 @if (estudiante.Count() > 0)
@@ -151,8 +145,6 @@
                                                 {
                                                     <div class="text-red">0,0</div>
                                                 }
-
-
                                             </td>
                                             <td class="text-center">
                                                 @if (estudiante.Count() > 0)
@@ -175,11 +167,7 @@
                                                 else
                                                 {
                                                     <div class="text-red">0,0</div>
-
-
                                                 }
-
-
                                             </td>
 
                                             <td class="text-center">@item[0]</td>
@@ -196,13 +184,41 @@
                     }
                 </div>
             </div>
+            <br />
+            <div id="chart2" class="panelBorder">
+                <div class="box-header with-border">
+                    <i class="fa fa-bar-chart-o"></i>
+                    <h3 class="box-title">Estadistica</h3>
 
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                            <select id="filtrar-select" class="form-control">
+                                <option value="3">Nota final</option>
+                                <option value="1">Nota 1</option>
+                                <option value="2">Nota 2</option>
+                            </select>
+                        </div>
+                        <div id="limpiar_grafica" class="  col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <canvas id="pieChart" width="100%" height="60px"></canvas>
+                        </div>
+                        <div id="canidad-estudiantes" class="col-sm-12"><p>Estudiantes</p></div>
+                       
+                     </div>
+                </div>
+                <!-- /.box-body-->
+
+            </div>
         </div>
+       
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
+        var labels = ["Notas entre 0 - 2,9",  "Notas entre 3 - 3,9", "Notas entre 4 - 4,9", "Notas en 5"];
+        var data = [];
         $('.select2').select2();
         // se configura la tabla, esta funcion está en helper.js
         configurar_dataTable("tablaPaginacion");
@@ -210,7 +226,71 @@
         $("#peorido").change(function () {
             $("#formdato").submit();
         });
+        $("#filtrar-select").change(function () {
+            
+            if ($("#filtrar-select").val() === "1") {
+                pos = 4;
+            }
+            else if ($("#filtrar-select").val() === "2") {
+                pos = 5;
+            }
+            else if ($("#filtrar-select").val() === "3") {
+                pos = 6;
+            }
+            data = armaVerctorDato(pos);
+            cargar_dato_pie("pieChart", labels, data, false,"pie");// esta en carga_dato_chart_pie.js
+        });
+        data = armaVerctorDato(6);
+        cargar_dato_pie("pieChart", labels, data, false, "pie");// esta en carga_dato_chart_pie.js
     });
+    function getNotas(posCol) {
+        
+        // filas del cuerpo  de la tabla
+        var tr = $($("#table1-nota").find("tbody")).find("tr");
+        var nfilas = tr.length;
+        var pos = 0;
+        var temNota = [];
+        for (i = 0; i < nfilas; i++) {
+            var nota = $(tr[i]).find("td")[posCol].innerHTML;
+            temNota.push($.trim(nota));
+        }
+        document.getElementById("canidad-estudiantes").innerHTML = "<p>Estudiantes: " + nfilas+"</p>";
+        return temNota;
+    }
+    function armaVerctorDato(posColumnaNotas) {
+        var datos_tem = [];
+        var notas = getNotas(posColumnaNotas);
+        
+        datos_tem.push(getCantidad(0, 2.9999, notas));
+        datos_tem.push(getCantidad(3, 3.9999, notas));
+        datos_tem.push(getCantidad(4, 4.9999, notas));
+        datos_tem.push(getCantidad(5, 5, notas));
+        console.log(datos_tem);
+        return datos_tem;
+    }
+    function getCantidad(minLimite, maxLimite, notas) {
+        var cantidad=0;
+        for (i = 0; i < notas.length; i++) {
+            if (notas[i].replace(",", ".") >= minLimite && notas[i].replace(",", ".") <= maxLimite) {
+                cantidad++;               
+            }           
+        }
+        return cantidad;
+
+        
+        //var sumNota=0;
+        //for (i = 0; i < notas.length; i++) {
+        //    if (notas[i].replace(",", ".") >= minLimite && notas[i].replace(",", ".") <= maxLimite) {
+        //        cantidad++;
+        //        sumNota = sumNota + notas[i].replace(",", ".");
+        //    }           
+        //}
+        //if (cantidad == 0) return 0;
+        //return sumNota/cantidad;
+
+
+
+    }
 </script>
 
 

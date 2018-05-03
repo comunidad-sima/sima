@@ -111,46 +111,42 @@
         </table>
     </div>
 
-    <div class=" panelBorder">
+    <div id="chart2" class="panelBorder">
         <div class="box-header with-border">
             <i class="fa fa-bar-chart-o"></i>
             <h3 class="box-title">Estadistica</h3>
 
         </div>
         <div class="box-body">
-            <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                    <select id="filtar-select" class="form-control">
+                        <option value="1">Corte 1</option>
+                        <option value="2">Corte 2</option>
+                       
+                    </select>
+                </div>
+                <div id="limpiar_grafica" class="  col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <canvas id="pieChart" width="100%" height="60px"></canvas>
+                </div>
 
-                <canvas id="pieChart"></canvas>
             </div>
         </div>
         <!-- /.box-body-->
+
     </div>
 
 </div>
+
 <script>
-    $(function () {
-
-        //pie
-        var ctxP = document.getElementById("pieChart").getContext('2d');
-        var myPieChart = new Chart(ctxP, {
-            type: 'pie',
-            data: {
-                labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
-                datasets: [
-                    {
-                        data: [300, 50, 100, 40, 120],
-                        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-                    }
-                ]
-            },
-            options: {
-                responsive: true
-            }
-        });
+    $(document).ready(function () {
+    
+        $("#chart1").load("/Charts/chartPieNota");
+        var labels = ["Notas entre 0 - 1,9", "Notas entre 2 - 2,9", "Notas entre 3 - 3,9", "Notas entre 4 - 4,9", "Notas en 5"];
+        var data = [3,5,7,9];
+        cargar_dato_pie("pieChart", labels, data, false, "pie");// esta en carga_dato_chart_pie.js
 
 
-    })
+
+    });
 </script>
-<script src="~/Scripts/paginacion.js"></script>
-

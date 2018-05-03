@@ -120,7 +120,6 @@ namespace WebSima.Models
         {
             String sql = "UPDATE usuarios SET id= @id, nombre= @nombres, apellidos= @apellidos," +
             "correo= @correo, celular= @celular, tipo= @tipo WHERE  id= @idAntiguo";
-
             var resultado = db.Database.ExecuteSqlCommand(sql,
                    new SqlParameter("@id", u.id),
                    new SqlParameter("@nombres", u.nombre.ToUpper()),
@@ -139,7 +138,7 @@ namespace WebSima.Models
         /// <param name="db"></param>
         /// <param name="nuevaContrasena"></param>
         /// <param name="id"></param>
-        public  void actualizarContrasena(bd_simaEntitie db, String nuevaContrasena , String id)
+        public  void actualizarContrasena(bd_simaEntitie db, string nuevaContrasena , string id)
         {
             String sql = "UPDATE usuarios SET contrasena = @contrasena WHERE  id= @id";
             var resultado = db.Database.ExecuteSqlCommand(sql,
