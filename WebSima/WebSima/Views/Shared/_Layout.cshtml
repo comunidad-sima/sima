@@ -16,6 +16,7 @@
     <title>SIMA</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Daterange picker -->
@@ -25,7 +26,8 @@
     <!-- Bootstrap Color Picker -->
     <link href="~/Content/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
+    @*<link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">*@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
     <!-- handsontable-->
@@ -52,13 +54,14 @@
     <link href="~/Content/estilos.css" rel="stylesheet" />
     <link href="~/Content/jquery-confirm.min.css" rel="stylesheet" />
 
-    <link href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    
     <!-- Theme style -->
     <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">
-
+    <!--toastr-->
+    <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
     <!-- jQuery 3 -->
     <script src="/Content/bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -69,7 +72,7 @@
             <!-- Logo -->
             <a href="index2.html" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>S</b>SIMA</span>
+                <span class="logo-mini"><b>S</b>IMA</span>
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg"><b>SIMA</b> 2.0</span>
             </a>
@@ -461,8 +464,8 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="registro_calificaciones" class="active"><a href="/Calificaciones/Registrar"><i class="fa fa-registered"></i>Registrar</a></li>
-                            <li id="grupos_notas" class="active"><a href="/Calificaciones/Grupos"><i class="fa fa-registered"></i>Registrar</a></li>
+                            @*<li id="registro_calificaciones" class="active"><a href="/Calificaciones/Registrar"><i class="fa fa-registered"></i>Registrar</a></li>*@
+                            <li id="grupos_notas" class="active"><a href="/Calificaciones/Grupos"><i class="fa fa-registered"></i>Grupos</a></li>
 
                         </ul>
                     </li>
@@ -534,6 +537,9 @@
     <script src="~/Scripts/xlsx.core.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     @*<script src="/Content/dist/js/demo.js"></script>*@
+    <!--toastr-->
+    <script src="~/Content/toastr/toastr.min.js"></script>
+
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/Scripts/jquery-confirm.js"></script>

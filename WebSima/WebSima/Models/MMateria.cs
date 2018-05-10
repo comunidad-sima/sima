@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.WebPages.Html;
+using WebSima.Models.WebApi;
 
 namespace WebSima.Models
 {
@@ -31,6 +32,31 @@ namespace WebSima.Models
                                });
             return materias.ToList();
 
+        }
+        /// <summary>
+        /// Consulta los programas filtrados por una materia en en un periodo
+        /// </summary>
+        /// <param name="periodo"></param>
+        /// <param name="materia"></param>
+        /// <returns></returns>
+        public List<SelectListItem> getProgramasDeMateria(string periodo, string materia)
+        {
+            var grupos = ConsumidorAppi.getProgramaMateria(periodo, materia);
+            List<SelectListItem> programas = null;
+            if (grupos != null)
+            {
+                programas = (from pro in grupos
+                             group pro by pro.nom_unidad into temp
+                             select new SelectListItem
+                             {
+                                 Value = temp.Key,
+                                 Text = temp.Key
+                             }).ToList();
+            }
+            else
+                programas = new List<SelectListItem>();
+            return programas;
+            
         }
         public MMateria getMateriaId(bd_simaEntitie db, string nomMateria)
         {
@@ -106,7 +132,16 @@ namespace WebSima.Models
 
             return materia;
         }
+        public bool esMonitoreadaMateria(string periodo,string  asignatura)
+        {
+            bool monitoreada=false;
+            List<MCurso> cursos = new MCurso().getCursoMateria(asignatura, periodo);
+            if (cursos != null && cursos.Count() > 0)
+                monitoreada = true;
+            return monitoreada;
 
+
+        }
     }
     
 }

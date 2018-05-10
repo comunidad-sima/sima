@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebSima.Models;
+using WebSima.Models.WebApi;
 
 namespace WebSima.Controllers
 {
@@ -79,8 +80,25 @@ namespace WebSima.Controllers
                 else
                 {
                     List<string> materiasDocente = new List<string>();
-                    materiasDocente.Add("MATEMATICA BASICA");
-                    materiasDocente.Add("CALCULO I");
+                    
+
+                    string id_docente = sesion.getIdUsuario();
+                    List<Grupo> grupos = ConsumidorAppi.getGrupos(periodo);
+                    
+                    if (grupos != null)
+                    {
+                        MMateria tem = new MMateria();
+                        grupos = (from g in grupos where (g.doc_docente.Equals(id_docente)) select g).ToList();
+                        foreach (var grupo in grupos)
+                        {
+                            if (tem.esMonitoreadaMateria(periodo, grupo.nom_materia))
+                            {
+                                materiasDocente.Add(grupo.nom_materia);
+                            }
+
+                        }
+                        materiasDocente = materiasDocente.Distinct().ToList();
+                    }
                     mcursos= new List<MCurso> ();
                     foreach (String item in materiasDocente)
                     {

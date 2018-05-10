@@ -25,16 +25,16 @@ namespace WebSima.Controllers
         {
             String periodo = MConfiguracionApp.getPeridoActual(db);
             String idUsuario=sesion.getIdUsuario();
-            List<List<AsignaturaGrupo>> datos = new List<List<AsignaturaGrupo>>();
+            List<List<Grupo>> datos = new List<List<Grupo>>();
             List<String> materias_ = new MCurso().getNombreMateriaMonitorCursos(idUsuario, periodo, 0);
 
-            List<AsignaturaGrupo> datos_2 = null;
+            List<Grupo> datos_2 = null;
             // se consultan los grupos de cada materia
             foreach (String materia_ in materias_)
             {
                 if (!materia_.Equals(""))
                 {
-                    datos_2 = ConsumidorAppi.getGruposMaterias(periodo, materia_);
+                    datos_2 = ConsumidorAppi.getProgramaMateria(periodo, materia_);
                     if (datos_2 == null)
                         ViewBag.mensajeError = "Error al cargar los datos, compruebe su conexión a internet.";
                     else

@@ -13,6 +13,7 @@ namespace WebSima.Models.WebApi
     /// </summary>
     public class ConsumidorAppi
     {
+        private static string  url_base="https://webapi.cecar.edu.co/IntegracionOtrosPortales/";
         
         private static RestRequest preparaRestRequest()
         {                   
@@ -38,7 +39,7 @@ namespace WebSima.Models.WebApi
              {
                  // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
                  periodo = periodo.Replace("-", "");
-                 String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetDatosEstudiante";
+                 String url = url_base+"api/v1/Bienestar/GetDatosEstudiante";
                  var client = new RestClient(url);
                  var request = preparaRestRequest();
                  // se agregan los parametros de la consulta
@@ -69,7 +70,7 @@ namespace WebSima.Models.WebApi
             {
                 // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
                 periodo = periodo.Replace("-", "");
-                String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetDatosEstudiante";
+                String url = url_base + "api/v1/Bienestar/GetDatosEstudiante";
                 var client = new RestClient(url);
                 var request = preparaRestRequest();
                 // se agregan los parametros de la consulta
@@ -102,7 +103,7 @@ namespace WebSima.Models.WebApi
             {
                 // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
                 periodo = periodo.Replace("-", "");
-                String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetDatosEstudiante";
+                String url = url_base + "api/v1/Bienestar/GetDatosEstudiante";
                 var client = new RestClient(url);
                 var request = preparaRestRequest();
                 // se agregan los parametros de la consulta
@@ -125,39 +126,39 @@ namespace WebSima.Models.WebApi
             return estudiantes;
         }
 
-        /// <summary>
-        /// Consulta los grupos que tiene una asigantura en un periodo
-        /// </summary>
-        /// <param name="periodo">Perido a consultar</param>
-        /// <param name="materia">Asignatura para consultar los grupos</param>
-        /// <returns>Array con los grupos de la asignatura</returns>
-         [MethodImpl(MethodImplOptions.Synchronized)]
-        public static List<AsignaturaGrupo>  getGruposMaterias(String periodo, String materia)
-        {
-            List<AsignaturaGrupo> estudiantes = null;
-            try
-            {
-             // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
-                periodo = periodo.Replace("-", "");
-                String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetGrupo";
-                var client = new RestClient(url);
-                var request = preparaRestRequest();
-                // se agregan los parametros de la consulta
-                request.AddParameter("periodo", periodo);
-                request.AddParameter("nom_materia", materia);
+        ///// <summary>
+        ///// Consulta los grupos que tiene una asigantura en un periodo
+        ///// </summary>
+        ///// <param name="periodo">Perido a consultar</param>
+        ///// <param name="materia">Asignatura para consultar los grupos</param>
+        ///// <returns>Array con los grupos de la asignatura</returns>
+        // [MethodImpl(MethodImplOptions.Synchronized)]
+        //public static List<Grupo>  getGruposMaterias(String periodo, String materia)
+        //{
+        //    List<Grupo> estudiantes = null;
+        //    try
+        //    {
+        //     // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
+        //        periodo = periodo.Replace("-", "");
+        //        String url = url_base + "api/v1/Bienestar/GetGrupo";
+        //        var client = new RestClient(url);
+        //        var request = preparaRestRequest();
+        //        // se agregan los parametros de la consulta
+        //        request.AddParameter("periodo", periodo);
+        //        request.AddParameter("nom_materia", materia);
                 
-                // se hace y la peticion y se reciben los datos
-                IRestResponse respuetaDatos = client.Execute(request);
-                // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
-                estudiantes = JsonConvert.DeserializeObject<List<AsignaturaGrupo>>(respuetaDatos.Content) as List<AsignaturaGrupo>;
-            }
-            catch (Exception)
-            {
+        //        // se hace y la peticion y se reciben los datos
+        //        IRestResponse respuetaDatos = client.Execute(request);
+        //        // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
+        //        estudiantes = JsonConvert.DeserializeObject<List<Grupo>>(respuetaDatos.Content) as List<AsignaturaGrupo>;
+        //    }
+        //    catch (Exception)
+        //    {
 
-            }
-            return estudiantes;
+        //    }
+        //    return estudiantes;
 
-        }
+        //}
         /// <summary>
         /// se utiliza para realizar pruebas sin tener q hacer peticiones a la api
         /// </summary>
@@ -258,7 +259,7 @@ namespace WebSima.Models.WebApi
              {
                  // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
                  periodo = periodo.Replace("-", "");
-                 String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetHorario";
+                 String url = url_base + "api/v1/Bienestar/GetHorario";
                  var client = new RestClient(url);
                  var request = preparaRestRequest();
                  // se agregan los parametros de la consulta
@@ -276,19 +277,19 @@ namespace WebSima.Models.WebApi
              return horarios;
          }
         /// <summary>
-        /// Consulta las notas de los estudiantes en una materia
+        /// Consulta las notas de un grupo de estudiantes en una materia
         /// </summary>
         /// <param name="periodo"></param>
         /// <param name="materia"></param>
         /// <returns></returns>
-         public static List<ComportamientoNotaEstudiente> getNotaEstudianteMateria(String periodo, String materia, List<String> idEstudiantes)
+         public static List<ComportamientoNotaEstudiente> getNotaEstudianteMateria(string periodo, string materia, List<string> idEstudiantes)
          {
              List<ComportamientoNotaEstudiente> notas = null;
              try
              {
                  // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
                  periodo = periodo.Replace("-", "");
-                 String url = "https://webapi.cecar.edu.co/IntegracionOtrosPortales/api/v1/Bienestar/GetComportamientoNotas";
+                 String url = url_base + "api/v1/Bienestar/GetComportamientoNotas";
                  var client = new RestClient(url);
                  var request = preparaRestRequest();
                  // se agregan los parametros de la consulta
@@ -308,6 +309,97 @@ namespace WebSima.Models.WebApi
 
              }
              return notas;
+         }
+         /// <summary>
+         /// Consulta las notas de todos los estudisnte en una materia
+         /// </summary>
+         /// <param name="periodo"></param>
+         /// <param name="materia"></param>
+         /// <returns></returns>
+         public static List<ComportamientoNotaEstudiente> getNotaEstudianteMateriaAll(string periodo, string materia)
+         {
+             List<ComportamientoNotaEstudiente> notas = null;
+             try
+             {
+                 // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
+                 periodo = periodo.Replace("-", "");
+                 String url = url_base + "api/v1/Bienestar/GetComportamientoNotas";
+                 var client = new RestClient(url);
+                 var request = preparaRestRequest();
+                 // se agregan los parametros de la consulta
+                 request.AddParameter("periodo", periodo);
+                 request.AddParameter("nom_materia", materia);
+                 
+                 // se hace y la peticion y se reciben los datos
+                 IRestResponse respuetaDatos = client.Execute(request);
+                 // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
+                 notas = JsonConvert.DeserializeObject<List<ComportamientoNotaEstudiente>>(respuetaDatos.Content) as List<ComportamientoNotaEstudiente>;
+             }
+             catch (Exception)
+             {
+
+             }
+             return notas;
+         }
+         /// <summary>
+         /// consulta los programa y grupos filtrado por materia
+         /// </summary>
+         /// <param name="periodo"></param>
+         /// <param name="materia"></param>
+         /// <returns></returns>
+         public static List<Grupo> getProgramaMateria(string periodo, string materia)
+         {
+             List<Grupo> notas = null;
+             try
+             {
+                 // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
+                 periodo = periodo.Replace("-", "");
+                 String url = url_base + "api/v1/Bienestar/GetGrupo";
+                 var client = new RestClient(url);
+                 var request = preparaRestRequest();
+                 // se agregan los parametros de la consulta
+                 request.AddParameter("periodo", periodo);
+                 request.AddParameter("nom_materia", materia);
+
+                 // se hace y la peticion y se reciben los datos
+                 IRestResponse respuetaDatos = client.Execute(request);
+                 // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
+                 notas = JsonConvert.DeserializeObject<List<Grupo>>(respuetaDatos.Content) as List<Grupo>;
+             }
+             catch (Exception)
+             {
+
+             }
+             return notas;
+         }
+        /// <summary>
+        /// consulta todos los grupos(programa, grupos, carga academica docentes...)
+        /// </summary>
+        /// <param name="periodo"></param>
+        /// <returns></returns>
+         public static List<Grupo> getGrupos(string periodo)
+         {
+             List<Grupo> grupos = null;
+             try
+             {
+                 // se convierte el periodo al formato de cecar. Ejemplo 2017-2 a 20172
+                 periodo = periodo.Replace("-", "");
+                 String url = url_base + "api/v1/Bienestar/GetGrupo";
+                 var client = new RestClient(url);
+                 var request = preparaRestRequest();
+                 // se agregan los parametros de la consulta
+                 request.AddParameter("periodo", periodo);
+
+                 // se hace y la peticion y se reciben los datos
+                 IRestResponse respuetaDatos = client.Execute(request);
+                 // se  Deserializan los datos a EstudianteMateria para un mejor tratamiento con linq
+                 grupos = JsonConvert.DeserializeObject<List<Grupo>>(respuetaDatos.Content) as List<Grupo>;
+             }
+             catch (Exception)
+             {
+
+             }
+             return grupos;
          }
 
         
