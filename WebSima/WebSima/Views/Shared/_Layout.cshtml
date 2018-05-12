@@ -224,7 +224,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Control Sidebar Toggle Button -->
+                        <!-- Control Sidebar Toggle Button -->          
                         <li>
                             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                         </li>
@@ -304,8 +304,6 @@
                         <ul class="treeview-menu">
 
                             <li id="Horario_monitores" class="active"><a href="/Horario/consultar_horario"><i class="fa fa-search"></i>Consultar Horarios</a></li>
-
-
                         </ul>
                     </li>
 
@@ -474,6 +472,39 @@
                 </ul>
             </section>
             <!-- /.sidebar -->
+        </aside>
+
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create configuracion sistema -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#" data-toggle="tab"><i class="fa fa-gear"> Configuración</i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div>
+                    <ul class="control-sidebar-menu">
+                        <li id="registrarhorario">
+                            <a href="/Configuracion/Configuracion_sistema">
+                                <i class="menu-icon  fa fa-wrench bg-red"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Configuracion Sistema</h4>
+                                    <p>periodo, contraseña</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Configuracion/configuracion_perfil">
+                                <i class="menu-icon fa fa-user-o bg-yellow"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Perfil Usuario</h4>
+                                    <p>contraseña</p>
+                                </div>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
         </aside>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">

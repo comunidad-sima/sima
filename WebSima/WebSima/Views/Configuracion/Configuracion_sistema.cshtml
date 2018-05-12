@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "ConfiguracionSistema";
+}
+
+
+<ol class="breadcrumb ">
+    <li class="breadcrumb-item ">Sistema</li>
+    <li class="breadcrumb-item active">Configuracion</li>
+
+</ol>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-success">
+            <div class="box-header with-border panelBorder">
+                <div class="box-header with-border ">
+                    <div class=" box-body panelBorder">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong> Actualizar Periodo</strong> </h3>
+                        </div>
+                        <div class="col-sm-12 col-12  col-lg-4 ">
+                            <label> Periodo:</label>
+                            <select required class="form-control " id="peorido" name="periodo">
+                                <option value="" selected disabled>Seleccionar periodo</option>
+                                <option value="1">2017</option>
+                            </select>
+                            <br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class=" box-body panelBorder">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong> Actualizar Contraseña</strong> </h3>
+                        </div>
+                        <div class="col-sm-12 col-12  col-lg-4 ">
+
+                            <div class="form-group">
+                                <label>Identificacion</label>
+                                <input type="text" name="id" value="" id="identificacion" class="form-control " />
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-sm-12 col-12  col-lg-4 ">
+
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input type="text" name="nombre" value="" id="nombre" class="form-control" disabled />
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-sm-12 col-12  col-lg-4 ">
+
+                            <div class="form-group">
+                                <label>Nueva Contraseña</label>
+                                <input type="password" name="password" value="" id="password" class="form-control " />
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class=" box-body panelBorder ">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><strong> Configuracion Alerta</strong> </h3>
+                        </div>
+                        <div class="col-sm-12 col-12  col-lg-4 ">
+                            <div class="form-group">
+                                <label>Permitir Alertas: </label>
+                                <label class="radio-inline">
+                                    <input type="checkbox" name="estado" id="radioSi" value="1" class="flat-red" required=""> SI
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-success">Actualizar Datos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<script>
+    $(document).ready(function () {
+        $('.select2').select2();
+
+
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        })
+    });
+</script>-->

@@ -160,7 +160,7 @@
     <Compile Include="Controllers\CalificacionesController.cs" />
     <Compile Include="Controllers\CapacitacionController.cs" />
     <Compile Include="Controllers\ClaseController.cs" />
-    <Compile Include="Controllers\ConfigAppController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CursoController.cs" />
     <Compile Include="Controllers\GruposController.cs" />
     <Compile Include="Controllers\HorarioController.cs" />
@@ -5511,19 +5511,19 @@
     <Content Include="Views\Test\add_pregunta.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ConfigApp\Index.cshtml" />
+    <Content Include="Views\Configuracion\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ConfigApp\Details.cshtml" />
+    <Content Include="Views\Configuracion\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ConfigApp\Create.cshtml" />
+    <Content Include="Views\Configuracion\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ConfigApp\Edit.cshtml" />
+    <Content Include="Views\Configuracion\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ConfigApp\Delete.cshtml" />
+    <Content Include="Views\Configuracion\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Usuario\Eliminados.cshtml" />
@@ -5618,6 +5618,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Views\Alerta\NotasSubidas.cshtml" />
+    <Content Include="Views\Configuracion\Configuracion_sistema.cshtml" />
+    <Content Include="Views\Configuracion\configuracion_perfil.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

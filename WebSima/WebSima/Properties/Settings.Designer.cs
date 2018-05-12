@@ -28,9 +28,9 @@ namespace WebSima.Properties {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-1HE0BC3\\SQLEXPRESS;Initial Catalog=bd_sima;Integrated Securit" +
             "y=True")]
-        public string CadenaPrueba {
+        public string bd_simaConexion {
             get {
-                return ((string)(this["CadenaPrueba"]));
+                return ((string)(this["bd_simaConexion"]));
             }
         }
     }
