@@ -32,9 +32,10 @@ function  configurar_dataTable(clase) {
         'searching': false,
         'ordering': true,
         'info': true,
-        'autoWidth': true
+        'autoWidth': true 
     });
 }
+
 // se configura el input para las fechas
 function configurar_daterangepicker(clase) {
     $('.' + clase).daterangepicker({
@@ -55,6 +56,7 @@ function alert_mensajes(mensaje, clase) {
     var _alert = ' <div class=" alert ' + clase + ' alert-dismissible "  role="alert">' +
  '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
   '<div >' + mensaje + '</div></div>';
-
+    
+    
     return _alert;
 }

@@ -1,106 +1,83 @@
 ﻿@{
     ViewBag.Title = "Grupos";
+    List<WebSima.Models.WebApi.Grupo> grupos = ViewBag.grupos;
+    
 }
 
-
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Home</li>
+        <li class="breadcrumb-item active">Grupos</li>
+    </ol>
+</div>
 
 <div class="row">
-    <div class="col-md-12">
-        <div class="box box-solid">
-            <div class="box-header with-border">
-                <h3 class="box-title">Ingenieria de sistemas</h3>
+
+    @{
+        if (grupos.Count() <= 0)
+        {
+            <div class="col-md-12">
+                <div id="noDisponibles" class="panelBorder text-center ">
+                    <br />
+                    <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">😞 Las asignaturas que tiene a cargo en este momento no son monitoreadas  😞</font>
+                    </font>
+                    <br /><br />
+                </div>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <table class="table tablaPaginacion table-responsive table-hover">
-
-                    <tbody>
-                       
-                            <tr>
-                                <td>
-                                  MATEMATICA CASICA: GRUPO -1 
-                                   
-                                </td>
+        }
 
 
-                                <td style="width:30px">
-                                    @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA DE SISTEMAS|MATEMATICA BASICA|1" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
+        List<string> programas = (from p in grupos select (p.nom_unidad)).Distinct().ToList();
+        foreach (var programa in programas)
+        {
+            var grupo_tem = (from gru in grupos where (gru.nom_unidad.Equals(programa)) select (gru)).ToList();
+            <div class="col-md-12">
+                <div class="box box-default color-palette-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">@programa</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                        <table class="table tablaPaginacion table-responsive table-hover">
+
+                            <tbody>
+                                @{
+            foreach (var grupo in grupo_tem)
+            {
+                <tr>
+                    <td>
+                        @grupo.nom_materia: GRUPO -@grupo.num_grupo
+
+                    </td>
 
 
-                                </td>
-                                
-
-                            </tr>
-                        <tr>
-                            <td>
-                                MATEMATICA CASICA: GRUPO - 2
-
-                            </td>
+                    <td style="width:30px">
+                        @Html.ActionLink("Subir notas", "Registrar", new { id = (programa+"|"+ grupo.nom_materia+"|"+grupo.num_grupo )},
+                        new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
 
 
-                            <td style="width:30px">
-                                @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA DE SISTEMAS|MATEMATICA BASICA|2" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
+                    </td>
 
 
-                            </td>
+                </tr>
 
+            }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
 
-                        </tr>
-                        
-                    </tbody>
-                </table>
+                <!-- /.box -->
             </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
-    </div>
-    <div class="col-md-12">
-        <div class="box box-solid">
-            <div class="box-header with-border">
-                <h3 class="box-title">Ingenieria Industrial</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <table class="table tablaPaginacion table-responsive table-hover">
+        }
+    }
 
-                    <tbody>
-
-                        <tr>
-                            <td>
-                                MATEMATICA CASICA: GRUPO -1
-
-                            </td>
-
-
-                            <td style="width:30px">
-                                @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA INDUSTRIAL|MATEMATICA BASICA|1" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
-
-
-                            </td>
-
-
-                        </tr>
-                        <tr>
-                            <td>
-                                MATEMATICA CASICA: GRUPO - 2
-
-                            </td>
-
-
-                            <td style="width:30px">
-                                @Html.ActionLink("Subir notas", "Registrar", new { id = "INGENIERIA INDUSTRIAL|MATEMATICA BASICA|2" }, new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
-
-
-                            </td>
-
-
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
-    </div>
 </div>
+
+
+
+ 

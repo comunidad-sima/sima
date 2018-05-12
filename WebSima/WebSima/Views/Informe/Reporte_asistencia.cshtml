@@ -2,6 +2,9 @@
     ViewBag.Title = "Reporte de asistencia";
     SelectList materias = ViewBag.materias;
     List<String[]> asistencia = ViewBag.asistencia;
+    if (asistencia == null) {
+        asistencia = new List<string[]>();
+    }
     
     List<WebSima.Models.WebApi.ComportamientoNotaEstudiente> datos_estudiante = ViewBag.datos_estudiante;
     String asignatura = ViewBag.asignatura;
@@ -9,6 +12,9 @@
     String seleted = "selected";
     String peridoSeleccionado = ViewBag.peridoSeleccionado;
     System.Globalization.NumberFormatInfo provider = new System.Globalization.NumberFormatInfo();
+
+     SelectList  programas = ViewBag.programas;
+    string programa = ViewBag.programa;
 
     }
 
@@ -30,7 +36,7 @@
                         <h3 class=" margin">
                             Período
                         </h3>
-                        <select required class="form-control " id="peorido" name="periodo">
+                        <select required class="form-control " id="periodo" name="periodo">
                             @foreach (String periodo in periodos)
                             {
                                 if (peridoSeleccionado.Equals(periodo))
@@ -44,24 +50,26 @@
                             }
                         </select>
                     </div>
-                    <div class="col-sm-12 col-12  col-lg-5 ">
-                        <h3 class=" margin">
-                            Asignaturas
-                        </h3>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group  ">
-                                    @Html.DropDownList("materia", materias, asignatura,
-                           new { @class = "form-control select2", style = "width: 100%" })
+    <div class="col-sm-12 col-lg-3 col-12 ">
+        <h3 class=" margin">
+            Asignaturas
+        </h3>
 
-                                    <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-success">Buscar</button>
-                                    </span>
-                                </div>
-                                <!-- /input-group -->
-                            </div>
-                        </div>
-                    </div>
+        @Html.DropDownList("materia", materias, asignatura,
+                           new { @class = "form-control select2" })
+    </div>
+    <div class="col-sm-12 col-lg-4  col-12">
+        <h3 class=" margin">
+            Programas
+        </h3>
+        @Html.DropDownList("programa", programas, programa,
+                           new { @class = "form-control select2" })
+    </div>
+    <div class="col-sm-12 col-lg-1 col-12">
+        <br /><br />
+        <h3 class=" margin"></h3>
+        <button type="submit" class="btn btn-success">Buscar</button>
+    </div>
                 }
             </div>
         </div>
@@ -73,8 +81,8 @@
                 <div class="box-tools pull-right">
                 </div>
                 <div class="col-sm-12 table-responsive">
-                    <table id="table1-nota" class="table tablaPaginacion table-bordered table-hover">
-                        <thead>
+                    <table id="table1-nota" class="table tablaPaginacion table-bordered table-hover" style="width :100%">
+                        <thead >
                             <tr>
                                 <th></th>
                                 <th>IDENTIFICACÓN</th>
@@ -84,22 +92,40 @@
                                 <th>NOTA-2</th>
                                 <th>DEFINITIVA</th>
 
-                                <th>ASISTENCIA MONITORIA</th>
+                                <th width="20px">ASIST. SIMA</th>
+                                <th width="20px">INASIST. CLASE</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            
-                                @{
-                                    int i = 1;
-                                    if (asistencia != null && datos_estudiante != null)
+                        <tbody>                     
+                           
+                              
+                               @{                                   
+                                    int i = 1;                                 
+                                    if (datos_estudiante != null)
                                     {
-                                        foreach (String[] item in asistencia)
+                                        
+                                        List<string> ides = (from e in datos_estudiante select (e.num_identificacion)).Distinct().ToList();
+                                       // List<string> id_asistencia = (from a in asistencia select (a[1])).ToList();
+                                      //  ides = ides.Union(id_asistencia).ToList();
+                                        string canti_asistencia;
+                                        foreach (var id in ides)
                                         {
-                                            var estudiante = (from e in datos_estudiante where (e.num_identificacion.Equals(item[1])) select (e)).ToList();
+                                            string string_nota1="0";
+                                            string string_nota2="0";
+                                            canti_asistencia = "0";
+                                            var estudiante = (from e in datos_estudiante where (e.num_identificacion.Equals(id)) select (e)).ToList();
+                                            var tem = (from a in asistencia where(a[1].Equals(id)) select (a[0])).ToList();
+                                            if (tem.Count() > 0) { 
+                                                canti_asistencia = tem.First();
+                                            }
+                                            if (estudiante.Count() > 0) {
+                                                string_nota1 = (from n in estudiante where (n.num_nota.Equals("1")) select (n.nota)).First();
+                                                string_nota2 = (from n in estudiante where (n.num_nota.Equals("2")) select (n.nota)).First();
+                                            }
                                             // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
-                                          <tr>
+<tr>
                                             <td>@(i++)</td>
-                                            <td>@item[1]</td>
+                                            <td>@id</td>
                                             <td>
                                                 @if (estudiante.Count() > 0)
                                                 {
@@ -116,7 +142,7 @@
                                             <td>
                                                 @if (estudiante.Count() > 0)
                                                 {
-                                                    @estudiante[0].nom_prog_matricula_estudiante
+                                                    @estudiante[0].nom_unidad
                                                 }
                                                 else
                                                 {
@@ -127,23 +153,34 @@
                                             <td class="text-center">
                                                 @if (estudiante.Count() > 0)
                                                 {
-
-                                                    @(Double.Parse(estudiante[0].nota, provider).ToString("#.##"));
+                                                    if (string_nota2.Equals("0") || string_nota2.Equals("0.0")) { 
+                                                         @("0,0")
+                                                    }
+                                                    else { 
+                                                    @(Double.Parse(string_nota1, provider).ToString("#.##"));
+                                                }
                                                 }
                                                 else
                                                 {
-                                                    <div class="text-red">0,0</div>
+                                                   
+                                                    @("0,0")
                                                 }
 
                                             </td>
                                             <td class="text-center">
                                                 @if (estudiante.Count() > 0)
                                                 {
-                                                    @(Double.Parse(estudiante[1].nota, provider).ToString("#.##"));
+                                                    if (string_nota2.Equals("0") || string_nota2.Equals("0.0")) { 
+                                                         @("0,0")
+                                                    }
+                                                    else { 
+                                                    @(Double.Parse(string_nota2, provider).ToString("#.##"));
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <div class="text-red">0,0</div>
+                                                   
+                                                    @("0,0")
                                                 }
                                             </td>
                                             <td class="text-center">
@@ -151,33 +188,43 @@
                                                 {
 
                                                     provider.NumberDecimalSeparator = ".";
-                                                    double nota1 = Double.Parse(estudiante[0].nota, provider) * (0.4);
-                                                    double nota2 = Double.Parse(estudiante[1].nota, provider) * (0.6);
+                                                    double nota1 = Double.Parse(string_nota1, provider) * (0.4);
+                                                    double nota2 = Double.Parse(string_nota2, provider) * (0.6);
                                                     double notaFin = nota1 + nota2;
-                                                    if (Math.Round(notaFin, 1) < 3)
-                                                    {
-                                                        <div class="text-red">@(Math.Round(notaFin, 1))</div>
-                                                    }
-                                                    else
-                                                    {
-                                                        @(Math.Round(notaFin, 1));
-                                                    }
+                                                    
+                                                      
+                                                    @(Math.Round(notaFin, 1))
+                                                  
+                                                   
 
                                                 }
                                                 else
                                                 {
-                                                    <div class="text-red">0,0</div>
+                                                    @*<div class="text-red">0,0</div>*@
+                                                    @("0,0")
                                                 }
                                             </td>
 
-                                            <td class="text-center">@item[0]</td>
+                                            <td class="text-center">
+                                                @canti_asistencia
+                                            </td>
+                                            <td class="text-center">
+                                                @if (estudiante.Count() > 0)
+                                                {
+                                                   @estudiante[1].num_fallas
+                                                }
+                                                else
+                                                {
+                                                     @("0")
+                                                }
+                                            </td>
                                         </tr>
                                     }
                                 }
                             }
                         </tbody>
                     </table>
-                    @if (asistencia.Count() > 0)
+                    @if (datos_estudiante !=null)
                     {
                         <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o"></i>Exportar </a>
 
@@ -219,12 +266,64 @@
     $(document).ready(function () {
         var labels = ["Notas entre 0 - 2,9",  "Notas entre 3 - 3,9", "Notas entre 4 - 4,9", "Notas en 5"];
         var data = [];
-        $('.select2').select2();
-        // se configura la tabla, esta funcion está en helper.js
-        configurar_dataTable("tablaPaginacion");
+        $('.select2').select2();       
+       
+        
+        $(".tablaPaginacion").DataTable({
+            'language': language,
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            "order": [[7, "desc"]],
+            "scrollX": true,
 
-        $("#peorido").change(function () {
+            "rowCallback": function (Row, Data) {
+                if (parseFloat(Data[6].replace(",", ".")) <= 2.999) {
+                    $($(Row).find("td")[6]).css('color', '#FD3431');
+                }
+                if (parseFloat(Data[5].replace(",", ".")) <= 2.999) {
+                    $($(Row).find("td")[5]).css('color', '#FD3431');
+                }
+                if (parseFloat(Data[4].replace(",", ".")) <= 2.999) {              
+                    $($(Row).find("td")[4]).css('color', '#FD3431');
+                }
+                
+            },
+        });
+
+        $("#periodo").change(function () {
             $("#formdato").submit();
+        });
+        $("#materia").change(function () {
+            $('#programa  option').remove();
+           
+            $('#programa').append('<option value="Todos">Todos</option>');
+
+
+            $.ajax({
+                url: "/Informe/getProgramas?periodo=" + $("#periodo").val() + "&materia=" + $("#materia").val().replace(" ", "+"),
+               
+                dataType: "json",
+                type: 'post',
+                beforeSend: function () { },
+                success: function (response) {
+                    $.each(response, function (i, item) {
+                        $('#programa').append('<option value="' + item + '">'+item+'</option>');
+                    });
+                    console.log(response)
+
+                }, error: function (error) {
+                    alert("Error al cargar los prgramas");
+                  
+                }
+            });
+
+
+
+           // $('.select2').selectpicker('refresh');
         });
         $("#filtrar-select").change(function () {
             
@@ -240,19 +339,22 @@
             data = armaVerctorDato(pos);
             cargar_dato_pie("pieChart", labels, data, false,"pie");// esta en carga_dato_chart_pie.js
         });
+        
         data = armaVerctorDato(6);
         cargar_dato_pie("pieChart", labels, data, false, "pie");// esta en carga_dato_chart_pie.js
     });
-    function getNotas(posCol) {
+    function getNotas(posCol) {  
         
-        // filas del cuerpo  de la tabla
-        var tr = $($("#table1-nota").find("tbody")).find("tr");
-        var nfilas = tr.length;
-        var pos = 0;
+       
         var temNota = [];
-        for (i = 0; i < nfilas; i++) {
-            var nota = $(tr[i]).find("td")[posCol].innerHTML;
-            temNota.push($.trim(nota));
+        var table = $('#table1-nota').DataTable();
+        var datos_table = table.data();
+        
+        var nfilas = datos_table.length;
+
+        for (i = 0; i < nfilas; i++) {// recorre las filas
+            var nota = datos_table[i] ;
+            temNota.push($.trim(nota[posCol]));
         }
         document.getElementById("canidad-estudiantes").innerHTML = "<p>Estudiantes: " + nfilas+"</p>";
         return temNota;
@@ -261,21 +363,26 @@
         var datos_tem = [];
         var notas = getNotas(posColumnaNotas);
         
-        datos_tem.push(getCantidad(0, 2.9999, notas));
-        datos_tem.push(getCantidad(3, 3.9999, notas));
-        datos_tem.push(getCantidad(4, 4.9999, notas));
-        datos_tem.push(getCantidad(5, 5, notas));
-        console.log(datos_tem);
+        datos_tem.push(getPorcentaje(0, 2.9999, notas));
+        datos_tem.push(getPorcentaje(3.0, 3.9999, notas));
+        datos_tem.push(getPorcentaje(4.0, 4.9999, notas));
+        datos_tem.push(getPorcentaje(5.0, 5.0, notas));
         return datos_tem;
     }
-    function getCantidad(minLimite, maxLimite, notas) {
-        var cantidad=0;
+    function getPorcentaje(minLimite, maxLimite, notas) {
+        var cantidad = 0;
+        var nota = 0;
+        var porcentaje = 0;
         for (i = 0; i < notas.length; i++) {
-            if (notas[i].replace(",", ".") >= minLimite && notas[i].replace(",", ".") <= maxLimite) {
-                cantidad++;               
-            }           
+            nota = parseFloat(notas[i].replace(",", "."));
+            if (nota >= minLimite && nota <= maxLimite) {
+                cantidad++;
+            }
         }
-        return cantidad;
+      
+        porcentaje = (cantidad / notas.length) * 100;
+        
+        return porcentaje;
 
         
         //var sumNota=0;

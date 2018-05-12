@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Index";
     //List<String> materiasMonitor = ViewBag.materiasMonitor;
-    List<List<WebSima.Models.WebApi.AsignaturaGrupo>> datos = ViewBag.datos;
+    List<List<WebSima.Models.WebApi.Grupo>> datos = ViewBag.datos;
     List<WebSima.Models.grupos_acargo> grupos_acargo = ViewBag.grupos_acargo;
     List<WebSima.Models.grupos_acargo> auxGurpos = null;
     String seleccionar="";
@@ -22,7 +22,7 @@
         @using (Html.BeginForm("SetGrupos", "Grupos", FormMethod.Post, new { id = "fDatosGrupos" }))
         {
             @*para mostar las materias que tiene a cargo el monitor*@
-            foreach (List<WebSima.Models.WebApi.AsignaturaGrupo> dato in datos)
+            foreach (List<WebSima.Models.WebApi.Grupo> dato in datos)
             {
                 //filtramos los progrogramas
                 List<String> programas = dato.Select(o => o.nom_unidad).Distinct().ToList();

@@ -164,11 +164,20 @@ namespace WebSima.Models
             HttpContext.Current.Session["materia_reporte_asistencia"] = dato;
 
         }
+        public void  setProgramaReporteAsistencia(string dato){
+            HttpContext.Current.Session["programa_reporte_asistencia"] = dato;
+        }
+        public string getProgramaReporteAsistencia()
+        {
+            this.sesion = Convert.ToString(HttpContext.Current.Session["programa_reporte_asistencia"]);
+            return sesion;
+            
+        }
         /// <summary>
         /// consulta la materia para generar el reporte de asistencia
         /// </summary>
         /// <returns></returns>
-        public String getMateriaReporteAsistencia()
+        public string getMateriaReporteAsistencia()
         {
             this.sesion = Convert.ToString(HttpContext.Current.Session["materia_reporte_asistencia"]);
             return sesion;

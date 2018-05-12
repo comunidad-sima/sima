@@ -251,8 +251,7 @@
     <Compile Include="Models\WebApi\ComportamientoNotaEstudiente .cs" />
     <Compile Include="Models\WebApi\ConsumidorAppi.cs" />
     <Compile Include="Models\WebApi\EstudianteMateria.cs" />
-    <Compile Include="Models\WebApi\PragramaCECAR.cs" />
-    <Compile Include="Models\WebApi\AsignaturaGrupo.cs" />
+    <Compile Include="Models\WebApi\Grupo.cs" />
     <Compile Include="Models\WebApi\HorarioEstudiante.cs" />
     <Compile Include="Models\WebApi\HorarioEstudianteID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -5136,6 +5135,8 @@
     <Content Include="Content\imagenes\acercade.png" />
     <Content Include="Content\imagenes\fondo.jpg" />
     <Content Include="Content\imagenes\logocecar.png" />
+    <Content Include="Content\toastr\toastr.min.css" />
+    <Content Include="Content\toastr\toastr.min.js" />
     <Content Include="Global.asax" />
     <Content Include="ClassDiagram1.cd" />
     <Content Include="Scripts\carga_dato_chart_pie.js" />

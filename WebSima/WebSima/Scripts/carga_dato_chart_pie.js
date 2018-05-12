@@ -8,8 +8,8 @@
             datasets: [
                 {
                     data: data,
-                    backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                    hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                    backgroundColor: ["#F7464A", "#FDB45C", "#46BFBD", "#3fe85c", "#3fe85c"],
+                    hoverBackgroundColor: ["#FF5A5E", "#FFC870", "#5AD3D1", "#22b126", "#616774"]
                 }
             ]
         },

@@ -356,7 +356,7 @@ namespace WebSima.Controllers
             MUsuario usuario = new MUsuario().getUsuarioId(id);
             if (usuario != null  )
             {
-                if (usuario.eliminado == 0)
+                if (usuario.eliminado == 1)
                      usuario=null;
                 else
                     usuario.contrasena = "";

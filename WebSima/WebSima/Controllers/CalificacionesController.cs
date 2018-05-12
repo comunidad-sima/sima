@@ -30,6 +30,24 @@ namespace WebSima.Controllers
         {
             if (sesion.esDocente(db))
             {
+                string id_docente = sesion.getIdUsuario();
+                string periodo = MConfiguracionApp.getPeridoActual(db);
+                List<Grupo> grupos = ConsumidorAppi.getGrupos(periodo);
+                List<Grupo> grupos_acargo= new List<Grupo>();
+                if (grupos != null)
+                {
+                    MMateria tem = new MMateria();
+                    grupos = (from g in grupos where (g.doc_docente.Equals(id_docente)) select g).ToList();
+                    foreach (var grupo in grupos)
+                    {
+                        if (tem.esMonitoreadaMateria(periodo, grupo.nom_materia))
+                        {
+                            grupos_acargo.Add(grupo);
+                        }
+                        
+                    }
+                }
+                ViewBag.grupos = grupos_acargo;
                 return View();
             }
             else
@@ -179,23 +197,7 @@ namespace WebSima.Controllers
         }
 
        
-        //
-        // POST: /Asistencia/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
 
        
 
