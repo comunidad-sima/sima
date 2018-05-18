@@ -27,6 +27,7 @@ namespace WebSima.Models
         [Required]
         public byte estado { get; set; }
         [Display(Name = "Fecha de cierre")]
+        //[DataType(DataType.Date)]
         [Required]
         public System.DateTime fecha_finalizacion { get; set; }
         [Display(Name = "Identificación  monitor")]

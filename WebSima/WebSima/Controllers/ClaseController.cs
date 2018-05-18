@@ -64,9 +64,10 @@ namespace WebSima.Controllers
             }
         }
 
-        public ActionResult Registros(String materia = "",String periodoBuscar="2017-2",String idMonitor="")
+        public ActionResult Registros(String materia = "",String periodoBuscar="-",String idMonitor="")
         {
-            String periodo = MConfiguracionApp.getPeridoActual(db);
+           if(periodoBuscar.Equals("-"))
+               periodoBuscar = MConfiguracionApp.getPeridoActual(db);
             if (sesion.esAdministrador(db))
             {
                 if (idMonitor.Equals("")) materia = "";
@@ -77,12 +78,12 @@ namespace WebSima.Controllers
                 ViewBag.periodos = auxClase.getPeriodosRegistradosDeClase(db);
                 ViewBag.datosMoniotres = new MUsuario().getDatosMonitoresPeriodo(periodoBuscar);
 
-                ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos(idMonitor, periodo,1);
+                ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos(idMonitor, periodoBuscar,1);
 
                 ViewBag.peridoSeleccionado = periodoBuscar;
                 ViewBag.monitorSeleccionado = idMonitor;
 
-                return View(auxClase.getClasesMonitorPerido(db, periodo, idMonitor, materia));
+                return View(auxClase.getClasesMonitorPerido(db, periodoBuscar, idMonitor, materia));
             }
             else
             {

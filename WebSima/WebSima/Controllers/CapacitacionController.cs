@@ -122,7 +122,8 @@ namespace WebSima.Controllers
                         // se comprueba si se gusrdó
                         if (guardar != null)
                         {
-                            respuesta.RESPUESTA = "OK";                 
+                            respuesta.RESPUESTA = "OK";
+                            respuesta.MENSAJE = "Capacitación registrada.";
                         }
                         else{
                             respuesta.RESPUESTA = "ERROR";

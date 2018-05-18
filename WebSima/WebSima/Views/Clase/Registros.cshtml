@@ -17,153 +17,173 @@
 
 </ol>
 
-<div class="panelBorder">
-    <h3>Clases registradas</h3>
-    <hr />
+<div class="box box-success">
 
-    @using (Html.BeginForm("Registros", "Clase", FormMethod.Get, new { id = "fDatos" }))
-    {
+    <div class="box-body ">
 
+        
 
-        <div class="row">
-            <div class="col-sm-12 col-12   col-lg-2">
-                <label>Periodo:*</label>
-                <select class="form-control buscarGrupo" id="periodoBuscar" name="periodoBuscar" required>
-                    <option>Seleccione periodo</option>
-                    @if (periodos != null)
-                    {
-                        foreach (var p in periodos)
-                        {
-                            <option value="@p"
-                                    @if (p.Equals(peridoSeleccionado)) { @selected_       }>
-                                @p
-                            </option>
-                        }
-                    }
-                    else
-                    {
-                        <option value="--">No periodos</option>
-                    }
-                </select>
+        <div class="panelBorder">
+            <h3 class="box-title">Clases registradas</h3>
+            <hr />
 
-            </div>
-            <div class="col-sm-12 col-12   col-lg-6">
-                <label>Monitor:*</label>
-                <select class="form-control buscarGrupo" id="idMonitor" name="idMonitor" required>
-                    <option value="">Todos</option>
-                    @if (datosMoniotres != null)
-                    {
-                        foreach (var datos in datosMoniotres)
-                        {
-                            <option value="@datos.id"
-                                    @if (datos.id.Equals(monitorSeleccionado)) { @selected_      }>
-                                @datos.apellidos @datos.nombre
-                            </option>
-                        }
-                    }
-                    else
-                    {
-                        <option value="--">No Monitor</option>
-                    }
-                </select>
-            </div>
-            <div class="col-sm-12 col-12   col-lg-4">
-                <label>Asignatura:*</label>
-                <select class="form-control buscarGrupo" id="materia" name="materia" required>
-                    <option value="">Todas</option>
-                    @if (materiasMonitor != null)
-                    {
-                        foreach (var m in materiasMonitor)
-                        {
-                            <option value="@m"
-                            @if (m.Equals(materiaSeleccionada))
-                            { @selected_       }>
-                            @m
-                            </option>
-                        }
-                    }
-                    else
-                    {
-                        <option value="--">No periodos</option>
-                    }
-                </select>
-            </div>
-          
-        </div>
-    }
-    
-   <br />
-    <div class="table-responsive">
-        <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.id)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.tema)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.comentario)
-                    </th>
-                    <th>
-                        Estudisntes
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.fecha_realizada)
-                    </th>
-                    <th class="text-center">
-                        Opciones
-                    </th>
-                 
-                </tr>
-            </thead>
-            @if (Model != null)
+            @using (Html.BeginForm("Registros", "Clase", FormMethod.Get, new { id = "fDatos" }))
             {
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.tema)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.comentario)
-                        </td>
-                        <td class="text-center">
-                            @item.estudisntes_asistentes.Count()
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.fecha_realizada).ToString().Substring(0, 10)
-                        </td>
-                        <td class="text-right">
-                            @if (!item.evidencia.Equals("-"))
+
+
+                <div class="row">
+                    <div class="col-sm-12 col-12   col-lg-2">
+                        <label>Periodo:*</label>
+                        <select class="form-control buscarGrupo" id="periodoBuscar" name="periodoBuscar" required>
+                            <option>Seleccione periodo</option>
+                            @if (periodos != null)
                             {
-                                @Html.ActionLink(" ", "Descargar", new { archivoNombre = item.evidencia }, new { @class = "btn btn-default fa  fa-cloud-download", title = "Descargar", })
+                                foreach (var p in periodos)
+                                {
+                                    <option value="@p"
+                                            @if (p.Equals(peridoSeleccionado)) { @selected_         }>
+                                        @p
+                                    </option>
+                                }
                             }
-                       
-                            @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle", })
-                        </td>
-                    </tr>
-                }
+                            else
+                            {
+                                <option value="--">No periodos</option>
+                            }
+                        </select>
+
+                    </div>
+                    <div class="col-sm-12 col-12   col-lg-6">
+                        <label>Monitor:*</label>
+                        <select class="form-control buscarGrupo" id="idMonitor" name="idMonitor" required>
+                            <option value="">Todos</option>
+                            @if (datosMoniotres != null)
+                            {
+                                foreach (var datos in datosMoniotres)
+                                {
+                                    <option value="@datos.id"
+                                            @if (datos.id.Equals(monitorSeleccionado)) { @selected_        }>
+                                        @datos.apellidos @datos.nombre
+                                    </option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="--">No Monitor</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-12   col-lg-4">
+                        <label>Asignatura:*</label>
+                        <select class="form-control buscarGrupo" id="materia" name="materia" required>
+                            <option value="">Todas</option>
+                            @if (materiasMonitor != null)
+                            {
+                                foreach (var m in materiasMonitor)
+                                {
+                                    <option value="@m"
+                                            @if (m.Equals(materiaSeleccionada)) { @selected_         }>
+                                        @m
+                                    </option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="--">No periodos</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
             }
 
-        </table>
+            <br />
+
+
+            <div class="table-responsive no-padding">
+                <table class="tablaPaginacion table table-hover table-sm table table-bordered table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tema)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.comentario)
+                            </th>
+                            <th>
+                                Estudisntes
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.fecha_realizada)
+                            </th>
+                            <th class="text-center" style="width:60px ">
+                                Opciones
+                            </th>
+
+                        </tr>
+                    </thead>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tema)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.comentario)
+                                </td>
+                                <td class="text-center">
+                                    @item.estudisntes_asistentes.Count()
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.fecha_realizada).ToString().Substring(0, 10)
+                                </td>
+                                <td class="text-right" style="width:60px ">
+                                    @if (!item.evidencia.Equals("-"))
+                                    {
+                                        @Html.ActionLink(" ", "Descargar", new { archivoNombre = item.evidencia }, new { @class = "btn btn-default fa  fa-cloud-download", title = "Descargar", })
+                                    }
+
+                                    @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default fa fa-eye", title = "Detalle", })
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </table>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    configurar_dataTable("tablaPaginacion");
+                    $("#periodoBuscar").change(function () {
+                        $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
+                    });
+                    $("#idMonitor").change(function () {
+                        $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
+                    });
+                    $("#materia").change(function () {
+                        $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
+                    });
+                });
+            </script>
+        </div>
+
+        
     </div>
-        <script>
-            $(document).ready(function () {
-                $("#periodoBuscar").change(function () {
-                    $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
-                });
-                $("#idMonitor").change(function () {
-                    $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
-                });
-                $("#materia").change(function () {
-                    $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
-                });
-            });
-        </script>
-    </div>
-<script src="~/Scripts/paginacion.js"></script>
+</div>
+
+
+
+
+
+
+
+
+    <script src="~/Scripts/paginacion.js"></script>

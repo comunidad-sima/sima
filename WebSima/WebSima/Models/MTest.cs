@@ -17,10 +17,13 @@ namespace WebSima.Models
         [Display(Name = "Código")]
         public int id { get; set; }
         [Display(Name = "Fecha de finalización")]
-        
+       // [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+
         [Required]
         public System.DateTime fecha_fin { get; set; }
         [Display(Name = "Fecha de inicio")]
+        //[DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+
         [Required]
         public System.DateTime fecha_inicio { get; set; }
         [Display(Name = "¿Quién responde?")]

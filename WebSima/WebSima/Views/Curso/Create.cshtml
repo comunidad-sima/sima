@@ -59,7 +59,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.fecha_finalizacion)
                 @Html.ValidationMessageFor(model => model.fecha_finalizacion, null, new { @class = "label label-danger"})
-                @Html.TextBoxFor(model => model.fecha_finalizacion, new { type = "text", @class = "form-control datepicker", placeholder = "yyyy-mm-dd" })
+                @Html.TextBoxFor(model => model.fecha_finalizacion, new { type = "text", @class = "form-control datepicker", placeholder = "YYY/MM/DD" })
 
             </div>
         </div>
@@ -131,9 +131,7 @@
                         else if (response["RESPUESTA"] == "LOGIN") {
                             toastr.error("Debe iniciar sesión", "Éxito");
                             location.href = "/";
-                        }
-
-                        
+                        }                    
                        
 
                     }, error: function (error) {

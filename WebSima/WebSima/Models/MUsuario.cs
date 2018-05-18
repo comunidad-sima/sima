@@ -53,7 +53,8 @@ namespace WebSima.Models
         [Display(Name = "Contraseña")]        
         [StringLength(12, ErrorMessage = "Máximo 12 caracteres")]
         public string contrasena { get; set; }
-        
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Facha de registro")]
         public System.DateTime fecha_registro { get; set; }
         public virtual ICollection<clases_sima> clases_sima { get; set; }

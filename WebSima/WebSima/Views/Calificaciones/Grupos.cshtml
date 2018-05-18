@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Grupos";
     List<WebSima.Models.WebApi.Grupo> grupos = ViewBag.grupos;
-    
+
 }
 
 <div>
@@ -14,70 +14,82 @@
 <div class="row">
 
     @{
-        if (grupos.Count() <= 0)
+        if (grupos == null || grupos.Count() <= 0)
         {
             <div class="col-md-12">
                 <div id="noDisponibles" class="panelBorder text-center ">
+                  
                     <br />
-                    <font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">😞 Las asignaturas que tiene a cargo en este momento no son monitoreadas  😞</font>
-                    </font>
+                    @if (grupos == null) { 
+                        <font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">😞 No fue posible cargar los grupos en este momento, compruebe su conexión a internet e intente nuevamente. 😞</font>
+                        </font>
+                    }
+                    else
+                    {
+                        <font style="vertical-align: inherit;">
+                            <font style="vertical-align: inherit;">😞 Las asignaturas que tiene a cargo en este momento no son monitoreadas. 😞</font>
+                        </font>
+                    }
                     <br /><br />
                 </div>
             </div>
         }
 
-
-        List<string> programas = (from p in grupos select (p.nom_unidad)).Distinct().ToList();
-        foreach (var programa in programas)
+        if (null != grupos)
         {
-            var grupo_tem = (from gru in grupos where (gru.nom_unidad.Equals(programa)) select (gru)).ToList();
-            <div class="col-md-12">
-                <div class="box box-default color-palette-box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">@programa</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-
-                        <table class="table tablaPaginacion table-responsive table-hover">
-
-                            <tbody>
-                                @{
-            foreach (var grupo in grupo_tem)
+            List<string> programas = (from p in grupos select (p.nom_unidad)).Distinct().ToList();
+            foreach (var programa in programas)
             {
-                <tr>
-                    <td>
-                        @grupo.nom_materia: GRUPO -@grupo.num_grupo
+                var grupo_tem = (from gru in grupos where (gru.nom_unidad.Equals(programa)) select (gru)).ToList();
+                <div class="col-md-12">
+                    <div class="box box-default color-palette-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">@programa</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
 
-                    </td>
+                            <table class="table tablaPaginacion table-responsive table-hover">
+
+                                <tbody>
+                                    @foreach (var grupo in grupo_tem)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @grupo.nom_materia: GRUPO -@grupo.num_grupo
+
+                                            </td>
 
 
-                    <td style="width:30px">
-                        @Html.ActionLink("Subir notas", "Registrar", new { id = (programa+"|"+ grupo.nom_materia+"|"+grupo.num_grupo )},
+                                            <td style="width:30px">
+                                                @Html.ActionLink("Subir notas", "Registrar", new { id = (programa + "|" + grupo.nom_materia + "|" + grupo.num_grupo) },
                         new { @class = "btn btn-success fa fa-line-chart", title = "ir a subir notas", })
 
 
-                    </td>
+                                            </td>
 
 
-                </tr>
+                                        </tr>
 
-            }
-                                }
-                            </tbody>
-                        </table>
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
                     </div>
-                    <!-- /.box-body -->
-                </div>
 
-                <!-- /.box -->
-            </div>
+                    <!-- /.box -->
+                </div>
+            }
         }
     }
 
+
 </div>
-
-
-
  
+
+

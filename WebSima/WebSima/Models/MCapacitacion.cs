@@ -26,9 +26,10 @@ namespace WebSima.Models
         [Required]
         public string comentarios { get; set; }
         [Display(Name = "Fecha aplicada")]
-        [DataType(DataType.Date)]
         [Required]
-        public System.DateTime fecha { get; set; }
+        //[DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}", ApplyFormatInEditMode = true)]
+       //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime fecha { get; set; }
         [Display(Name = "Evidencia")]
         [DataType(DataType.Upload, ErrorMessage = "error")]
         public string File { get; set; }

@@ -45,7 +45,7 @@
                         </td>
 
                         <td>
-                            @Html.DisplayFor(modelItem => item.fecha)
+                            @Html.DisplayFor(modelItem => item.fecha).ToString().Substring(0, 10)
                         </td>
                         <td class="text-right">
                             @if (!item.File.Equals("-"))
@@ -53,7 +53,8 @@
                                 @Html.ActionLink(" ", "Descargar", new { archivoNombre = item.File }, new { @class = "btn btn-default fa  fa-cloud-download", title = "Descargar evidencia", })
 
                             }
-                            @*@Html.ActionLink(" ", "Edit", new { id = item.cap_id }, new { @class = "btn btn-light fa fa-pencil-square-o ", title = "Editar", })*@@Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default  fa fa-eye", title = "detalle", })
+                            @*@Html.ActionLink(" ", "Edit", new { id = item.cap_id }, new { @class = "btn btn-light fa fa-pencil-square-o ", title = "Editar", })*@
+                                @Html.ActionLink(" ", "Details", new { id = item.id }, new { @class = "btn btn-default  fa fa-eye", title = "detalle", })
                             @Html.ActionLink(" ", "Delete", new { id = item.id }, new { @class = "btn btn-default fa fa-times eliminar", title = "Eliminar", style = "color:red;" })
                         </td>
                     </tr>

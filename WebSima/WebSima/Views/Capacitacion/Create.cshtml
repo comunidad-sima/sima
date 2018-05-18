@@ -30,7 +30,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    @Html.TextBoxFor(model => model.fecha, new { @class = "form-control datepicker  ", type = "text", placeholder = "YYYY-MM-DD" })
+                    @Html.TextBoxFor(model => model.fecha, new {  @class = "form-control datepicker  ", type = "text", placeholder = "YYYY/MM/DD" })
                 </div>
                     @Html.ValidationMessageFor(model => model.fecha, null, new { @class = "label label-danger" })
                 </div>
@@ -63,6 +63,7 @@
         <div class="text-right col-sm-12 form-group ">
 
             <input class="btn btn-success" type="submit" id="enviar" value="Guardar" />
+            <input class="btn  btn-default " type="reset" id="enviar" value="nuevo" />
 
         </div>
     </div>
@@ -99,25 +100,19 @@
                         // se activa el boton enviar
                         btn.val("Guardar");
                         btn.prop("disabled", false);                        
-                        var mensaje="";
-                        var clase = "";
+                        
                         if (response["RESPUESTA"] == "OK") {
-                            $("#registro").load("/Capacitacion/Listar");
-                            mensaje = "<strong>¡Exito!</strong> Capacitacón registrada.";
-                            clase = "alert-success";                    
-                           
-                        } else if (response["RESPUESTA"] == "ERROR") {                            
-                            mensaje = "<strong>¡Error!</strong> "+response["MENSAJE"];
-                            clase = "alert-danger";
+                            toastr.success(response["MENSAJE"], "Éxito");
+
+                        } else if (response["RESPUESTA"] == "ERROR") {
+
+                            toastr.error(response["MENSAJE"], "Error");
                         }
                         else if (response["RESPUESTA"] == "LOGIN") {
-                            mensaje = "<strong>¡Error!</strong>  Debe iniciar sesión";
-                            clase = " alert-danger";
-                            
+                            toastr.error("Debe iniciar sesión", "Éxito");
                             location.href = "/";
                         }
-                        //alert_mensajes() esta en helper.js
-                        $("#alert_1").html(alert_mensajes(mensaje, clase));
+
 
                     }, error: function (error) {
                         alert("Error");
