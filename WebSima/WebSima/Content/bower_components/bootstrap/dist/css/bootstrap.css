@@ -9,7 +9,6 @@ html {
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
-
 body {
   margin: 0;
 }
@@ -2442,7 +2441,7 @@ table th[class*="col-"] {
 }
 .table-responsive {
   min-height: .01%;
-  overflow-x: initial;
+  overflow-x: auto;
 }
 @media screen and (max-width: 767px) {
   .table-responsive {

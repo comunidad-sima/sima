@@ -356,11 +356,12 @@
                     $($(Row).find("td")[4]).css('color', '#FD3431');
                 }
                 
-            }, dom: 'Bfrtip',
-            buttons: [
-                'copy'
-            ]
-        });
+            },lengthChange: false,
+            buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
+            
+            });
+        table.buttons().container()
+       .appendTo('#example_wrapper .col-sm-6:eq(0)');
 
 
         $("#periodo").change(function () {
@@ -547,10 +548,8 @@
         var table = $('#table1-nota').DataTable();
         var datos_table = table.data();       
         var nfilas = datos_table.length;
-        contidad = 0;
-        console.log(posCol)
-        console.log(minLimite)
-        console.log(maxLimite)
+        contidad = 1;
+      
         tabla_detalles = $('#table1-nota-rango').DataTable();
         tabla_detalles.clear().draw();
         for (i = 0; i < nfilas; i++) {// recorre las filas
