@@ -6713,9 +6713,6 @@
     <Content Include="Content\handsontable\dist\jquery.handsontable.full.css" />
     <Content Include="Content\handsontable\dist\jquery.handsontable.full.js" />
     <Content Include="Content\jquery-confirm.min.css" />
-    <Content Include="Scripts\buttons.bootstrap.min.js" />
-    <Content Include="Scripts\dataTables.buttons.min.js" />
-    <Content Include="Scripts\jszip.min.js" />
     <Content Include="Content\plugins\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="Content\plugins\bootstrap-slider\slider.css" />
     <Content Include="Content\plugins\bootstrap-wysihtml5\bootstrap3-wysihtml5.all.js" />
@@ -6868,6 +6865,8 @@
     <Content Include="ClassDiagram1.cd" />
     <Content Include="Scripts\carga_dato_chart_pie.js" />
     <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Scripts\Excel_exportar.js" />
+    <Content Include="Scripts\FileSaver.min.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.form.min.js" />
     <Content Include="Scripts\jquery.min.js" />
@@ -6877,6 +6876,7 @@
     <Content Include="Scripts\helper.js" />
     <Content Include="Scripts\valida.js" />
     <Content Include="Scripts\xlsx.core.min.js" />
+    <Content Include="Scripts\xlsx.full.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

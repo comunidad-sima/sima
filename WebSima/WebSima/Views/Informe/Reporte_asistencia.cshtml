@@ -309,7 +309,7 @@
                         <tbody></tbody>
                     </table>
                     <div>
-                        <button class="btn btn-success">
+                        <button class="btn btn-success" id="exportar-datos" >
                             <i class="fa fa-file-excel-o"></i> Exportar
                         </button>
                     </div>
@@ -331,10 +331,29 @@
         var rango = 1;// rango de nota a filtrar 
 
         $('.select2').select2();       
-       
-      
-        $(".tablaPaginacion").DataTable(
-            {
+        
+        
+        $("#exportar-datos").click(function () {
+            var table = $('#table1-nota-rango').DataTable();
+            var datos_table = table.data();
+            var stockData = [];
+            $.each(datos_table, function (key, value) {
+                stockData.push({
+                    "Identificación": value[1],
+                    "Nombre": value[2],
+                    "Programa": value[3],
+                    "Nota corte 1": value[4],
+                    "Nota corte 2": value[5],
+                    "Definitiva": value[6],
+                    "Asistencia monitorias": value[7],
+                    "Asistencia a clase": value[8]
+                });
+            });
+            esportar_a_excel("Reporte", "Reporte de asistencia - SIMA", stockData, "Reporte de asistencia - SIMA")
+
+
+        });
+        $(".tablaPaginacion").DataTable({
             'language': language,
             'paging': true,
             'lengthChange': true,
@@ -356,12 +375,8 @@
                     $($(Row).find("td")[4]).css('color', '#FD3431');
                 }
                 
-            },lengthChange: false,
-            buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
-            
-            });
-        table.buttons().container()
-       .appendTo('#example_wrapper .col-sm-6:eq(0)');
+            }
+        });
 
 
         $("#periodo").change(function () {
@@ -473,6 +488,7 @@
         data = armaVerctorDato(window.pos, rango);
         cargar_dato_pie("pieChart", labels, data, false, "pie");// esta en carga_dato_chart_pie.js
     });
+    
     function getNotas(posCol) {  
         
        
