@@ -9,7 +9,7 @@ using WebSima.Models;
 
 namespace WebSima.Controllers
 {
-    public class ConfigAppController : Controller
+    public class ConfiguracionController : Controller
     {
         private bd_simaEntitie db = new bd_simaEntitie();
 
@@ -40,6 +40,14 @@ namespace WebSima.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+        public ActionResult Configuracion_sistema()
+        {
+            return View("Configuracion_sistema");
+        }
+        public ActionResult configuracion_perfil()
+        {
+            return View("configuracion_perfil");
         }
 
         //

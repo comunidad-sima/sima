@@ -16,20 +16,24 @@
     <title>SIMA</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    
+    <link href="~/Content/buttons.dataTables.min.css" rel="stylesheet" />
+
     <!-- Daterange picker -->
     <link rel="stylesheet" href="~/Content/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="~/Content/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
     <!-- Bootstrap Color Picker -->
     <link href="~/Content/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
-    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">*@
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
+    
     <!-- handsontable-->
     <link href="~/Content/handsontable/dist/jquery.handsontable.full.css" rel="stylesheet" />
     <!-- Select2 -->
@@ -64,7 +68,7 @@
     <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
     <!-- jQuery 3 -->
     <script src="/Content/bower_components/jquery/dist/jquery.min.js"></script>
-
+    <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">
 </head>
 <body class="hold-transition skin-green sidebar-mini">
     <div class="wrapper">
@@ -227,7 +231,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Control Sidebar Toggle Button -->
+                        <!-- Control Sidebar Toggle Button -->          
                         <li>
                             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                         </li>
@@ -307,8 +311,6 @@
                         <ul class="treeview-menu">
 
                             <li id="Horario_monitores" class="active"><a href="/Horario/consultar_horario"><i class="fa fa-search"></i>Consultar Horarios</a></li>
-
-
                         </ul>
                     </li>
 
@@ -478,6 +480,39 @@
             </section>
             <!-- /.sidebar -->
         </aside>
+
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create configuracion sistema -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#" data-toggle="tab"><i class="fa fa-gear"> Configuración</i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div>
+                    <ul class="control-sidebar-menu">
+                        <li id="registrarhorario">
+                            <a href="/Configuracion/Configuracion_sistema">
+                                <i class="menu-icon  fa fa-wrench bg-red"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Configuracion Sistema</h4>
+                                    <p>periodo, contraseña</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Configuracion/configuracion_perfil">
+                                <i class="menu-icon fa fa-user-o bg-yellow"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Perfil Usuario</h4>
+                                    <p>contraseña</p>
+                                </div>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
+        </aside>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <div class="content">@RenderBody()</div>
@@ -501,6 +536,10 @@
     <script src="/Content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Morris.js charts -->
     <script src="~/Scripts/Chart.min.js"></script>
+    <!-- DataTables -->
+    <script src="/Content/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
 
      <!-- Sparkline -->
     <script src="/Content/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
@@ -524,22 +563,22 @@
     <script src="/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
     <!-- handsontable-->
     <script src="~/Content/handsontable/dist/jquery.handsontable.full.js"></script>
-    <!-- DataTables -->
-    <script src="/Content/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-
-
-
+   
+    <script src="~/Scripts/pdfmake.min.js"></script>
+    <script src="~/Scripts/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/buttons.flash.min.js"></script>
     <!-- iCheck 1.0.1 -->
     <script src="/Content/plugins/iCheck/icheck.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/Content/dist/js/adminlte.min.js"></script>
+    @*excel*@
     <script src="~/Scripts/xlsx.core.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     @*<script src="/Content/dist/js/demo.js"></script>*@
     <!--toastr-->
     <script src="~/Content/toastr/toastr.min.js"></script>
-
+    @*exportar excel*@
+    <script src="~/Scripts/jszip.min.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/Scripts/jquery-confirm.js"></script>

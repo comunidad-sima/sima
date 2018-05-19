@@ -224,18 +224,22 @@
                             }
                         </tbody>
                     </table>
-                    @if (datos_estudiante !=null)
-                    {
-                        <a href="/informe/Download_reporte_asistencia" class="btn btn-success"><i class="fa fa-file-excel-o"></i>Exportar </a>
+                    @if (datos_estudiante != null)
+{
+    <a href="/informe/Download_reporte_asistencia" class=" btn btn-success">
+        <i class="fa fa-file-excel-o"></i> Exportar
+    </a>
 
-                    }
+          
+
+}
                 </div>
             </div>
             <br />
             <div id="chart2" class="panelBorder">
                 <div class="box-header with-border">
                     <i class="fa fa-bar-chart-o"></i>
-                    <h3 class="box-title">Estadistica</h3>
+                    <h3 class="box-title">Estadistica de notas</h3>
 
                 </div>
                 <div class="box-body">
@@ -246,6 +250,21 @@
                                 <option value="1">Nota 1</option>
                                 <option value="2">Nota 2</option>
                             </select>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                            <select id="rango-select" class="form-control">
+                                <option value="1">Rango de nota</option>
+                                <option value="2">Menor a 3</option>
+                                <option value="3">entre 3 y 3,9</option>
+                                <option value="4">entre 4 y 4,9</option>
+                                <option value="5">En 5</option>
+                                <option value="6">En 3 o más</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                            <button type="button" id="modal-mosatrar" class="btn btn-success" data-toggle="modal" data-target="#modal-notas-rango">
+                               Detlles
+                            </button>
                         </div>
                         <div id="limpiar_grafica" class="  col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <canvas id="pieChart" width="100%" height="60px"></canvas>
@@ -261,15 +280,61 @@
        
     </div>
 </div>
+<div class="modal fade panelborder  " id="modal-notas-rango">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-green">
+                <button type="button" id="close_pregunta" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" id="tituli-modal">Estudiantes con notas </h3>
+            </div>
+            <div class="modal-body" id="modat_estudiantes-rango">
+                <div class="panelBorder">
+                    <table id="table1-nota-rango" class="table tablaPaginacion table-bordered table-hover" style="width :100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>IDENTIFICACÓN</th>
+                                <th>NOMBRE COMPLETO</th>
+                                <th>PROGRAMA</th>
+                                <th>NOTA-1</th>
+                                <th>NOTA-2</th>
+                                <th>DEFINITIVA</th>
 
+                                <th width="20px">ASIST. SIMA</th>
+                                <th width="20px">INASIST. CLASE</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div>
+                        <button class="btn btn-success">
+                            <i class="fa fa-file-excel-o"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 <script>
     $(document).ready(function () {
         var labels = ["Notas entre 0 - 2,9",  "Notas entre 3 - 3,9", "Notas entre 4 - 4,9", "Notas en 5"];
         var data = [];
+        var pos;// posisicion de la columna notas a filtar 
+        window.pos = 6;
+        var rango = 1;// rango de nota a filtrar 
+
         $('.select2').select2();       
        
-        
-        $(".tablaPaginacion").DataTable({
+      
+        $(".tablaPaginacion").DataTable(
+            {
             'language': language,
             'paging': true,
             'lengthChange': true,
@@ -281,18 +346,22 @@
             "scrollX": true,
 
             "rowCallback": function (Row, Data) {
-                if (parseFloat(Data[6].replace(",", ".")) <= 2.999) {
+                if (parseFloat(Data[6].replace(",", ".")) < 3) {
                     $($(Row).find("td")[6]).css('color', '#FD3431');
                 }
-                if (parseFloat(Data[5].replace(",", ".")) <= 2.999) {
+                if (parseFloat(Data[5].replace(",", ".")) < 3) {
                     $($(Row).find("td")[5]).css('color', '#FD3431');
                 }
-                if (parseFloat(Data[4].replace(",", ".")) <= 2.999) {              
+                if (parseFloat(Data[4].replace(",", ".")) < 3) {
                     $($(Row).find("td")[4]).css('color', '#FD3431');
                 }
                 
-            },
+            }, dom: 'Bfrtip',
+            buttons: [
+                'copy'
+            ]
         });
+
 
         $("#periodo").change(function () {
             $("#formdato").submit();
@@ -313,34 +382,94 @@
                     $.each(response, function (i, item) {
                         $('#programa').append('<option value="' + item + '">'+item+'</option>');
                     });
-                    console.log(response)
-
                 }, error: function (error) {
                     alert("Error al cargar los prgramas");
                   
                 }
             });
-
-
-
-           // $('.select2').selectpicker('refresh');
         });
         $("#filtrar-select").change(function () {
             
             if ($("#filtrar-select").val() === "1") {
-                pos = 4;
+                window.pos = 4;
             }
             else if ($("#filtrar-select").val() === "2") {
-                pos = 5;
+                window.pos = 5;
             }
             else if ($("#filtrar-select").val() === "3") {
-                pos = 6;
+                window.pos = 6;
             }
-            data = armaVerctorDato(pos);
+            data = armaVerctorDato(window.pos, rango);
             cargar_dato_pie("pieChart", labels, data, false,"pie");// esta en carga_dato_chart_pie.js
         });
         
-        data = armaVerctorDato(6);
+        data = armaVerctorDato(window.pos, rango);
+        cargar_dato_pie("pieChart", labels, data, false, "pie");// esta en carga_dato_chart_pie.js
+    });
+    $("#modal-mosatrar").click(function () {
+        
+        rango = $("#rango-select").val();
+        
+        titulo = "";
+        if (rango == 1) {
+            titulo = "notas entre 0 y 5";
+            createAddRows(window.pos, 0, 5);
+        }
+        else if (rango == 2) {
+            titulo = "notas entre 0 y 2,9";
+            createAddRows(window.pos, 0, 2.999);
+
+        }
+        else if (rango == 3) {
+            titulo = "notas entre 3 y 3,9";
+            createAddRows(window.pos, 3, 3.999);
+
+        }
+        else if (rango == 4) {
+            titulo = "notas entre 4 y 4,9";
+            createAddRows(window.pos, 4, 4.999);
+
+        }
+        else if (rango == 5) {
+            titulo = "notas en 5";
+            createAddRows(window.pos, 5, 5);
+
+        }
+        else if (rango == 6) {
+            titulo = "notas entre 3 y 5";
+            createAddRows(window.pos, 3, 5);
+
+        }
+        $("#tituli-modal").text("Estudiantes con " + titulo);
+    });
+    $("#rango-select").change(function () {
+               
+        rango = $("#rango-select").val();
+       
+        if (rango==1) {
+            labels = ["Notas entre 0 - 2,9", "Notas entre 3 - 3,9", "Notas entre 4 - 4,9", "Notas en 5"];
+        }
+        else  if (rango == 2) {
+            labels = ["Notas entre 0 - 2,9", "Otras"];
+           
+        }
+        else if (rango == 3) {
+            labels = ["Notas entre 3 - 3,9", "Otras"];
+
+        }
+        else if (rango == 4) {
+            labels = ["Notas entre 4 - 4,9", "Otras"];
+
+        }
+        else if (rango == 5) {
+            labels = ["Notas en 5", "Otras"];
+
+        }
+        else if (rango == 6) {
+            labels = ["Notas entre 3 - 5", "Otras"];
+
+        }
+        data = armaVerctorDato(window.pos, rango);
         cargar_dato_pie("pieChart", labels, data, false, "pie");// esta en carga_dato_chart_pie.js
     });
     function getNotas(posCol) {  
@@ -359,14 +488,40 @@
         document.getElementById("canidad-estudiantes").innerHTML = "<p>Estudiantes: " + nfilas+"</p>";
         return temNota;
     }
-    function armaVerctorDato(posColumnaNotas) {
+    function armaVerctorDato(posColumnaNotas, rango) {
         var datos_tem = [];
         var notas = getNotas(posColumnaNotas);
-        
-        datos_tem.push(getPorcentaje(0, 2.9999, notas));
-        datos_tem.push(getPorcentaje(3.0, 3.9999, notas));
-        datos_tem.push(getPorcentaje(4.0, 4.9999, notas));
-        datos_tem.push(getPorcentaje(5.0, 5.0, notas));
+        if (rango == 1) {
+            datos_tem.push(getPorcentaje(0, 2.9999, notas));
+            datos_tem.push(getPorcentaje(3.0, 3.9999, notas));
+            datos_tem.push(getPorcentaje(4.0, 4.9999, notas));
+            datos_tem.push(getPorcentaje(5.0, 5.0, notas));
+        }
+        else if (rango == 2) {
+            porcen_tem =  getPorcentaje(0, 2.9999, notas);
+            datos_tem.push(porcen_tem);
+            datos_tem.push(100-porcen_tem);
+        }
+        else if (rango == 3) {
+            porcen_tem = getPorcentaje(3.0, 3.9999, notas);
+            datos_tem.push(porcen_tem);
+            datos_tem.push(100 - porcen_tem);
+        }
+        else if (rango == 4) {
+            porcen_tem = getPorcentaje(4.0, 4.9999, notas);
+            datos_tem.push(porcen_tem);
+            datos_tem.push(100 - porcen_tem);
+        }
+        else if (rango == 5) {
+            porcen_tem = getPorcentaje(5.0, 5.0, notas);
+            datos_tem.push(porcen_tem);
+            datos_tem.push(100 - porcen_tem);
+        }
+        else if (rango == 6) {
+            porcen_tem = getPorcentaje(3.0, 5.0, notas);
+            datos_tem.push(porcen_tem);
+            datos_tem.push(100 - porcen_tem);
+        }
         return datos_tem;
     }
     function getPorcentaje(minLimite, maxLimite, notas) {
@@ -380,24 +535,43 @@
             }
         }
       
-        porcentaje = (cantidad / notas.length) * 100;
+        porcentaje =( (cantidad / notas.length) * 100).toFixed(2);
         
         return porcentaje;
-
-        
-        //var sumNota=0;
-        //for (i = 0; i < notas.length; i++) {
-        //    if (notas[i].replace(",", ".") >= minLimite && notas[i].replace(",", ".") <= maxLimite) {
-        //        cantidad++;
-        //        sumNota = sumNota + notas[i].replace(",", ".");
-        //    }           
-        //}
-        //if (cantidad == 0) return 0;
-        //return sumNota/cantidad;
 
 
 
     }
+    function createAddRows(posCol, minLimite, maxLimite) {
+
+        var table = $('#table1-nota').DataTable();
+        var datos_table = table.data();       
+        var nfilas = datos_table.length;
+        contidad = 0;
+        console.log(posCol)
+        console.log(minLimite)
+        console.log(maxLimite)
+        tabla_detalles = $('#table1-nota-rango').DataTable();
+        tabla_detalles.clear().draw();
+        for (i = 0; i < nfilas; i++) {// recorre las filas
+
+            var datos = datos_table[i];
+            
+            nota = parseFloat(datos[posCol].replace(",", "."));
+            
+            if (nota >= minLimite && nota <= maxLimite) {
+             
+                row = [];
+                row.push(contidad++);
+                for (j = 1; j < datos.length; j++) {
+                    row.push(datos[j]);                   
+                }
+                tabla_detalles.row.add(row).draw(false);
+            }
+        }
+    }
+    
+
 </script>
 
 
