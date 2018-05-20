@@ -3,4 +3,88 @@
    
 }
 
-<h2>Index </h2>
+<div>
+    <ol class="breadcrumb " style="background-color: #ffffff">
+        <li class="breadcrumb-item ">Pricipal</li>
+        <li class="breadcrumb-item active">Correo</li>
+
+    </ol>
+</div>
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- /.box -->
+        <div class="box box-success">
+
+            <div class="box-body panelBorder">
+                @*se carga el contenido del formulario de nuevo registro*@
+                <div>
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><strong> Principal Correo</strong> </h3>
+                    </div>
+                    <div class="">
+
+                        <section class="content">
+                            <div class="row">
+                                <div class="col-md-3 panelBorder">
+                                    <a href="#" id="idRedactar" class="btn btn-success btn-block margin-bottom">Redactar</a>
+                                    <div class="box box-solid">
+                                       
+                                        <div class="box-body no-padding">
+                                            <ul class="nav nav-pills nav-stacked">
+                                                <li class="active">
+                                                    <a href="#" id="idRecibidos">
+                                                        <i class="fa fa-inbox"></i> Recibidos
+                                                        <span class="label label-success pull-right">12</span>
+                                                    </a>
+                                                </li>
+                                                <li><a href="#"><i class="fa fa-envelope-o"></i> Enviados</a></li>
+                                                <li><a href="#"><i class="fa fa-file-text-o"></i> Drafts</a></li>
+                                                <li>
+                                                    <a href="#"><i class="fa fa-filter"></i> Junk <span class="label label-warning pull-right">65</span></a>
+                                                </li>
+                                                <li><a href="#"><i class="fa fa-trash-o"></i> Trash</a></li>
+                                            </ul>
+                                        </div>
+                                        <!-- /.box-body -->
+                                    </div>
+                                  
+                                </div>
+                                <!-- /.col -->
+                                <div id="idCuerpoCorreo" class="col-md-9 " >
+                                    
+                                    <!-- /. box -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </section>
+                        <!-- /.content -->
+                    </div>
+
+                    
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#idRedactar").click(function () {
+            $("#idCuerpoCorreo").load("/Mail/Redactar");
+        });
+        $("#idRecibidos").click(function () {
+            $("#idCuerpoCorreo").load("/Mail/Recibidos");
+        });
+
+        $("#idCuerpoCorreo").load("/Mail/Recibidos");
+    });
+</script>
+
+

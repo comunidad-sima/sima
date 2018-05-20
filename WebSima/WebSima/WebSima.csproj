@@ -7238,7 +7238,7 @@
     <Content Include="Views\Calificaciones\Registrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\add_pregunta.cshtml" />
+    <Content Include="Views\Shared\Test\add_pregunta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Configuracion\Index.cshtml" />
@@ -7259,20 +7259,20 @@
     <Content Include="Views\Usuario\Eliminados.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Home.cshtml" />
-    <Content Include="Views\Test\Listar.cshtml" />
+    <Content Include="Views\Shared\Test\Home.cshtml" />
+    <Content Include="Views\Shared\Test\Listar.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Crear_test.cshtml" />
+    <Content Include="Views\Shared\Test\Crear_test.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Responder_test.cshtml" />
+    <Content Include="Views\Shared\Test\Responder_test.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Historial_test.cshtml" />
+    <Content Include="Views\Shared\Test\Historial_test.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Listar_test.cshtml" />
+    <Content Include="Views\Shared\Test\Listar_test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Horario\create_monitor.cshtml" />
@@ -7280,23 +7280,23 @@
     <Content Include="Views\Horario\select_monitor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Evaluacion_test.cshtml" />
+    <Content Include="Views\Shared\Test\Evaluacion_test.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Tests.cshtml" />
-    <Content Include="Views\Test\Tests_responder.cshtml" />
+    <Content Include="Views\Shared\Test\Tests.cshtml" />
+    <Content Include="Views\Shared\Test\Tests_responder.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Test_monitor.cshtml" />
+    <Content Include="Views\Shared\Test\Test_monitor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Edit_Pregunta.cshtml" />
+    <Content Include="Views\Shared\Test\Edit_Pregunta.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Detalles.cshtml" />
+    <Content Include="Views\Shared\Test\Detalles.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Test\Edit_test.cshtml" />
+    <Content Include="Views\Shared\Test\Edit_test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Calificaciones\Grupos.cshtml" />
@@ -7688,6 +7688,8 @@
     <Content Include="Views\Configuracion\Configuracion_sistema.cshtml" />
     <Content Include="Views\Configuracion\configuracion_perfil.cshtml" />
     <Content Include="Views\Mail\Index.cshtml" />
+    <Content Include="Views\Mail\Redactar.cshtml" />
+    <Content Include="Views\Mail\Recibidos.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
