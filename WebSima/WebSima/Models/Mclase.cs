@@ -54,68 +54,33 @@ namespace WebSima.Models
         /// <param name="idMonitor"></param>
         /// <returns></returns>
         public  List<Mclase> getClasesMonitorPerido(bd_simaEntitie db,String periodo, String idMonitor, String materia){
-          //  var clases_sima = db.clases_sima.Include(c => c.cursos).Include(c => c.usuarios);
+            
+            List<Mclase> clasesPeriodo=new List<Mclase>() ;
+            if (idMonitor.Equals("") && materia.Equals(""))
+              clasesPeriodo=  getClasesMonitor_materia_periodo(periodo, materia, idMonitor, 0);
 
+            else if (!materia.Equals("") && idMonitor.Equals(""))
+            {//cuando se filtra por materia
+                clasesPeriodo = getClasesMonitor_materia_periodo(periodo, materia, idMonitor, 1);
 
+            }
+            else if (!idMonitor.Equals("") && !materia.Equals(""))
+            {
+                // cuando se filtra por materia y monitor
+                clasesPeriodo = getClasesMonitor_materia_periodo(periodo, materia, idMonitor, 2);
+            }
+            else  if (!idMonitor.Equals("") && materia.Equals(""))
+            {
+                // cuando se filtra por  monitor
+                clasesPeriodo = getClasesMonitor_materia_periodo(periodo, materia, idMonitor, 3);
+            }
+            
 
+            
 
-
-            ///SP_Clases_Monitor_Periodo
-            ///
-
-
-
-
-            var clases =(from c in db.clases_sima
-                         where c.periodo == periodo && c.usuarios_id.StartsWith(idMonitor) && c.cursos.nombre_materia.StartsWith(materia)
-                select new Mclase
-                {
-                    id=c.id,
-                    fecha_registro=c.fecha_registro,
-                    comentario=c.comentario,
-                    cursos = c.cursos,
-                    estudisntes_asistentes=c.estudiantes_asistentes,
-                    evidencia=c.evidencia,
-                    fecha_realizada=c.fecha_realizada,
-                    periodo=c.periodo,
-                    tema=c.tema,
-                    usuarios=c.usuarios,
-                    usuarios_id=c.usuarios_id,
-                    cursos_id=c.cursos_id
-                    
-                }).ToList();
-            return clases;
+            return clasesPeriodo;
         }
-        /*// <summary>
-        /// esta clase consulta todas  las clases de un monitor,  con los id de los estudinates asistentes, los datos del monitor y del curso 
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="periodo"> perido en el que se desea consultar </param>
-        /// <param name="idMonitor"></param>
-        /// <returns></returns>
-        public static List<Mclase> getClasesMonitorPeriodoCompleta(bd_simaEntities db, String periodo, String idMonitor, String materia)
-        {
-            //  var clases_sima = db.clases_sima.Include(c => c.cursos).Include(c => c.usuarios);
-            var clases = (from c in db.clases_sima
-                          where c.cla_periodo == periodo && c.cla_usuarios_id == idMonitor && c.cursos.cur_materia.StartsWith(materia)
-                          select new Mclase
-                          {
-                              cla_id = c.cla_id,
-                              cla_fecha_registro = c.cla_fecha_registro,
-                              comentario = c.cla_comentario,
-                              cursos = c.cursos,
-                              estudisntes_asistentes=c.estudiantes_asistentes,
-                              evidencia = c.clas_evidencia,
-                              fecha_realizada = c.cla_fecha_realizada,
-                              periodo = c.cla_periodo,
-                              tema = c.cla_tema,
-                              usuarios=c.usuarios,
-                              usuarios_id = c.cla_usuarios_id,
-                              cursos_id = c.cla_cursos_id
-
-                          }).ToList();
-            return clases;
-        }*/
+        
         public bool guardarAsistentes(bd_simaEntitie db, clases_sima clsase,String[]idAsistentes)           
         {
             bool exito=true;
@@ -138,6 +103,65 @@ namespace WebSima.Models
             }
             return exito; 
         }
+        /// <summary>
+        /// consulta todas las clases en un perido por like nombre materia y like id monitor
+        /// </summary>
+        /// <param name="periodo"></param>
+        /// <param name="id_monitor"></param>
+        /// <returns></returns>
+        public List<Mclase> getClasesMonitor_materia_periodo(string periodo, string materia, string id_monotor, int tipoFiltro)
+        {
+            List<Mclase> clases = new List<Mclase>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Clases_Monitor_Periodo", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    cmd.Parameters.AddWithValue("@id_usuario", id_monotor);
+                    cmd.Parameters.AddWithValue("@materia", materia);
+                    cmd.Parameters.AddWithValue("@topoFiltro", tipoFiltro);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        Mclase c = new Mclase
+                        {
+                            id = Convert.ToInt32(row["id"].ToString()),
+                            comentario = row["comentario"].ToString(),
+                            cursos_id = Convert.ToInt32(row["cursos_id"].ToString()),
+                            periodo = row["periodo"].ToString(),
+                            tema = row["tema"].ToString(),
+                            usuarios_id = row["usuarios_id"].ToString(),
+                            evidencia = row["evidencia"].ToString(),
+                            fecha_realizada=DateTime.Parse(row["fecha_realizada"].ToString()),
+                            fecha_registro=DateTime.Parse(row["fecha_registro"].ToString())
+                            
+
+                        };
+                        clases.Add(c);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return clases;
+        }
+
         /// <summary>
         /// Esta funcion consuta todos los periodos donde se registro clase
         /// </summary>

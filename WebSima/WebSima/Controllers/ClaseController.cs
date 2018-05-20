@@ -9,6 +9,7 @@ using WebSima.Models;
 using WebSima.Models.WebApi;
 using System.Transactions;
 using WebSima.clases;
+using DocumentFormat.OpenXml.Wordprocessing;
 namespace WebSima.Controllers
 {
     public class ClaseController : Controller
@@ -38,31 +39,31 @@ namespace WebSima.Controllers
                 return Redirect("~/Inicio/Login");
             }
         }
-        public ActionResult Avance(String materia = "", String periodoBuscar = "2017-2", String idMonitor = "")
-        {
-            String periodo = MConfiguracionApp.getPeridoActual(db);
-            if (sesion.esAdministrador(db))
-            {
-                if (idMonitor.Equals("")) materia = "";
-                Mclase auxClase = new Mclase();
-                ViewBag.materiaSeleccionada = materia;
-                ViewBag.periodoSeleccionada = periodoBuscar;
-                ViewBag.idMonitorSeleccionado = idMonitor;
-                ViewBag.periodos = auxClase.getPeriodosRegistradosDeClase(db);
-                ViewBag.datosMoniotres = new MUsuario().getDatosMonitoresPeriodo(periodoBuscar);
+        //public ActionResult Avance(String materia = "", String periodoBuscar = "2017-2", String idMonitor = "")
+        //{
+        //    String periodo = MConfiguracionApp.getPeridoActual(db);
+        //    if (sesion.esAdministrador(db))
+        //    {
+        //        if (idMonitor.Equals("")) materia = "";
+        //        Mclase auxClase = new Mclase();
+        //        ViewBag.materiaSeleccionada = materia;
+        //        ViewBag.periodoSeleccionada = periodoBuscar;
+        //        ViewBag.idMonitorSeleccionado = idMonitor;
+        //        ViewBag.periodos = auxClase.getPeriodosRegistradosDeClase(db);
+        //        ViewBag.datosMoniotres = new MUsuario().getDatosMonitoresPeriodo(periodoBuscar);
 
-                ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos( idMonitor, periodo, 1);
+        //        ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos( idMonitor, periodo, 1);
 
-                ViewBag.peridoSeleccionado = periodoBuscar;
-                ViewBag.monitorSeleccionado = idMonitor;
+        //        ViewBag.peridoSeleccionado = periodoBuscar;
+        //        ViewBag.monitorSeleccionado = idMonitor;
 
-                return View(auxClase.getClasesMonitorPerido(db, periodo, idMonitor, materia));
-            }
-            else
-            {
-                return Redirect("~/Inicio/Login");
-            }
-        }
+        //        return View(auxClase.getClasesMonitorPerido(db, periodo, idMonitor, materia));
+        //    }
+        //    else
+        //    {
+        //        return Redirect("~/Inicio/Login");
+        //    }
+        //}
 
         public ActionResult Registros(String materia = "",String periodoBuscar="-",String idMonitor="")
         {
@@ -70,15 +71,18 @@ namespace WebSima.Controllers
                periodoBuscar = MConfiguracionApp.getPeridoActual(db);
             if (sesion.esAdministrador(db))
             {
-                if (idMonitor.Equals("")) materia = "";
+                if (materia.Equals("")) idMonitor = "";
                 Mclase auxClase = new Mclase();
                 ViewBag.materiaSeleccionada = materia;
                 ViewBag.periodoSeleccionada = periodoBuscar;
                 ViewBag.idMonitorSeleccionado = idMonitor;
                 ViewBag.periodos = auxClase.getPeriodosRegistradosDeClase(db);
-                ViewBag.datosMoniotres = new MUsuario().getDatosMonitoresPeriodo(periodoBuscar);
+                ViewBag.datosMoniotres = new MUsuario().getMonitores_de_materia(materia, periodoBuscar);
+                var materias = new MMateria().getMaterias_registro_grupos(db, periodoBuscar);
+              
+                ViewBag.materias= materias;
 
-                ViewBag.materiasMonitor = new MCurso().getNombreMateriaMonitorCursos(idMonitor, periodoBuscar,1);
+                    //= new MCurso().getNombreMateriaMonitorCursos(idMonitor, periodoBuscar,1);
 
                 ViewBag.peridoSeleccionado = periodoBuscar;
                 ViewBag.monitorSeleccionado = idMonitor;
@@ -97,7 +101,7 @@ namespace WebSima.Controllers
         public ActionResult Details(int id = 0)
         {
             String periodo = MConfiguracionApp.getPeridoActual(db);
-            if (!sesion.getIdUsuario().Equals(""))
+            if (sesion.esAdministradorOrMonitor(db))
             {
                 Mclase aux = new Mclase();
                 ViewBag.perfil = sesion.getIPerfilUsusrio();
@@ -263,7 +267,19 @@ namespace WebSima.Controllers
             }
         }
 
-        
+        public FileResult Descargar(String archivoNombre)
+        {
+            if (sesion.esAdministradorOrMonitor(db))
+            {
+                string ruta = Server.MapPath(Direccion.getDirClases() + "/" + archivoNombre);
+                if (Archivo.existeFile(ruta))
+                {
+                    var file = File(ruta, "application/octet-stream", archivoNombre);
+                    return file;
+                }
+            }
+            return null;
+        }
        
 
         protected override void Dispose(bool disposing)

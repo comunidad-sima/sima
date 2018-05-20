@@ -171,6 +171,11 @@ namespace WebSima.Controllers
 
             return Redirect("~/Inicio/Login");
         }
+        [HttpPost]
+        public JsonResult sesion_activa()
+        {            
+            return Json(!sesion.getIdUsuario().Equals(""));
+        }
 
 
     }

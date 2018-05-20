@@ -251,7 +251,7 @@
                     </div>
                     <div class="pull-left info">
                         <p>@session.getIdUsuario()</p>
-                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                        <a href="#"><i id="online" class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
              
@@ -529,7 +529,32 @@
         </footer>
     </div>
  
-    
+    <script>
+        $(document).ready(function () {          
+            setInterval('es_sesion_activa()', 8000);           
+        });
+        function es_sesion_activa() {
+            $.ajax({
+                url: "/Inicio/sesion_activa",
+                dataType: "json",
+                type: 'post',                
+                beforeSend: function () { },
+                success: function (response) {
+                    if (response) {
+                        $("#online").removeClass("text-danger");
+                        $("#online").addClass("text-success");
+                    } else {
+                        $("#online").addClass("text-danger");
+                        $("#online").removeClass("text-success");
+                    }
+                }, error: function (error) {
+                    $("#online").addClass("text-danger");
+                    $("#online").removeClass("text-success");
+                }
+            });
+            
+        }
+    </script>
     <!-- jQuery UI 1.11.4 -->
     <script src="~/Content/bower_components/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->

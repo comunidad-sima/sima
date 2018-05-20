@@ -208,6 +208,62 @@ namespace WebSima.Models
             return listausuarios;
 
         }
+
+        public List<MUsuario> getMonitores_de_materia(string materia, string periodo)
+        {
+            List<MUsuario> listausuarios = new List<MUsuario>();
+            var dtr = new DataSet();
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+            {
+                try
+                {
+                    // procedimiento almacenado 
+                    var cmd = new SqlCommand("SP_Monitores_de_materia", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@materia", materia);
+                    cmd.Parameters.AddWithValue("@periodo", periodo);
+                    conn.Open();
+                    var da = new SqlDataAdapter(cmd);
+                    //cmd.ExecuteNonQuery();
+                    da.Fill(dtr);
+                    foreach (DataRow row in dtr.Tables[0].Rows)
+                    {
+                        MUsuario u = new MUsuario
+                        {
+                            id = row["id"].ToString(),
+                            nombre = row["nombre"].ToString(),
+                            tipo = row["tipo"].ToString(),
+                            apellidos = row["apellidos"].ToString(),
+                            celular = row["celular"].ToString(),
+                            contrasena = row["contrasena"].ToString(),
+                            correo = row["correo"].ToString(),
+                            eliminado = Convert.ToByte(row["eliminado"]),
+                            fecha_registro = DateTime.Parse(row["fecha_registro"].ToString())
+
+                        };
+
+                        listausuarios.Add(u);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+            }
+
+
+            return listausuarios;
+
+        }
         /// <summary>
         /// consulta los usurios segun el estado de eliminado
         /// </summary>
@@ -383,50 +439,50 @@ namespace WebSima.Models
         /// </summary>
         /// <param name="db"></param>
         /// <returns></returns>
-        public  List<MUsuario> getDatosMonitoresPeriodo(string periodo)
-        {
+        //public  List<MUsuario> getDatosMonitoresPeriodok(string periodo)
+        //{
 
-            List<MUsuario> listausuarios = new List<MUsuario>();
-            var dtr = new DataSet();
-            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
-            {
-                try
-                {
-                    // procedimiento almacenado 
-                    var cmd = new SqlCommand("SP_Dato_monitores_perido", conn)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    //cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@periodo", periodo);
-                    conn.Open();
-                    var da = new SqlDataAdapter(cmd);
-                    //cmd.ExecuteNonQuery();
-                    da.Fill(dtr);
-                    foreach (DataRow row in dtr.Tables[0].Rows)
-                    {
-                        MUsuario u = new MUsuario
-                        {
-                            id = row["id"].ToString(),
-                            nombre = row["nombre"].ToString(),                            
-                            apellidos = row["apellidos"].ToString()
+        //    List<MUsuario> listausuarios = new List<MUsuario>();
+        //    var dtr = new DataSet();
+        //    using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["bd_simaConexion"].ConnectionString))
+        //    {
+        //        try
+        //        {
+        //            // procedimiento almacenado 
+        //            var cmd = new SqlCommand("SP_Dato_monitores_perido", conn)
+        //            {
+        //                CommandType = CommandType.StoredProcedure
+        //            };
+        //            //cmd.CommandType = CommandType.StoredProcedure;
+        //            cmd.Parameters.AddWithValue("@periodo", periodo);
+        //            conn.Open();
+        //            var da = new SqlDataAdapter(cmd);
+        //            //cmd.ExecuteNonQuery();
+        //            da.Fill(dtr);
+        //            foreach (DataRow row in dtr.Tables[0].Rows)
+        //            {
+        //                MUsuario u = new MUsuario
+        //                {
+        //                    id = row["id"].ToString(),
+        //                    nombre = row["nombre"].ToString(),                            
+        //                    apellidos = row["apellidos"].ToString()
 
-                        };
+        //                };
 
-                        listausuarios.Add(u);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string msg = ex.Message;
-                }
-                finally
-                {
-                    conn.Close();
-                }
-            }
-            return listausuarios;
+        //                listausuarios.Add(u);
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            string msg = ex.Message;
+        //        }
+        //        finally
+        //        {
+        //            conn.Close();
+        //        }
+        //    }
+        //    return listausuarios;
           
-        }
+        //}
     }
 }

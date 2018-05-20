@@ -12,5 +12,9 @@ namespace WebSima.clases
         {
             return new MUsuario().getUsuarioId(id);
         }
+        public static int getEstudianteAsistente(int id_calse)
+        {
+            return  new Mclase().getEstudiantesAsistentes(id_calse).Count();
+        }
     }
 }

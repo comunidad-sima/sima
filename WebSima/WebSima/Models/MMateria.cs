@@ -69,7 +69,7 @@ namespace WebSima.Models
 
         }
         /// <summary>
-        /// consulta el nombre de las materias que se le ha creado un curso en un perido
+        /// consulta el nombre de las materias que se le ha creado un curso en un periodo
         /// </summary>
         /// <param name="db"></param>
         /// <returns></returns>
