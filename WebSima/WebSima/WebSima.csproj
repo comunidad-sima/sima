@@ -155,6 +155,7 @@
     <Compile Include="clases\Excel_informe.cs" />
     <Compile Include="clases\HelperAlerta.cs" />
     <Compile Include="clases\HelperUsuario.cs" />
+    <Compile Include="clases\Mail.cs" />
     <Compile Include="clases\Rutina.cs" />
     <Compile Include="clases\Seguridad.cs" />
     <Compile Include="Controllers\CalificacionesController.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Controllers\InformeController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
     <Compile Include="Controllers\AlertaController.cs" />
+    <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
@@ -7685,6 +7687,7 @@
     <Content Include="Views\Alerta\NotasSubidas.cshtml" />
     <Content Include="Views\Configuracion\Configuracion_sistema.cshtml" />
     <Content Include="Views\Configuracion\configuracion_perfil.cshtml" />
+    <Content Include="Views\Mail\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

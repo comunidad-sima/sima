@@ -46,10 +46,10 @@ namespace WebSima.clases
                         new DataColumn("Identificación"),                                            
                         new DataColumn("Nombre"),
                         new DataColumn("Programa"),
-                        new DataColumn("Nota 1"),
-                        new DataColumn("Nota 2"),
+                        new DataColumn("Nota corte 1"),
+                        new DataColumn("Nota corte 2"),
                         new DataColumn("Definitiva"),
-                        new DataColumn("Asistencias SIMA"),
+                        new DataColumn("Asistencias a monitoria"),
                           new DataColumn("Inasistencias a clase")
 
                 });

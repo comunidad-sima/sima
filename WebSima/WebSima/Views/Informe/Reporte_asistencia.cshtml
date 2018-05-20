@@ -336,20 +336,30 @@
         $("#exportar-datos").click(function () {
             var table = $('#table1-nota-rango').DataTable();
             var datos_table = table.data();
-            var stockData = [];
+            var stockData = [[
+                "Identificación",
+                "Nombre",
+                "Programa",
+                "Nota corte 1",
+                "Nota corte 2",
+                "Definitiva",
+                "Asistencia a monitorias",
+                "Asistencia a clase"
+            ]];
             $.each(datos_table, function (key, value) {
-                stockData.push({
-                    "Identificación": value[1],
-                    "Nombre": value[2],
-                    "Programa": value[3],
-                    "Nota corte 1": value[4],
-                    "Nota corte 2": value[5],
-                    "Definitiva": value[6],
-                    "Asistencia monitorias": value[7],
-                    "Asistencia a clase": value[8]
-                });
+                stockData.push([
+                    value[1],
+                     value[2],
+                     value[3],
+                     value[4],
+                     value[5],
+                     value[6],
+                    value[7],
+                   value[8]
+                ]);
             });
-            esportar_a_excel("Reporte", "Reporte de asistencia - SIMA", stockData, "Reporte de asistencia - SIMA")
+            console.log(stockData)
+            esportar_a_excel("Reporte", "Reporte-SIMA", stockData, "Reporte-SIMA" )
 
 
         });
