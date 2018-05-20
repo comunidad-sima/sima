@@ -4,7 +4,7 @@
     ViewBag.Title = "Clases realizadas";
     List<WebSima.Models.MUsuario> datosMoniotres = ViewBag.datosMoniotres;
     List<String> periodos = ViewBag.periodos;
-    List<String> materiasMonitor = ViewBag.materiasMonitor;
+    var materias = ViewBag.materias;
     String materiaSeleccionada = ViewBag.materiaSeleccionada;
     String selected_ = "selected";
     String peridoSeleccionado = ViewBag.peridoSeleccionado;
@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-12   col-lg-2">
                         <label>Periodo:*</label>
-                        <select class="form-control buscarGrupo" id="periodoBuscar" name="periodoBuscar" required>
+                        <select class="form-control buscarGrupo " id="periodoBuscar" name="periodoBuscar" required>
                             <option>Seleccione periodo</option>
                             @if (periodos != null)
                             {
@@ -53,16 +53,38 @@
                         </select>
 
                     </div>
+                    <div class="col-sm-12 col-12   col-lg-4">
+                        <label>Asignatura:*</label>
+                        
+
+                        <select class="form-control buscarGrupo select2" id="materia" name="materia" required>
+                            <option value="">Todas</option>
+                            @if (materias != null)
+                            {
+                                foreach (var m in materias)
+                                {
+                                    <option value="@m.Value"
+                                            @if (m.Value.Equals(materiaSeleccionada)) { @selected_           }>
+                                        @m.Value
+                                    </option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="--">No periodos</option>
+                            }
+                        </select>
+                    </div>
                     <div class="col-sm-12 col-12   col-lg-6">
                         <label>Monitor:*</label>
-                        <select class="form-control buscarGrupo" id="idMonitor" name="idMonitor" required>
+                        <select class="form-control buscarGrupo " id="idMonitor" name="idMonitor" required>
                             <option value="">Todos</option>
                             @if (datosMoniotres != null)
                             {
                                 foreach (var datos in datosMoniotres)
                                 {
                                     <option value="@datos.id"
-                                            @if (datos.id.Equals(monitorSeleccionado)) { @selected_        }>
+                                            @if (datos.id.Equals(monitorSeleccionado)) { @selected_         }>
                                         @datos.apellidos @datos.nombre
                                     </option>
                                 }
@@ -73,26 +95,7 @@
                             }
                         </select>
                     </div>
-                    <div class="col-sm-12 col-12   col-lg-4">
-                        <label>Asignatura:*</label>
-                        <select class="form-control buscarGrupo" id="materia" name="materia" required>
-                            <option value="">Todas</option>
-                            @if (materiasMonitor != null)
-                            {
-                                foreach (var m in materiasMonitor)
-                                {
-                                    <option value="@m"
-                                            @if (m.Equals(materiaSeleccionada)) { @selected_         }>
-                                        @m
-                                    </option>
-                                }
-                            }
-                            else
-                            {
-                                <option value="--">No periodos</option>
-                            }
-                        </select>
-                    </div>
+                    
 
                 </div>
             }
@@ -140,7 +143,8 @@
                                     @Html.DisplayFor(modelItem => item.comentario)
                                 </td>
                                 <td class="text-center">
-                                    @item.estudisntes_asistentes.Count()
+                                    @WebSima.clases.HelperUsuario.getEstudianteAsistente(item.id)
+                                  
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.fecha_realizada).ToString().Substring(0, 10)
@@ -161,6 +165,7 @@
             </div>
             <script>
                 $(document).ready(function () {
+                    $('.select2').select2();
                     configurar_dataTable("tablaPaginacion");
                     $("#periodoBuscar").change(function () {
                         $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
@@ -169,7 +174,9 @@
                         $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
                     });
                     $("#materia").change(function () {
+                        $('#idMonitor > option[value=""]').attr('selected', 'selected');
                         $("#fDatos").submit();// se envia el formulario materia, para consultar los estuaiantes
+                       
                     });
                 });
             </script>
