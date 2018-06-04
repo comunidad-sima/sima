@@ -18,6 +18,14 @@ namespace WebSima.Controllers
            
             return View();
         }
+        public ActionResult Redactar()
+        {
+            return View("Redactar");
+        }
+        public ActionResult Recibidos()
+        {
+            return View("Recibidos");
+        }
 
     }
 }

@@ -67,9 +67,10 @@
     <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">
     <!--toastr-->
     <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
-    <!-- jQuery 3 -->
-    <script src="/Content/bower_components/jquery/dist/jquery.min.js"></script>
+   
     <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">
+    <!-- jQuery 3 -->
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
 </head>
 <body class="hold-transition skin-green sidebar-mini">
     <div class="wrapper">
@@ -325,7 +326,7 @@
                         <ul class="treeview-menu">
 
                             <li id="registros_clases"><a href="/Clase/Registros"><i class="fa fa-registered"></i>Registros</a></li>
-                            <li id="avance_cleses"><a href="/Clase/Avance"><i class="fa fa-circle-o"></i>Avance</a></li>
+                            @*<li id="avance_cleses"><a href="/Clase/Avance"><i class="fa fa-circle-o"></i>Avance</a></li>*@
                             @*<li id=""><a href="/Usuario/Create"><i class="fa fa-circle-o"></i>Nueva</a></li>*@
 
                         </ul>
@@ -370,6 +371,18 @@
                         </a>
                         <ul class="treeview-menu">
                             <li id="registro_calificaciones" class="active"><a href="/Calificaciones/Registrar"><i class="fa fa-registered"></i>Registrar</a></li>
+
+                        </ul>
+                    </li>
+                      <li id="correo" class="treeview">
+                        <a href="#">
+                            <i class="fa fa-envelope-o"></i> <span>Correo</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="grupos_notas" class="active"><a href="/Mail/index"><i class="fa fa-address-card-o"></i>Principal</a></li>
 
                         </ul>
                     </li>
@@ -472,6 +485,7 @@
 
                         </ul>
                     </li>
+                    
                   }
                    
                     <li class="header">LABELS</li>
@@ -547,9 +561,11 @@
                         $("#online").addClass("text-danger");
                         $("#online").removeClass("text-success");
                     }
+                    console.log(response)
                 }, error: function (error) {
                     $("#online").addClass("text-danger");
                     $("#online").removeClass("text-success");
+                    console.log("eeeeeeee")
                 }
             });
             

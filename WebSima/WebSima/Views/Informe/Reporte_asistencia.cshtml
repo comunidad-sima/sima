@@ -229,8 +229,12 @@
     <a href="/informe/Download_reporte_asistencia" class=" btn btn-success">
         <i class="fa fa-file-excel-o"></i> Exportar
     </a>
+    <a href="#" class=" btn btn-success" data-toggle="modal" data-target="#modal-correo" id="modalCorreo">
+        <i class="fa fa-envelope-o"></i> Enviar Correo
+    </a>
 
-          
+
+
 
 }
                 </div>
@@ -240,6 +244,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-bar-chart-o"></i>
                     <h3 class="box-title">Estadistica de notas</h3>
+                    
 
                 </div>
                 <div class="box-body">
@@ -322,6 +327,30 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<div class="modal fade  " id="modal-correo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-green">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Redactar Correo</h3>
+            </div>
+            <div class="modal-body row" >
+                <div id="idEnviarCorreo" class="col-md-12 ">
+
+
+                </div>
+            </div>
+            <!-- Main content -->
+
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 <script>
     $(document).ready(function () {
         var labels = ["Notas entre 0 - 2,9",  "Notas entre 3 - 3,9", "Notas entre 4 - 4,9", "Notas en 5"];
@@ -330,7 +359,9 @@
         window.pos = 6;
         var rango = 1;// rango de nota a filtrar 
 
-        $('.select2').select2();       
+        $('.select2').select2();
+        
+        $("#idEnviarCorreo").load("/Mail/Redactar ");
         
         
         $("#exportar-datos").click(function () {
