@@ -84,8 +84,11 @@
                     <table id="table1-nota" class="table tablaPaginacion table-bordered table-hover" style="width :100%">
                         <thead >
                             <tr>
-                                <th></th>
-                                <th>IDENTIFICACÓN</th>
+                                <th>
+                                    <input type="checkbox" id="checkTodos" class="flat-red"> 
+                                   
+                                </th>
+                                <th>IDENTIFICACIÓN</th>
                                 <th>NOMBRE COMPLETO</th>
                                 <th>PROGRAMA</th>
                                 <th>NOTA-1</th>
@@ -124,7 +127,7 @@
                                             }
                                             // var estudiante = datos_estudiante.Select(e => e).Where(e => e.num_identificacion.Equals(item[1])).Distinct();
 <tr>
-                                            <td>@(i++)</td>
+                                            <td><input type="checkbox" class="flat-red"> @(i++)</td>
                                             <td>@id</td>
                                             <td>
                                                 @if (estudiante.Count() > 0)
@@ -352,6 +355,13 @@
     <!-- /.modal-dialog -->
 </div>
 <script>
+
+    $('document').ready(function () {
+        $("#checkTodos").change(function () {
+            $("input:checkbox").prop('checked', $(this).prop("checked"));
+        });
+    });
+
     $(document).ready(function () {
         var labels = ["Notas entre 0 - 2,9",  "Notas entre 3 - 3,9", "Notas entre 4 - 4,9", "Notas en 5"];
         var data = [];
@@ -362,7 +372,12 @@
         $('.select2').select2();
         
         $("#idEnviarCorreo").load("/Mail/Redactar ");
-        
+
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+  
         
         $("#exportar-datos").click(function () {
             var table = $('#table1-nota-rango').DataTable();
