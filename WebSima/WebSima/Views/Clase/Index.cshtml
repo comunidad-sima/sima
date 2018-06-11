@@ -93,7 +93,7 @@
                             @Html.DisplayFor(modelItem => item.comentario)
                         </td>
                         <td class="text-center">
-                            @*@item.estudisntes_asistentes.Count()*@
+                            @WebSima.clases.HelperUsuario.getEstudianteAsistente(item.id)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.fecha_realizada).ToString().Substring(0, 10)
